@@ -82,9 +82,9 @@ bol <- boletas %>%
   mutate(cod_subclase = substr(cod_prod, 1, nchar(cod_prod) - 2), .before = cod_prod) %>% 
   mutate(cod_clase = substr(cod_prod, 1, nchar(cod_prod) - 3), .before = cod_subclase) %>%
   mutate(cod_grupo = substr(cod_prod, 1, nchar(cod_prod) - 4), .before = cod_clase) %>%
-  mutate(cod_div = substr(cod_prod, 1, nchar(cod_prod) - 5), .before = cod_grupo) %>%
-  mutate(cantidad_actual = cantidad_anterior) %>% 
-  mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba
+  mutate(cod_div = substr(cod_prod, 1, nchar(cod_prod) - 5), .before = cod_grupo) #%>%
+  #mutate(cantidad_actual = cantidad_anterior) %>% 
+  #mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba
 ```
 
 ------------------------------------------------------------------------
@@ -177,6 +177,7 @@ prom_pond <- varacum %>%
 ```{r}
 ind_prod <- prom_pond %>% 
   mutate(ind_prod = indice_grupo*prom_pon)
+ind_prod
 
 #ind_prod %>% 
 #  filter(grupo_nombre == "Arroz") #estas ultimas dos lineas son solamente para visualizar algunos datos
