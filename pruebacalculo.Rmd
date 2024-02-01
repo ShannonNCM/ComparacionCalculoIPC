@@ -78,16 +78,20 @@ En este apartado se agregan columnas que identifican a las variedades dentro de 
 bol <- boletas %>% 
   select(region, codigo_articulo, articulo, cantidad_anterior, cantidad_actual, precio_anterior, precio_actual) %>% 
   mutate(cod_prod = substr(codigo_articulo, 1, ifelse(nchar(codigo_articulo) > 8, nchar(codigo_articulo) - 2, nchar(codigo_articulo) - 1)), .before = codigo_articulo) %>% 
-  mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) %>% 
-  mutate(cod_subclase = substr(cod_prod, 1, nchar(cod_prod) - 2), .before = cod_prod) %>% 
-  mutate(cod_clase = substr(cod_prod, 1, nchar(cod_prod) - 3), .before = cod_subclase) %>%
-  mutate(cod_grupo = substr(cod_prod, 1, nchar(cod_prod) - 4), .before = cod_clase) %>%
-  mutate(cod_div = substr(cod_prod, 1, nchar(cod_prod) - 5), .before = cod_grupo) #%>%
+  mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) #%>% 
+  #mutate(cod_subclase = substr(cod_prod, 1, nchar(cod_prod) - 2), .before = cod_prod) %>% 
+  #mutate(cod_clase = substr(cod_prod, 1, nchar(cod_prod) - 3), .before = cod_subclase) %>%
+  #mutate(cod_grupo = substr(cod_prod, 1, nchar(cod_prod) - 4), .before = cod_clase) %>%
+  #mutate(cod_div = substr(cod_prod, 1, nchar(cod_prod) - 5), .before = cod_grupo) #%>%
   #mutate(cantidad_actual = cantidad_anterior) %>% 
   #mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba
 ```
 
 ------------------------------------------------------------------------
+
+```{r}
+sum(is.na(bol))
+```
 
 #### Calculo del IPC
 
@@ -123,12 +127,17 @@ pon_div <- pondcat("División") %>%
 1.  Calculo la variacion de las variedades (articulos)
 
 ```{r}
-bol01 <- variacion(bol)
+bol01 <- variacion(bol) %>% 
+  drop_na()
 bol01 %>% 
   select(region, cod_prod, codigo_articulo, articulo, var_prod)
 ```
 
 ------------------------------------------------------------------------
+
+```{r}
+sum(is.na(bol01))
+```
 
 2.  Relativo de precios de un producto Esto es la media geometrica de todas las variaciones de los articulos (variedades) que componen un producto
 
@@ -177,11 +186,16 @@ prom_pond <- varacum %>%
 ```{r}
 ind_prod <- prom_pond %>% 
   mutate(ind_prod = indice_grupo*prom_pon) %>% 
-  cod_grupos()
-ind_prod
+  cod_grupos() %>% 
+  drop_na()
 
+ind_prod
 #ind_prod %>% 
 #  filter(grupo_nombre == "Arroz") #estas ultimas dos lineas son solamente para visualizar algunos datos
+```
+
+```{r}
+sum(is.na(ind_prod))
 ```
 
 Pruebas de calculos para grupos arriba de productos
@@ -233,21 +247,7 @@ ind_prod %>%
 ```
 
 ```{r}
-ipc(ind_prod,cod_subclase)
-```
-
-```{r}
-#prueba para calcular la subclase
-#en esta forma es debido a que me surgio la duda de si deberia calcular, usando la ponderacion de la subclase o simplemente tomando la suma de las ponderaciones que ya tenia desde los productos
-ind_prod %>% 
-  select(region, cod_subclase, ind_prod) %>% 
-  rename(grupo_codigo = cod_subclase) %>% 
-  left_join(pon_subclase %>% select(region, grupo_codigo, grupo_nombre, ponderacion_region), 
-                           by = c("region", "grupo_codigo")) %>%
-  group_by(region, grupo_codigo, grupo_nombre) %>%
-  summarize(sum1 = sum(ind_prod*ponderacion_region),
-            sum2 = sum(ponderacion_region)) %>% 
-  mutate(ind = sum1/sum2)
+#me falta hacer lo de generar una sola funcion para el calculo
 ```
 
 5.  Indice de precios a nivel republica
@@ -256,39 +256,56 @@ ind_prod %>%
 
 ```{r}
 ind_prod %>% 
-  left_join(participacion, by = c("region"))
-```
-
-```{r}
-ind_prod %>% 
-  left_join(participacion, by = c("region")) %>% 
   group_by(cod_prod, grupo_nombre) %>%
-  summarize(sumapond = sum(ponderacion_region*participacion*ind_prod),
-            sumprod = sum(ponderacion_region*participacion)) %>% 
-  mutate(ind_prod_rep = sumapond/sumprod) %>% 
-  select(cod_prod, grupo_nombre, ind_prod_rep)
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
 ```
 
-#aca algunos indices salen como Nan porque hay datos faltantes en las boletas :c
+```{r}
+#indice subclase
+ind_prod %>% 
+  group_by(cod_subclase) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
+```
 
 ```{r}
+#indice clase
+ind_prod %>% 
+  group_by(cod_clase) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
+```
 
+```{r}
+#indice grupo
+ind_prod %>% 
+  group_by(cod_grupo) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
+```
+
+```{r}
+#indice div
+ind_prod %>% 
+  group_by(cod_div) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
 ```
 
 6.  Indice general
 
 ```{r}
-
-
-
-
-pon_div %>% 
-  filter(region != 0) %>% 
-  left_join(participacion, by ="region") %>% 
-  group_by(region) %>% 
-  summarize(sum1 = sum(ponderacion_region*participacion), sum2 = sum(ponderacion_region*participacion*indice_grupo)) %>% 
-  mutate(ind = sum2/sum1) %>% 
-  select(region, ind)
+ind_prod %>% 
+  group_by(region) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
 ```
 
 ```{r}
