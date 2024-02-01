@@ -1,7 +1,5 @@
 #Script con las funciones utilizadas para los calculos del ipc
 
-
-
 #funcion para asignar los codigos de subclase, clase, grupo y division
 cod_grupos <- function(x){
   data.frame(x %>% 
