@@ -76,7 +76,7 @@ bol <- boletas %>%
 ```
 
 ```{r}
-sum(is.na(bol))
+sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
 ```
 
 ### Cálculo del IPC
@@ -124,7 +124,7 @@ prom_pon <- relativo %>%
 ind_prod <- prom_pon %>% 
   mutate(ind_prod = indice_grupo*prom_pon) %>% 
   cod_grupos() %>% 
-  drop_na()
+  drop_na() #utilice el dropna porque hay datos faltantes en las boletas
 ind_prod
 #ind_prod %>% 
 #  select(region, cod_prod, grupo_nombre, sum_pon, prom_pon, ind_prod) %>% 
@@ -185,3 +185,69 @@ ind_prod %>%
             count = n()) %>% 
   mutate(ind = sum1/sum2)
 ```
+
+#### 5. Índice de precios a nivel república
+
+##### 5.1 índice de productos
+
+```{r}
+ind_prod %>% 
+  group_by(cod_prod, grupo_nombre) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region),
+            count = n()) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
+```
+
+##### 5.1 índice de subclase
+
+```{r}
+ind_prod %>% 
+  group_by(cod_subclase) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region),
+            count = n()) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
+```
+
+##### 5.2 Índice de clase
+
+```{r}
+ind_prod %>% 
+  group_by(cod_clase) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
+```
+
+##### 5.3 Índice de grupo
+
+```{r}
+ind_prod %>% 
+  group_by(cod_grupo) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
+```
+
+##### 5.4 Índice de división
+
+```{r}
+ind_prod %>% 
+  group_by(cod_div) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
+```
+
+#### 6. Índice general
+
+```{r}
+ind_prod %>% 
+  group_by(region) %>%
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_prod_rep = sum1/sum2)
+```
+
+#### 
