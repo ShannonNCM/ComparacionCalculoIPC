@@ -1,0 +1,133 @@
+---
+title: "Calculo del IPC"
+output: html_notebook
+---
+
+### Librerias y conexión a la base de datos
+
+Se importan las librerías para las bases de datos
+
+```{r}
+library("readxl")
+library("tidyverse")
+require("tidyverse")
+library("writexl")
+library("tibble")
+library("openxlsx")
+library("DBI")
+library("odbc")
+library("RSQLite")
+library("psych")
+library("pracma")
+library("bit64")
+
+source("funciones_ipc.R")
+```
+
+Conexión al servidor
+
+```{r}
+server <- 'ipcprod.database.windows.net'
+user <- 'ipcreader'
+pas <- '1pc/*2023'
+database <- 'db-indices'
+```
+
+```{r}
+#crea un string completo para conectarse a la base de datos
+conn_str <- paste0("Driver={ODBC Driver 17 for SQL Server};",
+  "Server=", server, ";",
+  "Database=", database, ";",
+  "Uid=", user, ";",
+  "Pwd=", pas, ";"
+)
+```
+
+```{r}
+con <- dbConnect(odbc::odbc(), .connection_string=conn_str)
+```
+
+Obtención de la base de datos
+
+```{sql connection=con, output.var="boletas"}
+EXEC [dbo].[sp_get_precios_recolectados_mes] 2024, 1
+```
+
+```{sql connection=con, output.var="ponderaciones"}
+EXEC sp_get_indice_grupo 2024, 1
+```
+
+```{r}
+#un mini df que tiene la participacion de las regiones
+participacion <- data.frame(region = c(1,2,3,4,5,6,7,8),
+                            participacion = c(29.79,6.98,7.77,20.41,8.01,11.97,11.38,3.69)) %>% 
+  mutate(region = as.integer64(region))
+```
+
+### Adecuación de la base de datos
+
+En este apartado se modifica el dataframe agregando una columna para asignar a cada variedad un grupo para su identificación posterior
+
+```{r}
+bol <- boletas %>% 
+  select(region, codigo_articulo, articulo, cantidad_anterior, cantidad_actual, precio_anterior, precio_actual) %>% 
+  mutate(cod_prod = substr(codigo_articulo, 1, ifelse(nchar(codigo_articulo) > 8, nchar(codigo_articulo) - 2, nchar(codigo_articulo) - 1)), .before = codigo_articulo) %>% 
+  mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod))
+```
+
+```{r}
+sum(is.na(bol))
+```
+
+### Cálculo del IPC
+
+#### 1. Cálculo de la variación de las variedades (artículos)
+
+```{r}
+bol01 <- variacion(bol) %>% 
+  drop_na()
+bol01 %>% 
+  select(region, cod_prod, codigo_articulo, articulo, var_prod)
+```
+
+#### 2. Relativo de precios de un producto
+
+Esto es la media geométrica de todas las variaciones de las variedades (artículos) que componen un producto.
+
+```{r}
+relativo <- bol01 %>% 
+  group_by(region, cod_prod) %>% 
+  summarize(relativo = geometric.mean(var_prod)) %>%
+  left_join(pon_prod %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_grupo), 
+                           by = c("region", "cod_prod")) %>% 
+  select(region, cod_prod, grupo_nombre, relativo, ponderacion_region, indice_grupo)
+```
+
+#### 3. Promedio ponderado
+
+Se calcula la variacion acumulada, que es la suma producto de los relativos y sus ponderaciones. Luego se realiza la suma de los ponderadores y a partir de estos valores se calcula el promedio ponderado
+
+```{r}
+prom_pon <- relativo %>% 
+  group_by(region, cod_prod, grupo_nombre) %>%
+  summarize(var_ac = sum(relativo*ponderacion_region),
+            sum_pon = sum(ponderacion_region),
+            count = n()) %>% 
+  mutate(prom_pon = var_ac/sum_pon) %>% 
+  left_join(relativo %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_grupo), by = c("region", "cod_prod", "grupo_nombre"))
+```
+
+#### 4. Índice de precios por región
+
+##### 4.1 Índice de productos
+
+```{r}
+ind_prod <- prom_pon %>% 
+  mutate(ind_prod = indice_grupo*prom_pon) %>% 
+  cod_grupos() %>% 
+  drop_na()
+ind_prod
+#ind_prod %>% 
+#  select(region, cod_prod, grupo_nombre, sum_pon, prom_pon, ind_prod) %>% 
+#  filter(cod_prod == "0111102")
+```
