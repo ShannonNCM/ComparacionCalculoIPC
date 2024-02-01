@@ -176,23 +176,79 @@ prom_pond <- varacum %>%
 
 ```{r}
 ind_prod <- prom_pond %>% 
-  mutate(ind_prod = indice_grupo*prom_pon)
+  mutate(ind_prod = indice_grupo*prom_pon) %>% 
+  cod_grupos()
 ind_prod
 
 #ind_prod %>% 
 #  filter(grupo_nombre == "Arroz") #estas ultimas dos lineas son solamente para visualizar algunos datos
 ```
 
-4.2 Indice de subclase, clase, grupo y division
+Pruebas de calculos para grupos arriba de productos
+
+Indice por subclase
 
 ```{r}
-ipc(pon_subclase,participacion)
-ipc(pon_clase, participacion)
-ipc(pon_grupo, participacion)
-ipc(pon_div, participacion)
+#este seria el indice por subclase
+ind_prod %>% 
+  select(region, cod_subclase, grupo_nombre, ponderacion_region, ind_prod) %>% 
+  rename(grupo_codigo = cod_subclase) %>% 
+  group_by(region, grupo_codigo) %>%
+  summarize(sum1 = sum(ind_prod*ponderacion_region),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind = sum1/sum2)
 ```
 
-------------------------------------------------------------------------
+```{r}
+#indice por clase
+ind_prod %>% 
+  select(region, cod_clase, grupo_nombre, ponderacion_region, ind_prod) %>% 
+  rename(grupo_codigo = cod_clase) %>% 
+  group_by(region, grupo_codigo) %>%
+  summarize(sum1 = sum(ind_prod*ponderacion_region),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind = sum1/sum2)
+```
+
+```{r}
+#indice por grupo
+ind_prod %>% 
+  select(region, cod_grupo, grupo_nombre, ponderacion_region, ind_prod) %>% 
+  rename(grupo_codigo = cod_grupo) %>% 
+  group_by(region, grupo_codigo) %>%
+  summarize(sum1 = sum(ind_prod*ponderacion_region),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind = sum1/sum2)
+```
+
+```{r}
+#indice por division
+ind_prod %>% 
+  select(region, cod_div, grupo_nombre, ponderacion_region, ind_prod) %>% 
+  rename(grupo_codigo = cod_div) %>% 
+  group_by(region, grupo_codigo) %>%
+  summarize(sum1 = sum(ind_prod*ponderacion_region),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind = sum1/sum2)
+```
+
+```{r}
+ipc(ind_prod,cod_subclase)
+```
+
+```{r}
+#prueba para calcular la subclase
+#en esta forma es debido a que me surgio la duda de si deberia calcular, usando la ponderacion de la subclase o simplemente tomando la suma de las ponderaciones que ya tenia desde los productos
+ind_prod %>% 
+  select(region, cod_subclase, ind_prod) %>% 
+  rename(grupo_codigo = cod_subclase) %>% 
+  left_join(pon_subclase %>% select(region, grupo_codigo, grupo_nombre, ponderacion_region), 
+                           by = c("region", "grupo_codigo")) %>%
+  group_by(region, grupo_codigo, grupo_nombre) %>%
+  summarize(sum1 = sum(ind_prod*ponderacion_region),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind = sum1/sum2)
+```
 
 5.  Indice de precios a nivel republica
 
@@ -200,28 +256,32 @@ ipc(pon_div, participacion)
 
 ```{r}
 ind_prod %>% 
+  left_join(participacion, by = c("region"))
+```
+
+```{r}
+ind_prod %>% 
   left_join(participacion, by = c("region")) %>% 
-  mutate(new_col = ponderacion_region*participacion*ind_prod) %>% 
   group_by(cod_prod, grupo_nombre) %>%
-  summarize(sumprod = sum(ponderacion_region*participacion), sumapond = sum(new_col)) %>% 
+  summarize(sumapond = sum(ponderacion_region*participacion*ind_prod),
+            sumprod = sum(ponderacion_region*participacion)) %>% 
   mutate(ind_prod_rep = sumapond/sumprod) %>% 
   select(cod_prod, grupo_nombre, ind_prod_rep)
 ```
 
 #aca algunos indices salen como Nan porque hay datos faltantes en las boletas :c
 
-5.2 Indice de subclase, clase, grupo y division
-
 ```{r}
-ipc_nac(pon_subclase,participacion)
-ipc_nac(pon_clase,participacion)
-ipc_nac(pon_grupo,participacion)
-ipc_nac(pon_div,participacion)
+
 ```
 
 6.  Indice general
 
 ```{r}
+
+
+
+
 pon_div %>% 
   filter(region != 0) %>% 
   left_join(participacion, by ="region") %>% 

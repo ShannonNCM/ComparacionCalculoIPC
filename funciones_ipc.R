@@ -2,6 +2,17 @@
 
 
 
+#funcion para asignar los codigos de subclase, clase, grupo y division
+cod_grupos <- function(x){
+  data.frame(x %>% 
+              mutate(cod_subclase = substr(cod_prod, 1, nchar(cod_prod) - 2), .before = cod_prod) %>% 
+              mutate(cod_clase = substr(cod_prod, 1, nchar(cod_prod) - 3), .before = cod_subclase) %>%
+              mutate(cod_grupo = substr(cod_prod, 1, nchar(cod_prod) - 4), .before = cod_clase) %>%
+              mutate(cod_div = substr(cod_prod, 1, nchar(cod_prod) - 5), .before = cod_grupo))
+}
+
+
+
 #Funcion para obtener las ponderaciones de las distitas categorias
 pondcat <- function(x){
   ponderacionesmesant %>% 
@@ -18,16 +29,21 @@ variacion <- function(x){
 }
 
 
+
+
 #funcion para calcular el ipc en las categorias superiores por region
-ipc <- function(x,y){
+#x es la columna del dataframe que tiene el codigo del grupo para el que se va a calcular el ipc
+ipc <- function(x, y){
   data.frame(x %>% 
-               filter(region !=0) %>% 
-               left_join(y, by = "region") %>% 
-               group_by(region, grupo_codigo, grupo_nombre) %>% 
-               summarize(sum1 = sum(ponderacion_region*participacion), 
-                         sum2 = sum(ponderacion_region*participacion*indice_grupo)) %>% 
-               mutate(ind = sum2/sum1))
+               #select(region, y, grupo_nombre, ponderacion_region, ind_prod) %>% 
+               rename(grupo_codigo = y) %>% 
+               group_by(region, grupo_codigo) %>% 
+               summarize(sum1 = sum(ind_prod*ponderacion_region),
+                         sum2 = sum(ponderacion_region)) %>% 
+               mutate(ind = sum1/sum2))
 }
+
+
 
 
 
