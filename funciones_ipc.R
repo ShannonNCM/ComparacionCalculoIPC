@@ -29,6 +29,10 @@ variacion <- function(x){
 
 
 
+
+
+#ESTAS FUNCIONES NO LAS ESTOY USANDO, HAY CAMBIOS PENDIENTES TODAVIA
+
 #funcion para calcular el ipc en las categorias superiores por region
 #x es la columna del dataframe que tiene el codigo del grupo para el que se va a calcular el ipc
 ipc <- function(x, y){

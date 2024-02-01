@@ -1,5 +1,5 @@
 ---
-title: "Calculo del IPC"
+title: "Prueba del Calculo del IPC"
 output: html_notebook
 ---
 
