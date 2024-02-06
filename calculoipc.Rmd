@@ -83,6 +83,7 @@ sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
 bol %>% 
   filter(cod_prod == "0111202") #%>% 
   #filter(cod_prod == "0116302")
+#aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
 
 ###  Cálculo del IPC
