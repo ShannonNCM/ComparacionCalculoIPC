@@ -79,7 +79,13 @@ bol <- boletas %>%
 sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
 ```
 
-### Cálculo del IPC
+```{r}
+bol %>% 
+  filter(cod_prod == "0111202") #%>% 
+  #filter(cod_prod == "0116302")
+```
+
+###  Cálculo del IPC
 
 #### 1. Cálculo de la variación de las variedades (artículos)
 
@@ -87,7 +93,8 @@ sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
 bol01 <- variacion(bol) %>% 
   drop_na()
 bol01 %>% 
-  select(region, cod_prod, codigo_articulo, articulo, var_prod)
+  select(region, cod_prod, codigo_articulo, articulo, var_prod) %>% 
+  filter(cod_prod == "0116104")
 ```
 
 #### 2. Relativo de precios de un producto
@@ -129,6 +136,15 @@ ind_prod
 #ind_prod %>% 
 #  select(region, cod_prod, grupo_nombre, sum_pon, prom_pon, ind_prod) %>% 
 #  filter(cod_prod == "0111102")
+
+ind_prod %>% 
+  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
+  #filter(ind_prod > 1000) #%>% 
+  #filter(ind_prod > 500) #%>%
+  filter(ind_prod > 200)
+  
+
+write.xlsx(ind_prod, "indicesproductos_012024.xlsx")
 ```
 
 ##### 4.2 Índice de subclase
@@ -156,7 +172,7 @@ ind_prod %>%
             count = n()) %>% 
   mutate(ind = sum1/sum2) #%>% 
   #filter(grupo_codigo == "0111") 
-#el problema aqui es que el count esta contando todos todos los que se usaron, porque estoy yendo desde la base de datos de los productos, que si coindicen al menos para el arroz, excepto en la region 7 que me salen solo 15 :O
+#el "problema" aqui es que el count esta contando todos todos los que se usaron, porque estoy yendo desde la base de datos de los productos, que si coindicen al menos para el arroz, excepto en la region 7 que me salen solo 15 :O
 ```
 
 ##### 4.4 Índice de grupo
@@ -250,4 +266,11 @@ ind_prod %>%
   mutate(ind_prod_rep = sum1/sum2)
 ```
 
-#### 
+En esta parte del indice general las regiones 1 y 4 se dispararon demasiado
+
+```{r}
+ind_prod %>% 
+  summarize(sum1 = sum(ponderacion_region*ind_prod),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(indrep = sum1/sum2)
+```
