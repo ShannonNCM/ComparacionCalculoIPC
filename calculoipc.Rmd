@@ -72,7 +72,9 @@ En este apartado se modifica el dataframe agregando una columna para asignar a c
 bol <- boletas %>% 
   select(region, codigo_articulo, articulo, cantidad_anterior, cantidad_actual, precio_anterior, precio_actual) %>% 
   mutate(cod_prod = substr(codigo_articulo, 1, ifelse(nchar(codigo_articulo) > 8, nchar(codigo_articulo) - 2, nchar(codigo_articulo) - 1)), .before = codigo_articulo) %>% 
-  mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod))
+  mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) #%>% 
+#  mutate(cantidad_actual = cantidad_anterior) %>% 
+#  mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba
 ```
 
 ```{r}
@@ -81,8 +83,8 @@ sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
 
 ```{r}
 bol %>% 
-  filter(cod_prod == "0111202") #%>% 
-  #filter(cod_prod == "0116302")
+  #filter(cod_prod == "0111202") #%>% 
+  filter(cod_prod == "0116104")
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
 
@@ -138,14 +140,14 @@ ind_prod
 #  select(region, cod_prod, grupo_nombre, sum_pon, prom_pon, ind_prod) %>% 
 #  filter(cod_prod == "0111102")
 
-ind_prod %>% 
-  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
+#ind_prod %>% 
+#  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
   #filter(ind_prod > 1000) #%>% 
-  #filter(ind_prod > 500) #%>%
-  filter(ind_prod > 200)
+#  filter(ind_prod > 500) #%>%
+  #filter(ind_prod > 200)
   
 
-write.xlsx(ind_prod, "indicesproductos_012024.xlsx")
+#write.xlsx(ind_prod, "indicesproductos_012024.xlsx")
 ```
 
 ##### 4.2 Índice de subclase
