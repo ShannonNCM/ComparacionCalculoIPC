@@ -88,7 +88,7 @@ bol %>%
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
 
-###  Cálculo del IPC
+### Cálculo del IPC
 
 #### 1. Cálculo de la variación de las variedades (artículos)
 
@@ -140,14 +140,14 @@ ind_prod
 #  select(region, cod_prod, grupo_nombre, sum_pon, prom_pon, ind_prod) %>% 
 #  filter(cod_prod == "0111102")
 
-#ind_prod %>% 
+#indover150 <- ind_prod %>% 
 #  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
   #filter(ind_prod > 1000) #%>% 
-#  filter(ind_prod > 500) #%>%
+  #filter(ind_prod > 500) #%>%
   #filter(ind_prod > 200)
-  
+  #filter(ind_prod > 150)
 
-#write.xlsx(ind_prod, "indicesproductos_012024.xlsx")
+#write.xlsx(indover150, "indicessobre150_012024.xlsx")
 ```
 
 ##### 4.2 Índice de subclase
