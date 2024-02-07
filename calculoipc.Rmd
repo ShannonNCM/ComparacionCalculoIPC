@@ -27,9 +27,9 @@ source("funciones_ipc.R")
 Conexión al servidor
 
 ```{r}
-server <- 'ipcprod.database.windows.net'
-user <- 'ipcreader'
-pas <- '1pc/*2023'
+server <- 'inegt-ipc.database.windows.net'
+user <- 'ipcuser_exec'
+pas <- 'In3/*ipc2023'
 database <- 'db-indices'
 ```
 
@@ -140,7 +140,8 @@ ind_prod
 #  select(region, cod_prod, grupo_nombre, sum_pon, prom_pon, ind_prod) %>% 
 #  filter(cod_prod == "0111102")
 
-#indover150 <- ind_prod %>% 
+#indover150 <- 
+#ind_prod %>% 
 #  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
   #filter(ind_prod > 1000) #%>% 
   #filter(ind_prod > 500) #%>%
