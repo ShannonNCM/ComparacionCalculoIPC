@@ -13,7 +13,7 @@ cod_grupos <- function(x){
 
 #Funcion para obtener las ponderaciones de las distitas categorias
 pondcat <- function(x){
-  ponderacionesmesant %>% 
+  ponderaciones %>% 
     filter(tipo_grupo == x) %>% 
     select(region_id, grupo_codigo, grupo_nombre, ponderacion_region, indice_grupo) %>% 
     rename(region = region_id) %>% 

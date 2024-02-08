@@ -73,8 +73,8 @@ bol <- boletas %>%
   select(region, codigo_articulo, articulo, cantidad_anterior, cantidad_actual, precio_anterior, precio_actual) %>% 
   mutate(cod_prod = substr(codigo_articulo, 1, ifelse(nchar(codigo_articulo) > 8, nchar(codigo_articulo) - 2, nchar(codigo_articulo) - 1)), .before = codigo_articulo) %>% 
   mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) #%>% 
-#  mutate(cantidad_actual = cantidad_anterior) %>% 
-#  mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba
+  #mutate(cantidad_actual = cantidad_anterior) %>% 
+  #mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba
 ```
 
 ```{r}
@@ -83,9 +83,16 @@ sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
 
 ```{r}
 bol %>% 
-  #filter(cod_prod == "0111202") #%>% 
-  filter(cod_prod == "0116104")
+  filter(cod_prod == "0118901") #%>% 
+  #filter(cod_prod == "0116104")
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
+```
+
+```{r}
+#Aqui tengo las ponderaciones para cada produto por cada region y los indices anteriores
+pon_prod <- pondcat("Producto") %>% 
+  rename(cod_prod = grupo_codigo) %>%
+  mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod))
 ```
 
 ### Cálculo del IPC
@@ -96,8 +103,9 @@ bol %>%
 bol01 <- variacion(bol) %>% 
   drop_na()
 bol01 %>% 
-  select(region, cod_prod, codigo_articulo, articulo, var_prod) %>% 
-  filter(cod_prod == "0116104")
+  select(region, cod_prod, codigo_articulo, articulo, var_prod)
+
+#sum(is.na(bol01))
 ```
 
 #### 2. Relativo de precios de un producto
@@ -135,18 +143,23 @@ ind_prod <- prom_pon %>%
   mutate(ind_prod = indice_grupo*prom_pon) %>% 
   cod_grupos() %>% 
   drop_na() #utilice el dropna porque hay datos faltantes en las boletas
-ind_prod
+#ind_prod
 #ind_prod %>% 
 #  select(region, cod_prod, grupo_nombre, sum_pon, prom_pon, ind_prod) %>% 
 #  filter(cod_prod == "0111102")
 
 #indover150 <- 
-#ind_prod %>% 
-#  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
+ind_prod %>% 
+  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
   #filter(ind_prod > 1000) #%>% 
   #filter(ind_prod > 500) #%>%
   #filter(ind_prod > 200)
-  #filter(ind_prod > 150)
+  filter(ind_prod > 150)
+
+#ind_prod01 <- ind_prod %>% 
+#  select(region, cod_prod, ind_prod)
+#se guardan los datos en el workbook
+#writeData(indices, "Cuadro1", ind_prod01)
 
 #write.xlsx(indover150, "indicessobre150_012024.xlsx")
 ```
@@ -196,6 +209,7 @@ ind_prod %>%
 ##### 4.5 Índice de división
 
 ```{r}
+#ind_div <- 
 ind_prod %>% 
   select(region, cod_div, grupo_nombre, ponderacion_region, ind_prod) %>% 
   rename(grupo_codigo = cod_div) %>% 
@@ -203,7 +217,11 @@ ind_prod %>%
   summarize(sum1 = sum(ind_prod*ponderacion_region),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
-  mutate(ind = sum1/sum2)
+  mutate(ind = sum1/sum2) #%>% 
+  #select(region, grupo_codigo, ind)
+
+#se guardan los datos en el workbook
+#writeData(indices, "Cuadro2", ind_div)
 ```
 
 #### 5. Índice de precios a nivel república
@@ -263,11 +281,16 @@ ind_prod %>%
 #### 6. Índice general
 
 ```{r}
+#ind_gen <- 
 ind_prod %>% 
   group_by(region) %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region)) %>% 
-  mutate(ind_prod_rep = sum1/sum2)
+  mutate(ind_prod_rep = sum1/sum2) #%>% 
+  #select(region, ind_prod_rep)
+
+#se guardan los datos en el workbook
+#writeData(indices, "Cuadro3", ind_gen)
 ```
 
 En esta parte del indice general las regiones 1 y 4 se dispararon demasiado
@@ -277,4 +300,13 @@ ind_prod %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region)) %>% 
   mutate(indrep = sum1/sum2)
+```
+
+```{r}
+#indices <- createWorkbook()
+#for (i in 1:5) {
+#  nombres_cuad <- paste("Cuadro",i,sep = "")
+#  addWorksheet(indices, nombres_cuad)}
+
+#saveWorkbook(indices, "prueba01.xlsx", overwrite = TRUE)
 ```
