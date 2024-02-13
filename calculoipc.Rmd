@@ -93,7 +93,7 @@ sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
 
 ```{r}
 bol %>% 
-  filter(cod_prod == "0531101") #%>% 
+  filter(cod_prod == "1312004") #%>% 
   #filter(cod_prod == "0116104")
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
@@ -244,7 +244,8 @@ ind_prod %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
-  mutate(ind_prod_rep = sum1/sum2)
+  mutate(ind_prod_rep = sum1/sum2) %>% 
+  filter(cod_prod == "0431104")
 ```
 
 ##### 5.1 índice de subclase
