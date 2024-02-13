@@ -77,23 +77,28 @@ bol <- boletas %>%
   select(region, codigo_articulo, articulo, cantidad_anterior, cantidad_actual, precio_anterior, precio_actual) %>% 
   mutate(cod_prod = substr(codigo_articulo, 1, ifelse(nchar(codigo_articulo) > 8, nchar(codigo_articulo) - 2, nchar(codigo_articulo) - 1)), .before = codigo_articulo) %>% 
   mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) %>% 
-  drop_na() %>% 
-  filter(cantidad_anterior-cantidad_actual < 5) %>% 
-  filter(precio_anterior-precio_actual < 5) %>% 
-  filter(cantidad_actual-cantidad_anterior < 5) %>% 
-  filter(precio_actual-precio_anterior < 5) #%>% 
-  #filter(cantidad_anterior != 0)#%>% 
+  drop_na() %>%
+  filter(cantidad_anterior !=0) %>% 
+  filter(cantidad_actual !=0) %>% 
+  filter(precio_anterior !=0) %>% 
+  filter(precio_actual !=0) %>% 
+  filter(cantidad_anterior-cantidad_actual < 10) %>% 
+  filter(precio_anterior-precio_actual < 10) %>% 
+  filter(cantidad_actual-cantidad_anterior < 10) %>% 
+  filter(precio_actual-precio_anterior < 10) #%>% 
+  
   #mutate(cantidad_actual = cantidad_anterior) %>% 
   #mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba
 ```
 
 ```{r}
 sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
+#unique(bol$cod_prod)
 ```
 
 ```{r}
 bol %>% 
-  filter(cod_prod == "1312004") #%>% 
+  filter(cod_prod == "0611117") #%>% 
   #filter(cod_prod == "0116104")
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
@@ -164,7 +169,7 @@ ind_prod %>%
   #filter(ind_prod > 1000) #%>% 
   #filter(ind_prod > 500) #%>%
   #filter(ind_prod > 200)
-  filter(ind_prod > 150)
+  filter(ind_prod < 80)
 
 #ind_prod01 <- ind_prod %>% 
 #  select(region, cod_prod, ind_prod)
@@ -244,8 +249,8 @@ ind_prod %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
-  mutate(ind_prod_rep = sum1/sum2) %>% 
-  filter(cod_prod == "0431104")
+  mutate(ind_prod_rep = sum1/sum2) #%>% 
+  #filter(cod_prod == "0431104")
 ```
 
 ##### 5.1 índice de subclase
