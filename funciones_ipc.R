@@ -28,6 +28,16 @@ variacion <- function(x){
 
 
 
+pondant <- function(x,y){
+  x %>% 
+    filter(tipo_grupo == y) %>% 
+    select(region_id, grupo_codigo, grupo_nombre, ponderacion_region, indice_grupo) %>% 
+    rename(region = region_id) %>% 
+    mutate(grupo_codigo = as.character(grupo_codigo))
+}
+
+
+
 
 
 
