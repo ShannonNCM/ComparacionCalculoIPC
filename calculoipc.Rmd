@@ -65,7 +65,7 @@ EXEC sp_get_indice_grupo 2023, 12
 ```{r}
 #un mini df que tiene la participacion de las regiones
 participacion <- data.frame(region = c(1,2,3,4,5,6,7,8),
-                            participacion = c(29.79,6.98,7.77,20.41,8.01,11.97,11.38,3.69)) %>% 
+                            participacion = c(13.472203,12.046949,12.486967,12.483411,12.674423,12.415842,12.190962,12.229243)) %>% 
   mutate(region = as.integer64(region))
 ```
 
@@ -175,7 +175,7 @@ ind_prod %>%
   select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
   #filter(ind_prod > 1000) #%>% 
   #filter(ind_prod > 500) #%>%
-  #filter(ind_prod > 140)
+  #filter(ind_prod > 110)
   filter(ind_prod < 90)
 
 #ind_prod01 <- ind_prod %>% 
@@ -209,7 +209,6 @@ ind_subclase <- ind_prod %>%
             count = n()) %>% 
   mutate(ind = sum1/sum2) #%>% 
   #filter(ind > 150)
-sum(is.na(ind_subclase)) 
 ```
 
 ##### 4.3 Índice de clase
@@ -367,8 +366,8 @@ ind_div %>%
 ```{r}
 ind_gen %>% 
   select(region, ind_prod_rep) %>% 
-  left_join(pondant(bolant,"División") %>% 
-              mutate(grupo_codigo = ifelse(nchar(grupo_codigo) == 1, paste0("0", grupo_codigo), grupo_codigo))
+  left_join(participacion) %>% 
+  mutate(inc_prod = ((ind_prod_rep-100)*participacion)/100)
   #left_join(pondant(bolant,"División") #%>% 
   #            mutate(grupo_codigo = ifelse(nchar(grupo_codigo) == 1, paste0("0", grupo_codigo), grupo_codigo)) %>% 
   #            select(region, grupo_codigo, ponderacion_region, indice_grupo), 
