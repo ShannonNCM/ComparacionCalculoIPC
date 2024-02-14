@@ -87,9 +87,7 @@ bol <- boletas %>%
   mutate(cantidad_anterior = ifelse(cantidad_anterior == 0, cantidad_actual, cantidad_anterior)) %>% 
   mutate(precio_anterior = ifelse(precio_anterior == 0, precio_actual, precio_anterior)) %>% 
   mutate(cantidad_anterior = ifelse(is.na(cantidad_anterior), cantidad_actual, cantidad_anterior)) %>% 
-  mutate(precio_anterior = ifelse(is.na(precio_anterior), precio_actual, precio_anterior)) #%>%
-  #filter(cantidad_anterior !=0) %>% 
-  #filter(precio_anterior !=0)
+  mutate(precio_anterior = ifelse(is.na(precio_anterior), precio_actual, precio_anterior))
 
   
   #mutate(cantidad_actual = cantidad_anterior) %>% 
@@ -207,7 +205,9 @@ ind_subclase <- ind_prod %>%
   summarize(sum1 = sum(ind_prod*ponderacion_region),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
-  mutate(ind = sum1/sum2) #%>% 
+  mutate(ind = sum1/sum2) %>%
+  drop_na() %>% 
+  select(region, grupo_codigo, ind)
   #filter(ind > 150)
 ```
 
@@ -221,7 +221,9 @@ ind_clase <- ind_prod %>%
   summarize(sum1 = sum(ind_prod*ponderacion_region),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
-  mutate(ind = sum1/sum2) #%>% 
+  mutate(ind = sum1/sum2) %>%
+  drop_na() %>% 
+  select(region, grupo_codigo, ind)
   #filter(ind > 150) #%>% 
   #filter(grupo_codigo == "0111") 
 #el "problema" aqui es que el count esta contando todos todos los que se usaron, porque estoy yendo desde la base de datos de los productos, que si coindicen al menos para el arroz, excepto en la region 7 que me salen solo 15 :O
@@ -237,7 +239,9 @@ ind_grupo <- ind_prod %>%
   summarize(sum1 = sum(ind_prod*ponderacion_region),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
-  mutate(ind = sum1/sum2) #%>% 
+  mutate(ind = sum1/sum2) %>%
+  drop_na() %>% 
+  select(region, grupo_codigo, ind)
   #filter(ind > 150)
 ```
 
@@ -251,7 +255,9 @@ ind_div <- ind_prod %>%
   summarize(sum1 = sum(ind_prod*ponderacion_region),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
-  mutate(ind = sum1/sum2) #%>% 
+  mutate(ind = sum1/sum2) %>%
+  drop_na() %>% 
+  select(region, grupo_codigo, ind)
   #filter(ind > 150) #%>% 
   #select(region, grupo_codigo, ind)
 ```
@@ -266,7 +272,8 @@ ind_rep_prod <- ind_prod %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
-  mutate(ind_prod_rep = sum1/sum2) #%>% 
+  mutate(ind_prod_rep = sum1/sum2) %>%
+  select(cod_prod, grupo_nombre, ind_prod_rep)
   #filter(ind_prod_rep > 150) #%>% 
   #filter(cod_prod == "0431104")
 ```
@@ -279,7 +286,9 @@ ind_rep_subclase <- ind_prod %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
-  mutate(ind_prod_rep = sum1/sum2) #%>% 
+  mutate(ind_prod_rep = sum1/sum2) %>%
+  drop_na() %>% 
+  select(cod_subclase, ind_prod_rep)
   #filter(ind_prod_rep > 150)
 ```
 
@@ -290,7 +299,9 @@ ind_rep_clase <- ind_prod %>%
   group_by(cod_clase) %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region)) %>% 
-  mutate(ind_prod_rep = sum1/sum2) #%>% 
+  mutate(ind_prod_rep = sum1/sum2) %>%
+  drop_na() %>% 
+  select(cod_clase, ind_prod_rep)
   #filter(ind_prod_rep > 150)
 ```
 
@@ -301,7 +312,9 @@ ind_rep_grupo <- ind_prod %>%
   group_by(cod_grupo) %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region)) %>% 
-  mutate(ind_prod_rep = sum1/sum2) #%>% 
+  mutate(ind_prod_rep = sum1/sum2) %>%
+  drop_na() %>% 
+  select(cod_grupo, ind_prod_rep)
   #filter(ind_prod_rep > 150)
 ```
 
@@ -312,7 +325,9 @@ ind_rep_div <- ind_prod %>%
   group_by(cod_div) %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region)) %>% 
-  mutate(ind_prod_rep = sum1/sum2) #%>% 
+  mutate(ind_prod_rep = sum1/sum2) %>%
+  drop_na() %>% 
+  select(cod_div, ind_prod_rep)
   #filter(ind_prod_rep > 150)
 ```
 
@@ -323,8 +338,8 @@ ind_gen <- ind_prod %>%
   group_by(region) %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region)) %>% 
-  mutate(ind_prod_rep = sum1/sum2) #%>% 
-  #select(region, ind_prod_rep)
+  mutate(ind_prod_rep = sum1/sum2) %>%
+  select(region, ind_prod_rep)
 ```
 
 ```{r}
@@ -339,47 +354,45 @@ ind_rep <- ind_prod %>%
 7.1 Incidencias por producto
 
 ```{r}
-ind_prod %>% 
+incid_prod <- ind_prod %>% 
   select(region, cod_prod, grupo_nombre, ponderacion_region, ind_prod) %>% 
   left_join(pondant(bolant,"Producto") %>% 
               rename(cod_prod = grupo_codigo) %>%
               mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) %>% 
               select(region, cod_prod, grupo_nombre, indice_grupo), 
             by = c("region", "cod_prod", "grupo_nombre")) %>% 
-  mutate(inc_prod = ((ind_prod-indice_grupo)*ponderacion_region)/100)
+  mutate(inc_prod = ((ind_prod-indice_grupo)*ponderacion_region)/100) %>% 
+  select(region, cod_prod, grupo_nombre, inc_prod)
 ```
 
 7.2 Incidencias por division
 
 ```{r}
-ind_div %>% 
+incid_div <- ind_div %>% 
   select(region, grupo_codigo, ind) %>% 
   left_join(pondant(bolant,"División") %>% 
               mutate(grupo_codigo = ifelse(nchar(grupo_codigo) == 1, paste0("0", grupo_codigo), grupo_codigo)) %>% 
               select(region, grupo_codigo, ponderacion_region, indice_grupo), 
             by = c("region", "grupo_codigo")) %>% 
-  mutate(inc_div = ((ind-indice_grupo)*ponderacion_region)/100)
+  mutate(inc_div = ((ind-indice_grupo)*ponderacion_region)/100) %>% 
+  select(region, grupo_codigo, inc_div) %>% 
+  drop_na()
 ```
 
 7.3 Incidencias por region
 
 ```{r}
-ind_gen %>% 
+incid_reg <- ind_gen %>% 
   select(region, ind_prod_rep) %>% 
   left_join(participacion) %>% 
   mutate(inc_prod = ((ind_prod_rep-100)*participacion)/100)
-  #left_join(pondant(bolant,"División") #%>% 
-  #            mutate(grupo_codigo = ifelse(nchar(grupo_codigo) == 1, paste0("0", grupo_codigo), grupo_codigo)) %>% 
-  #            select(region, grupo_codigo, ponderacion_region, indice_grupo), 
-  #          by = c("region", "grupo_codigo")) %>% 
-  #mutate(inc_div = ((ind-indice_grupo)*ponderacion_region)/100)
 ```
 
-Exportamos a un excel
+Exportamos a un excel de nombre prueba02
 
 ```{r}
 indices <- createWorkbook()
-for (i in 1:13) {
+for (i in 1:15) {
   nombres_cuad <- paste("Cuadro",i,sep = "")
   addWorksheet(indices, nombres_cuad)}
 
@@ -396,6 +409,9 @@ writeData(indices, "Cuadro9", ind_rep_grupo)
 writeData(indices, "Cuadro10", ind_rep_div)
 writeData(indices, "Cuadro11", ind_gen)
 writeData(indices, "Cuadro12", ind_rep)
+writeData(indices, "Cuadro13", incid_prod)
+writeData(indices, "Cuadro14", incid_div)
+writeData(indices, "Cuadro15", incid_reg)
 
-saveWorkbook(indices, "prueba01.xlsx", overwrite = TRUE)
+saveWorkbook(indices, "prueba02.xlsx", overwrite = TRUE)
 ```
