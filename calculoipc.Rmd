@@ -28,10 +28,15 @@ source("funciones_ipc.R")
 Conexión al servidor
 
 ```{r}
-server <- 'inegt-ipc.database.windows.net'
-user <- 'ipcuser_exec'
-pas <- 'In3/*ipc2023'
+server <- 'ipcprod.database.windows.net'
+user <- 'ipcreader'
+pas <- '1pc/*2023'
 database <- 'db-indices'
+
+#server <- 'inegt-ipc.database.windows.net'
+#user <- 'ipcuser_exec'
+#pas <- 'In3/*ipc2023'
+#database <- 'db-indices'
 ```
 
 ```{r}
@@ -50,16 +55,20 @@ con <- dbConnect(odbc::odbc(), .connection_string=conn_str)
 
 Obtención de la base de datos
 
+El dataframe "boletas" tiene todos los datos obtenidos del servidor con la base de datos del mes actual
+
 ```{sql connection=con, output.var="boletas"}
-EXEC [dbo].[sp_get_precios_recolectados_mes] 2024, 1
+EXEC [dbo].[sp_get_precios_recolectados_mes] 2024, 2
 ```
+
+El dataframe "ponderaciones" contiene los datos de las ponderaciones para el mes actual, asi como los indices del mes anterior que estan en la variable "indice_anterior"
 
 ```{sql connection=con, output.var="ponderaciones"}
-EXEC sp_get_indice_grupo 2024, 1
+EXEC sp_get_indice_grupo 2024, 2
 ```
 
-```{sql connection=con, output.var="bolant"}
-EXEC sp_get_indice_grupo 2023, 12
+```{sql connection=con, output.var="ponderacionesant"}
+EXEC sp_get_indice_grupo 2024, 1
 ```
 
 ```{r}
@@ -75,33 +84,34 @@ dbDisconnect(con)
 
 ### Adecuación de la base de datos
 
-En este apartado se modifica el dataframe agregando una columna para asignar a cada variedad un grupo para su identificación posterior
+En este apartado se modifica el dataframe agregando una columna para asignar a cada variedad un grupo para su identificación posterior, la base de datos modificada se guarda en el dataframe de nombre "bol"
 
 ```{r}
 bol <- boletas %>%
-  filter(tp_poll_impute_status %in% c(351821, 351824)) %>% 
-  filter(detail_tp_poll_status %in% c(351634, 351635)) %>% 
+  filter(tp_poll_impute_status %in% c(351821, 351824)) %>% #filtro de estado de imputacion
+  filter(detail_tp_poll_status %in% c(351634, 351635)) %>% #filtro de estado de la boleta
   select(region, codigo_articulo, articulo, cantidad_anterior, cantidad_actual, precio_anterior, precio_actual, nt_tipo) %>% 
   mutate(cod_prod = substr(codigo_articulo, 1, ifelse(nchar(codigo_articulo) > 8, nchar(codigo_articulo) - 2, nchar(codigo_articulo) - 1)), .before = codigo_articulo) %>% 
-  mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) %>% 
+  mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) %>%
   mutate(cantidad_anterior = ifelse(cantidad_anterior == 0, cantidad_actual, cantidad_anterior)) %>% 
   mutate(precio_anterior = ifelse(precio_anterior == 0, precio_actual, precio_anterior)) %>% 
   mutate(cantidad_anterior = ifelse(is.na(cantidad_anterior), cantidad_actual, cantidad_anterior)) %>% 
   mutate(precio_anterior = ifelse(is.na(precio_anterior), precio_actual, precio_anterior))
+#estas ultimas 4 condicionales son en caso de que no aparezca un precio/cantidad o el precio/cantidad que se reporta tenga valor 0
 
   
   #mutate(cantidad_actual = cantidad_anterior) %>% 
-  #mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba
+  #mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba del calculo
 ```
 
 ```{r}
-sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
+#sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
 #unique(bol$cod_prod)
 ```
 
 ```{r}
-bol %>% 
-  filter(cod_prod == "0117205") #%>% 
+#bol %>% 
+  #filter(cod_prod == "0111202") #%>% 
   #filter(cod_prod == "0116104")
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
@@ -136,9 +146,9 @@ Esto es la media geométrica de todas las variaciones de las variedades (artícu
 relativo <- bol01 %>% 
   group_by(region, cod_prod) %>% 
   summarize(relativo = geometric.mean(var_prod)) %>%
-  left_join(pon_prod %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_grupo), 
+  left_join(pon_prod %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_anterior), 
                            by = c("region", "cod_prod")) %>% 
-  select(region, cod_prod, grupo_nombre, relativo, ponderacion_region, indice_grupo)
+  select(region, cod_prod, grupo_nombre, relativo, ponderacion_region, indice_anterior)
 ```
 
 #### 3. Promedio ponderado
@@ -151,7 +161,7 @@ prom_pon <- relativo %>%
   summarize(var_ac = sum(relativo*ponderacion_region),
             sum_pon = sum(ponderacion_region)) %>% 
   mutate(prom_pon = var_ac/sum_pon) %>% 
-  left_join(relativo %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_grupo), by = c("region", "cod_prod", "grupo_nombre"))
+  left_join(relativo %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_anterior), by = c("region", "cod_prod", "grupo_nombre"))
 ```
 
 #### 4. Índice de precios por región
@@ -160,7 +170,7 @@ prom_pon <- relativo %>%
 
 ```{r}
 ind_prod <- prom_pon %>% 
-  mutate(ind_prod = indice_grupo*prom_pon) %>% 
+  mutate(ind_prod = indice_anterior*prom_pon) %>% 
   cod_grupos() %>% 
   drop_na() #utilice el dropna porque hay datos faltantes en las boletas
 #ind_prod
@@ -174,7 +184,7 @@ ind_prod %>%
   #filter(ind_prod > 1000) #%>% 
   #filter(ind_prod > 500) #%>%
   #filter(ind_prod > 110)
-  filter(ind_prod < 90)
+  filter(ind_prod < 60)
 
 #ind_prod01 <- ind_prod %>% 
 #  select(region, cod_prod, ind_prod)
@@ -188,7 +198,7 @@ ind_prod %>%
 ind_prod <- ind_prod %>% 
   select(region, cod_div, cod_grupo, cod_clase, cod_subclase, cod_prod, grupo_nombre, ind_prod) %>% 
   full_join(pon_prod) %>% 
-  mutate(ind_prod = ifelse(is.na(ind_prod), indice_grupo, ind_prod)) %>% 
+  mutate(ind_prod = ifelse(is.na(ind_prod), indice_anterior, ind_prod)) %>% 
   filter(region != 0)
 
 ind_prod01 <- ind_prod %>% 
@@ -356,12 +366,12 @@ ind_rep <- ind_prod %>%
 ```{r}
 incid_prod <- ind_prod %>% 
   select(region, cod_prod, grupo_nombre, ponderacion_region, ind_prod) %>% 
-  left_join(pondant(bolant,"Producto") %>% 
+  left_join(pondcat("Producto") %>% 
               rename(cod_prod = grupo_codigo) %>%
               mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) %>% 
-              select(region, cod_prod, grupo_nombre, indice_grupo), 
+              select(region, cod_prod, grupo_nombre, indice_anterior), 
             by = c("region", "cod_prod", "grupo_nombre")) %>% 
-  mutate(inc_prod = ((ind_prod-indice_grupo)*ponderacion_region)/100) %>% 
+  mutate(inc_prod = ((ind_prod-indice_anterior)*ponderacion_region)/indice_anterior) %>% 
   select(region, cod_prod, grupo_nombre, inc_prod)
 ```
 
@@ -370,11 +380,11 @@ incid_prod <- ind_prod %>%
 ```{r}
 incid_div <- ind_div %>% 
   select(region, grupo_codigo, ind) %>% 
-  left_join(pondant(bolant,"División") %>% 
+  left_join(pondcat("División") %>% 
               mutate(grupo_codigo = ifelse(nchar(grupo_codigo) == 1, paste0("0", grupo_codigo), grupo_codigo)) %>% 
-              select(region, grupo_codigo, ponderacion_region, indice_grupo), 
+              select(region, grupo_codigo, ponderacion_region, indice_anterior), 
             by = c("region", "grupo_codigo")) %>% 
-  mutate(inc_div = ((ind-indice_grupo)*ponderacion_region)/100) %>% 
+  mutate(inc_div = ((ind-indice_anterior)*ponderacion_region)/indice_anterior) %>% 
   select(region, grupo_codigo, inc_div) %>% 
   drop_na()
 ```
@@ -388,7 +398,7 @@ incid_reg <- ind_gen %>%
   mutate(inc_prod = ((ind_prod_rep-100)*participacion)/100)
 ```
 
-Exportamos a un excel de nombre prueba02
+Exportamos a un excel de nombre para este mes
 
 ```{r}
 indices <- createWorkbook()
@@ -411,7 +421,7 @@ writeData(indices, "Cuadro11", ind_gen)
 writeData(indices, "Cuadro12", ind_rep)
 writeData(indices, "Cuadro13", incid_prod)
 writeData(indices, "Cuadro14", incid_div)
-writeData(indices, "Cuadro15", incid_reg)
+#writeData(indices, "Cuadro15", incid_reg)
 
-saveWorkbook(indices, "prueba02.xlsx", overwrite = TRUE)
+saveWorkbook(indices, "indiceprelim_022024.xlsx", overwrite = TRUE)
 ```
