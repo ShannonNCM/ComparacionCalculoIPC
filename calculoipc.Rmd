@@ -110,8 +110,8 @@ bol <- boletas %>%
 ```
 
 ```{r}
-#bol %>% 
-  #filter(cod_prod == "0111202") #%>% 
+bol %>% 
+  filter(cod_prod == "0111202") #%>% 
   #filter(cod_prod == "0116104")
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
@@ -195,14 +195,14 @@ ind_prod %>%
 ```
 
 ```{r}
-ind_prod <- ind_prod %>% 
-  select(region, cod_div, cod_grupo, cod_clase, cod_subclase, cod_prod, grupo_nombre, ind_prod) %>% 
-  full_join(pon_prod) %>% 
-  mutate(ind_prod = ifelse(is.na(ind_prod), indice_anterior, ind_prod)) %>% 
-  filter(region != 0)
+#ind_prod <- ind_prod %>% 
+#  select(region, cod_div, cod_grupo, cod_clase, cod_subclase, cod_prod, grupo_nombre, ind_prod) %>% 
+#  full_join(pon_prod) %>% 
+#  mutate(ind_prod = ifelse(is.na(ind_prod), indice_anterior, ind_prod)) %>% 
+#  filter(region != 0)
 
-ind_prod01 <- ind_prod %>% 
-  select(region, cod_prod, ind_prod)
+#ind_prod01 <- ind_prod %>% 
+#  select(region, cod_prod, ind_prod)
 ```
 
 ##### 4.2 Índice de subclase
@@ -396,6 +396,7 @@ incid_reg <- ind_gen %>%
   select(region, ind_prod_rep) %>% 
   left_join(participacion) %>% 
   mutate(inc_prod = ((ind_prod_rep-100)*participacion)/100)
+#me falta arreglar esto para que tome los indices de las regiones, pero aun no tengo la funcion que me permite bajar los datos del indice de region en el sistema
 ```
 
 Exportamos a un excel de nombre para este mes
