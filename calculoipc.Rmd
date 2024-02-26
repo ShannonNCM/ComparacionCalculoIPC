@@ -88,17 +88,14 @@ En este apartado se modifica el dataframe agregando una columna para asignar a c
 
 ```{r}
 bol <- boletas %>%
-  filter(tp_poll_impute_status %in% c(351821, 351824)) %>% #filtro de estado de imputacion
-  filter(detail_tp_poll_status %in% c(351634, 351635)) %>% #filtro de estado de la boleta
+  #filter(tp_poll_impute_status %in% c(351821, 351824)) %>% #filtro de estado de imputacion
+  #filter(detail_tp_poll_status %in% c(351634, 351635)) %>% #filtro de estado de la boleta
   select(region, codigo_articulo, articulo, cantidad_anterior, cantidad_actual, precio_anterior, precio_actual, nt_tipo) %>% 
   mutate(cod_prod = substr(codigo_articulo, 1, ifelse(nchar(codigo_articulo) > 8, nchar(codigo_articulo) - 2, nchar(codigo_articulo) - 1)), .before = codigo_articulo) %>% 
   mutate(cod_prod = ifelse(nchar(cod_prod) == 6, paste0("0", cod_prod), cod_prod)) %>%
-  mutate(cantidad_anterior = ifelse(cantidad_anterior == 0, cantidad_actual, cantidad_anterior)) %>% 
-  mutate(precio_anterior = ifelse(precio_anterior == 0, precio_actual, precio_anterior)) %>% 
-  mutate(cantidad_anterior = ifelse(is.na(cantidad_anterior), cantidad_actual, cantidad_anterior)) %>% 
-  mutate(precio_anterior = ifelse(is.na(precio_anterior), precio_actual, precio_anterior))
-#estas ultimas 4 condicionales son en caso de que no aparezca un precio/cantidad o el precio/cantidad que se reporta tenga valor 0
-
+  mutate(cantidad_anterior = ifelse(cantidad_anterior == 0 | is.na(cantidad_anterior), cantidad_actual, cantidad_anterior)) %>% 
+  mutate(precio_anterior = ifelse(precio_anterior == 0 | is.na(precio_anterior), precio_actual, precio_anterior))
+#estas ultimas 2 condicionales son en caso de que no aparezca un precio/cantidad o el precio/cantidad que se reporta tenga valor 0
   
   #mutate(cantidad_actual = cantidad_anterior) %>% 
   #mutate(precio_actual = precio_anterior) # estas dos ultimas filas no irian en la de verdad esto es solo para la prueba del calculo
@@ -111,7 +108,7 @@ bol <- boletas %>%
 
 ```{r}
 bol %>% 
-  filter(cod_prod == "0111202") #%>% 
+  filter(cod_prod == "0451001") #%>% 
   #filter(cod_prod == "0116104")
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
@@ -195,6 +192,7 @@ ind_prod %>%
 ```
 
 ```{r}
+#esta parte se uso porque en enero no aparecian todos los productos
 #ind_prod <- ind_prod %>% 
 #  select(region, cod_div, cod_grupo, cod_clase, cod_subclase, cod_prod, grupo_nombre, ind_prod) %>% 
 #  full_join(pon_prod) %>% 
