@@ -104,11 +104,14 @@ bol <- boletas %>%
 ```{r}
 #sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
 #unique(bol$cod_prod)
+#sum(is.na(boletas$cantidad_actual))
+
+#which(is.na(bol$cantidad_actual))
 ```
 
 ```{r}
 bol %>% 
-  filter(cod_prod == "0451001") #%>% 
+  filter(cod_prod == "1312002") #%>% 
   #filter(cod_prod == "0116104")
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
@@ -394,7 +397,7 @@ incid_reg <- ind_gen %>%
   select(region, ind_prod_rep) %>% 
   left_join(participacion) %>% 
   mutate(inc_prod = ((ind_prod_rep-100)*participacion)/100)
-#me falta arreglar esto para que tome los indices de las regiones, pero aun no tengo la funcion que me permite bajar los datos del indice de region en el sistema
+#me falta arreglar esto para que tome los indices de las regiones, pero aun no tengo la funcion que me permite bajar los datos del indice de region del sistema
 ```
 
 Exportamos a un excel de nombre para este mes
