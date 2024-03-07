@@ -431,7 +431,7 @@ for (i in 1:16) {
   addWorksheet(indices, nombres_cuad)}
 
 #se guardan los datos en el workbook
-writeData(indices, "Indices", ind_prod01)
+writeData(indices, "Cuadro1", ind_prod01)
 writeData(indices, "Cuadro2", ind_subclase)
 writeData(indices, "Cuadro3", ind_clase)
 writeData(indices, "Cuadro4", ind_grupo)
