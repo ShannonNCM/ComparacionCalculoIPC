@@ -407,14 +407,14 @@ prod_faltantes <- pon_prod %>%
 ```
 
 ```{r}
-write.xlsx(prod_faltantes, "productosnorecolectadoss_022024.xlsx")
+#write.xlsx(prod_faltantes, "productosnorecolectadoss_022024.xlsx")
 ```
 
 Exportamos a un excel de nombre para este mes
 
 ```{r}
 indices <- createWorkbook()
-for (i in 1:15) {
+for (i in 1:16) {
   nombres_cuad <- paste("Cuadro",i,sep = "")
   addWorksheet(indices, nombres_cuad)}
 
@@ -434,6 +434,7 @@ writeData(indices, "Cuadro12", ind_rep)
 writeData(indices, "Cuadro13", incid_prod)
 writeData(indices, "Cuadro14", incid_div)
 #writeData(indices, "Cuadro15", incid_reg)
+writeData(indices, "Cuadro16", prod_faltantes)
 
 saveWorkbook(indices, "indiceprelim_022024.xlsx", overwrite = TRUE)
 ```
