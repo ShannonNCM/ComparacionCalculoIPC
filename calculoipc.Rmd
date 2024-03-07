@@ -67,10 +67,6 @@ El dataframe "ponderaciones" contiene los datos de las ponderaciones para el mes
 EXEC sp_get_indice_grupo 2024, 2
 ```
 
-```{sql connection=con, output.var="ponderacionesant"}
-EXEC sp_get_indice_grupo 2024, 1
-```
-
 ```{r}
 #un mini df que tiene la participacion de las regiones
 participacion <- data.frame(region = c(1,2,3,4,5,6,7,8),
@@ -110,8 +106,8 @@ bol <- boletas %>%
 ```
 
 ```{r}
-bol %>% 
-  filter(cod_prod == "1312002") #%>% 
+#bol %>% 
+  #filter(cod_prod == "1312002") #%>% 
   #filter(cod_prod == "0116104")
 #aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
 ```
@@ -184,7 +180,7 @@ ind_prod %>%
   #filter(ind_prod > 1000) #%>% 
   #filter(ind_prod > 500) #%>%
   #filter(ind_prod > 110)
-  filter(ind_prod < 60)
+  filter(ind_prod < 80)
 
 #ind_prod01 <- ind_prod %>% 
 #  select(region, cod_prod, ind_prod)
@@ -398,6 +394,20 @@ incid_reg <- ind_gen %>%
   left_join(participacion) %>% 
   mutate(inc_prod = ((ind_prod_rep-100)*participacion)/100)
 #me falta arreglar esto para que tome los indices de las regiones, pero aun no tengo la funcion que me permite bajar los datos del indice de region del sistema
+```
+
+#### 8. Productos no recolectados
+
+```{r}
+#aca va la parte donde se obtienen los productos que no se cotizaron en el mes
+prod_faltantes <- pon_prod %>% 
+  filter(region == 0) %>% 
+  anti_join(ind_prod, by = "cod_prod") %>% 
+  select(cod_prod, grupo_nombre)
+```
+
+```{r}
+write.xlsx(prod_faltantes, "productosnorecolectadoss_022024.xlsx")
 ```
 
 Exportamos a un excel de nombre para este mes
