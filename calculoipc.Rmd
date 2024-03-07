@@ -389,10 +389,22 @@ incid_div <- ind_div %>%
 7.3 Incidencias por region
 
 ```{r}
+ind_reg_ant <- pon_prod %>% 
+  filter(region != 0) %>% 
+  group_by(region) %>%
+  summarize(sum1 = sum(ponderacion_region*indice_anterior),
+            sum2 = sum(ponderacion_region)) %>% 
+  mutate(ind_reg_ant = sum1/sum2) %>%
+  select(region, ind_reg_ant)
+```
+
+```{r}
 incid_reg <- ind_gen %>% 
   select(region, ind_prod_rep) %>% 
   left_join(participacion) %>% 
-  mutate(inc_prod = ((ind_prod_rep-100)*participacion)/100)
+  left_join(ind_reg_ant) %>% 
+  mutate(inc_prod = ((ind_prod_rep-ind_reg_ant)*participacion)/ind_reg_ant) %>% 
+  select(region, inc_prod)
 #me falta arreglar esto para que tome los indices de las regiones, pero aun no tengo la funcion que me permite bajar los datos del indice de region del sistema
 ```
 
@@ -419,7 +431,7 @@ for (i in 1:16) {
   addWorksheet(indices, nombres_cuad)}
 
 #se guardan los datos en el workbook
-writeData(indices, "Cuadro1", ind_prod01)
+writeData(indices, "Indices", ind_prod01)
 writeData(indices, "Cuadro2", ind_subclase)
 writeData(indices, "Cuadro3", ind_clase)
 writeData(indices, "Cuadro4", ind_grupo)
@@ -433,7 +445,7 @@ writeData(indices, "Cuadro11", ind_gen)
 writeData(indices, "Cuadro12", ind_rep)
 writeData(indices, "Cuadro13", incid_prod)
 writeData(indices, "Cuadro14", incid_div)
-#writeData(indices, "Cuadro15", incid_reg)
+writeData(indices, "Cuadro15", incid_reg)
 writeData(indices, "Cuadro16", prod_faltantes)
 
 saveWorkbook(indices, "indiceprelim_022024.xlsx", overwrite = TRUE)
