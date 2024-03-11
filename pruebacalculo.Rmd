@@ -49,7 +49,7 @@ con <- dbConnect(odbc::odbc(), .connection_string=conn_str)
 
 Obtención de la base de datos
 
-```{sql connection=con, output.var="boletas"}
+```{sql connection=con, output.var="boletastest"}
 EXEC [dbo].[sp_get_precios_recolectados_mes] 2024, 1
 ```
 
@@ -58,7 +58,7 @@ EXEC sp_get_indice_grupo 2024, 1
 ```
 
 ```{sql connection=con, output.var="ponderacionesmesant"}
-EXEC sp_get_indice_grupo 2023, 12
+EXEC sp_get_indice_grupo 2024, 1
 ```
 
 ```{r}

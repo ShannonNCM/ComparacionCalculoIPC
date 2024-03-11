@@ -128,10 +128,8 @@ bol01 <- variacion(bol) %>%
   mutate(var_prod = ifelse(nt_tipo %in% c(351761,351762), 1, var_prod)) %>% 
   select(region, cod_prod, codigo_articulo, articulo, var_prod)
   #drop_na()
-#bol01 %>% 
-#  select(region, cod_prod, codigo_articulo, articulo, var_prod)
 
-sum(is.na(bol01))
+#sum(is.na(bol01))
 ```
 
 #### 2. Relativo de precios de un producto
@@ -182,8 +180,8 @@ ind_prod %>%
   #filter(ind_prod > 110)
   filter(ind_prod < 80)
 
-#ind_prod01 <- ind_prod %>% 
-#  select(region, cod_prod, ind_prod)
+ind_prod01 <- ind_prod %>% 
+  select(region, cod_prod, ind_prod)
 #se guardan los datos en el workbook
 #writeData(indices, "Cuadro1", ind_prod01)
 
@@ -215,7 +213,6 @@ ind_subclase <- ind_prod %>%
   mutate(ind = sum1/sum2) %>%
   drop_na() %>% 
   select(region, grupo_codigo, ind)
-  #filter(ind > 150)
 ```
 
 ##### 4.3 Índice de clase
@@ -231,9 +228,6 @@ ind_clase <- ind_prod %>%
   mutate(ind = sum1/sum2) %>%
   drop_na() %>% 
   select(region, grupo_codigo, ind)
-  #filter(ind > 150) #%>% 
-  #filter(grupo_codigo == "0111") 
-#el "problema" aqui es que el count esta contando todos todos los que se usaron, porque estoy yendo desde la base de datos de los productos, que si coindicen al menos para el arroz, excepto en la region 7 que me salen solo 15 :O
 ```
 
 ##### 4.4 Índice de grupo
@@ -249,7 +243,6 @@ ind_grupo <- ind_prod %>%
   mutate(ind = sum1/sum2) %>%
   drop_na() %>% 
   select(region, grupo_codigo, ind)
-  #filter(ind > 150)
 ```
 
 ##### 4.5 Índice de división
@@ -265,8 +258,6 @@ ind_div <- ind_prod %>%
   mutate(ind = sum1/sum2) %>%
   drop_na() %>% 
   select(region, grupo_codigo, ind)
-  #filter(ind > 150) #%>% 
-  #select(region, grupo_codigo, ind)
 ```
 
 #### 5. Índice de precios a nivel república
@@ -281,8 +272,6 @@ ind_rep_prod <- ind_prod %>%
             count = n()) %>% 
   mutate(ind_prod_rep = sum1/sum2) %>%
   select(cod_prod, grupo_nombre, ind_prod_rep)
-  #filter(ind_prod_rep > 150) #%>% 
-  #filter(cod_prod == "0431104")
 ```
 
 ##### 5.1 índice de subclase
@@ -296,7 +285,6 @@ ind_rep_subclase <- ind_prod %>%
   mutate(ind_prod_rep = sum1/sum2) %>%
   drop_na() %>% 
   select(cod_subclase, ind_prod_rep)
-  #filter(ind_prod_rep > 150)
 ```
 
 ##### 5.2 Índice de clase
@@ -309,7 +297,6 @@ ind_rep_clase <- ind_prod %>%
   mutate(ind_prod_rep = sum1/sum2) %>%
   drop_na() %>% 
   select(cod_clase, ind_prod_rep)
-  #filter(ind_prod_rep > 150)
 ```
 
 ##### 5.3 Índice de grupo
@@ -322,7 +309,6 @@ ind_rep_grupo <- ind_prod %>%
   mutate(ind_prod_rep = sum1/sum2) %>%
   drop_na() %>% 
   select(cod_grupo, ind_prod_rep)
-  #filter(ind_prod_rep > 150)
 ```
 
 ##### 5.4 Índice de división
@@ -335,7 +321,6 @@ ind_rep_div <- ind_prod %>%
   mutate(ind_prod_rep = sum1/sum2) %>%
   drop_na() %>% 
   select(cod_div, ind_prod_rep)
-  #filter(ind_prod_rep > 150)
 ```
 
 #### 6. Índice general
@@ -405,7 +390,6 @@ incid_reg <- ind_gen %>%
   left_join(ind_reg_ant) %>% 
   mutate(inc_prod = ((ind_prod_rep-ind_reg_ant)*participacion)/ind_reg_ant) %>% 
   select(region, inc_prod)
-#me falta arreglar esto para que tome los indices de las regiones, pero aun no tengo la funcion que me permite bajar los datos del indice de region del sistema
 ```
 
 #### 8. Productos no recolectados
@@ -418,35 +402,8 @@ prod_faltantes <- pon_prod %>%
   select(cod_prod, grupo_nombre)
 ```
 
-```{r}
-#write.xlsx(prod_faltantes, "productosnorecolectadoss_022024.xlsx")
-```
-
 Exportamos a un excel de nombre para este mes
 
 ```{r}
-indices <- createWorkbook()
-for (i in 1:16) {
-  nombres_cuad <- paste("Cuadro",i,sep = "")
-  addWorksheet(indices, nombres_cuad)}
-
-#se guardan los datos en el workbook
-writeData(indices, "Cuadro1", ind_prod01)
-writeData(indices, "Cuadro2", ind_subclase)
-writeData(indices, "Cuadro3", ind_clase)
-writeData(indices, "Cuadro4", ind_grupo)
-writeData(indices, "Cuadro5", ind_div)
-writeData(indices, "Cuadro6", ind_rep_prod)
-writeData(indices, "Cuadro7", ind_rep_subclase)
-writeData(indices, "Cuadro8", ind_rep_clase)
-writeData(indices, "Cuadro9", ind_rep_grupo)
-writeData(indices, "Cuadro10", ind_rep_div)
-writeData(indices, "Cuadro11", ind_gen)
-writeData(indices, "Cuadro12", ind_rep)
-writeData(indices, "Cuadro13", incid_prod)
-writeData(indices, "Cuadro14", incid_div)
-writeData(indices, "Cuadro15", incid_reg)
-writeData(indices, "Cuadro16", prod_faltantes)
-
-saveWorkbook(indices, "indiceprelim_022024.xlsx", overwrite = TRUE)
+exportarexcel("indiceprelim_022024.xlsx")
 ```
