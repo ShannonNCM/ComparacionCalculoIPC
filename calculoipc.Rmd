@@ -58,13 +58,13 @@ Obtención de la base de datos
 El dataframe "boletas" tiene todos los datos obtenidos del servidor con la base de datos del mes actual
 
 ```{sql connection=con, output.var="boletas"}
-EXEC [dbo].[sp_get_precios_recolectados_mes] 2024, 2
+EXEC [dbo].[sp_get_precios_recolectados_mes] 2024, 3
 ```
 
 El dataframe "ponderaciones" contiene los datos de las ponderaciones para el mes actual, asi como los indices del mes anterior que estan en la variable "indice_anterior"
 
 ```{sql connection=con, output.var="ponderaciones"}
-EXEC sp_get_indice_grupo 2024, 2
+EXEC sp_get_indice_grupo 2024, 3
 ```
 
 ```{r}
@@ -339,6 +339,7 @@ ind_rep <- ind_prod %>%
   summarize(sum1 = sum(ponderacion_region*ind_prod),
             sum2 = sum(ponderacion_region)) %>% 
   mutate(indrep = sum1/sum2)
+ind_rep
 ```
 
 #### 7. Incidencias
@@ -405,5 +406,5 @@ prod_faltantes <- pon_prod %>%
 Exportamos a un excel de nombre para este mes
 
 ```{r}
-exportarexcel("indiceprelim_022024.xlsx")
+exportarexcel("indiceprelim_032024.xlsx")
 ```
