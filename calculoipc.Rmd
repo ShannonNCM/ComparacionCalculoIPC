@@ -173,12 +173,12 @@ ind_prod <- prom_pon %>%
 #  filter(cod_prod == "0111102")
 
 #indover150 <- 
-ind_prod %>% 
-  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
+#ind_prod %>% 
+#  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
   #filter(ind_prod > 1000) #%>% 
   #filter(ind_prod > 500) #%>%
   #filter(ind_prod > 110)
-  filter(ind_prod < 80)
+#  filter(ind_prod < 80)
 
 ind_prod01 <- ind_prod %>% 
   select(region, cod_prod, ind_prod)
