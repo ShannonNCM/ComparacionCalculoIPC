@@ -27,7 +27,7 @@ recodificacion = {
     '1112031':'011120304', #preparacion nutricional
     '1113011':'011130101', #pan frances 
     '1113012':'011130103', #pan rodajado
-    '1113021':'011130102', #pan dulce corriente
+    '1113021':'011130102', #pan dulce corriente o de manteca
     '1113031':'011130201', #galletas
     '1113041':'011150101', 
     '1113042':'011150101',
@@ -53,7 +53,7 @@ recodificacion = {
     '1122021':'011220101',
     '1122022':'011220102',
     '1122023':'011220104', #carne de cerdo
-    '1122031':'011230101', #pollo 
+    '1122031':'011230101', #pollo fresco entero de granja 
     '1124021':'011210108', #higado de res
     '1125011':'011240101', 
     '1125012':'011240101', #salchichas
@@ -691,4 +691,9 @@ recodificacion = {
     "1199031":"111120301", #coloque las frituras de maiz en los tortrix
     "11112072":"011130303", #coloque las porciones de pastel frio de fresas en los pasteles frios
     "1230012":"012110202", #coloque el te de frutas en los te de caja
+    #'1122032':'011230101', #agregue el pollo amarillo al pollo fresco entero de granja
+    #'1122032':'011230102' #coloque el pollo amarillo en las pechugas de pollo
+    '1113054':'011130102', #coloque los cubiletes, etc en el pan dulce corriente o de manteca
+    '1113022':'011130102', #intento de colocar el pan especial en el pan dulce
+    '1113032':'011130201', #coloque las galletas saladas en las galletas
 }
