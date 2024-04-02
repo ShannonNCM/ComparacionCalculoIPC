@@ -696,4 +696,7 @@ recodificacion = {
     '1113054':'011130102', #coloque los cubiletes, etc en el pan dulce corriente o de manteca
     '1113022':'011130102', #intento de colocar el pan especial en el pan dulce
     '1113032':'011130201', #coloque las galletas saladas en las galletas
+    #'1114013':'011120301', #coloque el cereal de arroz inflado en las hojuelas de maiz
+    #'1114014':'011120301', #coloque el cereal aritos en las hojuelas de maiz
+    '1114012':'011120301', #coloque las hojuelas de maiz azucaradas en las hojuelas de maiz
 }
