@@ -1759,134 +1759,21 @@ display: none;
 <p>Se importan las librerías para las bases de datos</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInJlYWR4bFwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(&quot;readxl&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhyZWFkeGzigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1dhcm5pbmcgbWVzc2FnZTpcbnBhY2thZ2Ug4oCYb2RiY+KAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDQuMi4zIFxuIn0= -->
-<pre><code>Warning: package ‘readxl’ was built under R version 4.2.3Warning message:
-package ‘odbc’ was built under R version 4.2.3 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInRpZHl2ZXJzZVwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJh0aWR5dmVyc2XigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1dhcm5pbmc6IHBhY2thZ2Ug4oCYZ2dwbG90MuKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDQuMi4zV2FybmluZzogcGFja2FnZSDigJh0aWJibGXigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1dhcm5pbmc6IHBhY2thZ2Ug4oCYZHBseXLigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1dhcm5pbmc6IHBhY2thZ2Ug4oCYbHVicmlkYXRl4oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gNC4yLjPilIDilIAgQXR0YWNoaW5nIGNvcmUgdGlkeXZlcnNlIHBhY2thZ2VzIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2UgMi4wLjAg4pSA4pSAXG7inJQgZHBseXIgICAgIDEuMS40ICAgICDinJQgcmVhZHIgICAgIDIuMS40XG7inJQgZm9yY2F0cyAgIDEuMC4wICAgICDinJQgc3RyaW5nciAgIDEuNS4wXG7inJQgZ2dwbG90MiAgIDMuNC40ICAgICDinJQgdGliYmxlICAgIDMuMi4xXG7inJQgbHVicmlkYXRlIDEuOS4yICAgICDinJQgdGlkeXIgICAgIDEuMy4wXG7inJQgcHVycnIgICAgIDEuMC4xICAgICDilIDilIAgQ29uZmxpY3RzIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2VfY29uZmxpY3RzKCkg4pSA4pSAXG7inJYgZHBseXI6OmZpbHRlcigpIG1hc2tzIHN0YXRzOjpmaWx0ZXIoKVxu4pyWIGRwbHlyOjpsYWcoKSAgICBtYXNrcyBzdGF0czo6bGFnKClcbuKEuSBVc2UgdGhlIFx1MDAxYl04OztodHRwOi8vY29uZmxpY3RlZC5yLWxpYi5vcmcvXHUwMDA3Y29uZmxpY3RlZCBwYWNrYWdlXHUwMDFiXTg7O1x1MDAwNyB0byBmb3JjZSBhbGwgY29uZmxpY3RzIHRvIGJlY29tZSBlcnJvcnNcbiJ9 -->
-<pre><code>Warning: package ‘tidyverse’ was built under R version 4.2.3Warning: package ‘ggplot2’ was built under R version 4.2.3Warning: package ‘tibble’ was built under R version 4.2.3Warning: package ‘dplyr’ was built under R version 4.2.3Warning: package ‘lubridate’ was built under R version 4.2.3── Attaching core tidyverse packages ──────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVxdWlyZShcInRpZHl2ZXJzZVwiKVxubGlicmFyeShcIndyaXRleGxcIilcbmBgYCJ9 -->
-<pre class="r"><code>require(&quot;tidyverse&quot;)
-library(&quot;writexl&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJh3cml0ZXhs4oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gNC4yLjNcbiJ9 -->
-<pre><code>Warning: package ‘writexl’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInRpYmJsZVwiKVxubGlicmFyeShcIm9wZW54bHN4XCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(&quot;tibble&quot;)
-library(&quot;openxlsx&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhvcGVueGxzeOKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDQuMi4zXG4ifQ== -->
-<pre><code>Warning: package ‘openxlsx’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcIkRCSVwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(&quot;DBI&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhEQknigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1xuIn0= -->
-<pre><code>Warning: package ‘DBI’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcIm9kYmNcIilcbmxpYnJhcnkoXCJSU1FMaXRlXCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(&quot;odbc&quot;)
-library(&quot;RSQLite&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhSU1FMaXRl4oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gNC4yLjNcbiJ9 -->
-<pre><code>Warning: package ‘RSQLite’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInBzeWNoXCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(&quot;psych&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhwc3ljaOKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDQuMi4zXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYcHN5Y2jigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmdncGxvdDLigJk6XG5cbiAgICAlKyUsIGFscGhhXG4ifQ== -->
-<pre><code>Warning: package ‘psych’ was built under R version 4.2.3
-Attaching package: ‘psych’
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInJlYWR4bFwiKVxubGlicmFyeShcInRpZHl2ZXJzZVwiKVxucmVxdWlyZShcInRpZHl2ZXJzZVwiKVxubGlicmFyeShcIndyaXRleGxcIilcbmxpYnJhcnkoXCJ0aWJibGVcIilcbmxpYnJhcnkoXCJvcGVueGxzeFwiKVxubGlicmFyeShcIkRCSVwiKVxubGlicmFyeShcIm9kYmNcIilcbmxpYnJhcnkoXCJSU1FMaXRlXCIpXG5saWJyYXJ5KFwicHN5Y2hcIilcbmxpYnJhcnkoXCJwcmFjbWFcIilcbmxpYnJhcnkoXCJiaXQ2NFwiKVxuXG5zb3VyY2UoXCJmdW5jaW9uZXNfaXBjLlJcIilcbmBgYCJ9 -->
+<pre class="r"><code>library(&quot;readxl&quot;)
+library(&quot;tidyverse&quot;)
+require(&quot;tidyverse&quot;)
+library(&quot;writexl&quot;)
+library(&quot;tibble&quot;)
+library(&quot;openxlsx&quot;)
+library(&quot;DBI&quot;)
+library(&quot;odbc&quot;)
+library(&quot;RSQLite&quot;)
+library(&quot;psych&quot;)
+library(&quot;pracma&quot;)
+library(&quot;bit64&quot;)
 
-The following objects are masked from ‘package:ggplot2’:
-
-    %+%, alpha</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInByYWNtYVwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(&quot;pracma&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhwcmFjbWHigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1xuQXR0YWNoaW5nIHBhY2thZ2U6IOKAmHByYWNtYeKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6cHN5Y2jigJk6XG5cbiAgICBsb2dpdCwgcG9sYXJcblxuVGhlIGZvbGxvd2luZyBvYmplY3QgaXMgbWFza2VkIGZyb20g4oCYcGFja2FnZTpwdXJycuKAmTpcblxuICAgIGNyb3NzXG4ifQ== -->
-<pre><code>Warning: package ‘pracma’ was built under R version 4.2.3
-Attaching package: ‘pracma’
-
-The following objects are masked from ‘package:psych’:
-
-    logit, polar
-
-The following object is masked from ‘package:purrr’:
-
-    cross</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcImJpdDY0XCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(&quot;bit64&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBiaXRcblxuQXR0YWNoaW5nIHBhY2thZ2U6IOKAmGJpdOKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnByYWNtYeKAmTpcblxuICAgIGlzLnNvcnRlZFxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnBzeWNo4oCZOlxuXG4gICAga2V5c29ydFxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmRwbHly4oCZOlxuXG4gICAgc3ltZGlmZlxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmJhc2XigJk6XG5cbiAgICB4b3JcblxuQXR0YWNoaW5nIHBhY2thZ2UgYml0NjRcbnBhY2thZ2U6Yml0NjQgKGMpIDIwMTEtMjAxNyBKZW5zIE9laGxzY2hsYWVnZWxcbmNyZWF0b3JzOiBpbnRlZ2VyNjQgcnVuaWY2NCBzZXEgOlxuY29lcmNpb246IGFzLmludGVnZXI2NCBhcy52ZWN0b3IgYXMubG9naWNhbCBhcy5pbnRlZ2VyIGFzLmRvdWJsZSBhcy5jaGFyYWN0ZXIgYXMuYml0c3RyaW5nXG5sb2dpY2FsIG9wZXJhdG9yOiAhICYgfCB4b3IgIT0gPT0gPCA8PSA+PSA+XG5hcml0aG1ldGljIG9wZXJhdG9yOiArIC0gKiAvICUvJSAlJSBeXG5tYXRoOiBzaWduIGFicyBzcXJ0IGxvZyBsb2cyIGxvZzEwXG5tYXRoOiBmbG9vciBjZWlsaW5nIHRydW5jIHJvdW5kXG5xdWVyeWluZzogaXMuaW50ZWdlcjY0IGlzLnZlY3RvciBbaXMuYXRvbWljfSBbbGVuZ3RoXSBmb3JtYXQgcHJpbnQgc3RyXG52YWx1ZXM6IGlzLm5hIGlzLm5hbiBpcy5maW5pdGUgaXMuaW5maW5pdGVcbmFnZ3JlZ2F0aW9uOiBhbnkgYWxsIG1pbiBtYXggcmFuZ2Ugc3VtIHByb2RcbmN1bXVsYXRpb246IGRpZmYgY3VtbWluIGN1bW1heCBjdW1zdW0gY3VtcHJvZFxuYWNjZXNzOiBsZW5ndGg8LSBbIFs8LSBbWyBbWzwtXG5jb21iaW5lOiBjIHJlcCBjYmluZCByYmluZCBhcy5kYXRhLmZyYW1lXG5XQVJOSU5HIGRvbid0IHVzZSBhcyBzdWJzY3JpcHRzXG5XQVJOSU5HIHNlbWFudGljcyBkaWZmZXIgZnJvbSBpbnRlZ2VyXG5mb3IgbW9yZSBoZWxwIHR5cGUgP2JpdDY0XG5cbkF0dGFjaGluZyBwYWNrYWdlOiDigJhiaXQ2NOKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnV0aWxz4oCZOlxuXG4gICAgaGFzaHRhYlxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6YmFzZeKAmTpcblxuICAgICVpbiUsIDosIGlzLmRvdWJsZSwgbWF0Y2gsIG9yZGVyLCByYW5rXG4ifQ== -->
-<pre><code>Loading required package: bit
-
-Attaching package: ‘bit’
-
-The following object is masked from ‘package:pracma’:
-
-    is.sorted
-
-The following object is masked from ‘package:psych’:
-
-    keysort
-
-The following object is masked from ‘package:dplyr’:
-
-    symdiff
-
-The following object is masked from ‘package:base’:
-
-    xor
-
-Attaching package bit64
-package:bit64 (c) 2011-2017 Jens Oehlschlaegel
-creators: integer64 runif64 seq :
-coercion: as.integer64 as.vector as.logical as.integer as.double as.character as.bitstring
-logical operator: ! &amp; | xor != == &lt; &lt;= &gt;= &gt;
-arithmetic operator: + - * / %/% %% ^
-math: sign abs sqrt log log2 log10
-math: floor ceiling trunc round
-querying: is.integer64 is.vector [is.atomic} [length] format print str
-values: is.na is.nan is.finite is.infinite
-aggregation: any all min max range sum prod
-cumulation: diff cummin cummax cumsum cumprod
-access: length&lt;- [ [&lt;- [[ [[&lt;-
-combine: c rep cbind rbind as.data.frame
-WARNING don&#39;t use as subscripts
-WARNING semantics differ from integer
-for more help type ?bit64
-
-Attaching package: ‘bit64’
-
-The following object is masked from ‘package:utils’:
-
-    hashtab
-
-The following objects are masked from ‘package:base’:
-
-    %in%, :, is.double, match, order, rank</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKFwiZnVuY2lvbmVzX2lwYy5SXCIpXG5gYGAifQ== -->
-<pre class="r"><code>source(&quot;funciones_ipc.R&quot;)</code></pre>
+source(&quot;funciones_ipc.R&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2326,10 +2213,10 @@ ind_prod01 &lt;- ind_prod %&gt;%
   mutate(indrep = sum1/sum2)
 ind_rep</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6Mywic3VtbWFyeSI6eyJEZXNjcmlwdGlvbiI6WyJkZiBbMSDDlyAzXSJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJndHlpVERtaXVCaVlHQmdabUJoWW1KZ1pnVXlHVmhEUTl4MExSaUFJa0FPSXdNTEF5ZUlyZ0FxRWdhclpHRGdBd2s0ZkR4bjM5czAzUnpPYjl0d3hQMHdyd0djSHltVDFUN1gvakNhUWF4NWlibXB4VUNHQU1SYXNDQkxjV211SVJMYkNNcG15OHhMS1VvdFFET0NzeWkvWEE5bURDOVlBb3hSN1VuT1NTeUcyUU1UNUVwSkxFblVTeXNDNmdYeS9xRnBZYzh2S01uTXp3TnFZZ0w1bEJWTk0yTVJtb0JBYVI3SUZTbTZ5Um1sZWRtNnBxWWdHNkRPWVVCMUdwek5ETEdUNlQvVUxGYVlUMVB6MGpQelVtR096MGxNU3MyQmN2aUEzZ1g3VnErZ0tET3ZCT1lWb0dpeFhrbCtTU0pNSFZkeWZnNU1CT3c1aG44QUxrQ2d2K0VCQUFBPSJ9 -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6Mywic3VtbWFyeSI6eyJEZXNjcmlwdGlvbiI6WyJkZiBbMSDDlyAzXSJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJndHlpVERtaXVCaVlHQmdabUJoWW1KZ1pnVXlHVmhEUTl4MExSaUFJa0FPSXdNTEF5ZUlyZ0FxRWdhclpHRGdBd2s0Zkx3cXRkaCtTeGVjMzdhVGU5UFZhelBoL0VpWk53eVhSWGFqR2NTYWw1aWJXZ3hrQ0VDc0JRdXlGSmZtR2lLeGphQnN0c3k4bEtMVUFqUWpPSXZ5eS9WZ3h2Q0NKY0FZMVo3a25NUmltRDB3UWE2VXhKSkV2YlFpb0Y0Zzd4K2FGdmI4Z3BMTS9EeWdKaWFRVDFuUk5ETVdvUWtJbHVhQlhKR2ltNXhSbXBldGEyaG1EcklDNmg0R1ZMZkIyY3dRUzVuK1F3MWpoWGsxTlM4OU15OFY1dnFjeEtUVUhDaUhEK2hmc0hmMUNvb3k4MHBnZmdHS0Z1dVY1SmNrd3RSeEplZm53RVRBdm1QNEJ3RFRSdG5uNGdFQUFBPT0ifQ== -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["sum1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["sum2"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["indrep"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"72931.97","2":"726.0958","3":"100.444"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+{"columns":[{"label":["sum1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["sum2"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["indrep"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"73041.66","2":"727.1307","3":"100.4519"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
   </script>
 </div>
 <!-- rnb-frame-end -->

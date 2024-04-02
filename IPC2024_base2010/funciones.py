@@ -691,12 +691,15 @@ recodificacion = {
     "1199031":"111120301", #coloque las frituras de maiz en los tortrix
     "11112072":"011130303", #coloque las porciones de pastel frio de fresas en los pasteles frios
     "1230012":"012110202", #coloque el te de frutas en los te de caja
-    #'1122032':'011230101', #agregue el pollo amarillo al pollo fresco entero de granja
-    #'1122032':'011230102' #coloque el pollo amarillo en las pechugas de pollo
+    #'1122032':'011230101', #**agregue el pollo amarillo al pollo fresco entero de granja
+    #'1122032':'011230102', #**coloque el pollo amarillo en las pechugas de pollo
     '1113054':'011130102', #coloque los cubiletes, etc en el pan dulce corriente o de manteca
     '1113022':'011130102', #intento de colocar el pan especial en el pan dulce
     '1113032':'011130201', #coloque las galletas saladas en las galletas
-    #'1114013':'011120301', #coloque el cereal de arroz inflado en las hojuelas de maiz
-    #'1114014':'011120301', #coloque el cereal aritos en las hojuelas de maiz
+    #'1114013':'011120301', #**coloque el cereal de arroz inflado en las hojuelas de maiz
+    #'1114014':'011120301', #**coloque el cereal aritos en las hojuelas de maiz
     '1114012':'011120301', #coloque las hojuelas de maiz azucaradas en las hojuelas de maiz
+    "1290012":"012150201", #coloqe las bebidas energizantes en las rehidratantes
+    "1181012":"011810101", #coloque azucar morena en la azucar blanca
+    "6131011":"061310101", #coloque los lentes de lectura en los lentes correctores
 }
