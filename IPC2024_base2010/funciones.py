@@ -691,7 +691,7 @@ recodificacion = {
     "1199031":"111120301", #coloque las frituras de maiz en los tortrix
     "11112072":"011130303", #coloque las porciones de pastel frio de fresas en los pasteles frios
     "1230012":"012110202", #coloque el te de frutas en los te de caja
-    #'1122032':'011230101', #**agregue el pollo amarillo al pollo fresco entero de granja
+    '1122032':'011230101', #**agregue el pollo amarillo al pollo fresco entero de granja
     #'1122032':'011230102', #**coloque el pollo amarillo en las pechugas de pollo
     '1113054':'011130102', #coloque los cubiletes, etc en el pan dulce corriente o de manteca
     '1113022':'011130102', #intento de colocar el pan especial en el pan dulce
@@ -702,4 +702,11 @@ recodificacion = {
     "1290012":"012150201", #coloqe las bebidas energizantes en las rehidratantes
     "1181012":"011810101", #coloque azucar morena en la azucar blanca
     "6131011":"061310101", #coloque los lentes de lectura en los lentes correctores
+    "4321021":"125110501", #cuota de vigilancia residencial
+    '11430103':'011430103', #para arreglar una cosa de la crema que sale raro en la base de datos
+    "3213031":"032130101", #agregueu los tennis para niños en zapatos amarrados para niño
+    "8392021":"083110201", #television por cable
+    "9719022":"094110105", #agregue los diccionarios bilingues en las enciclpedias
+    "11620101":"011620101", #agregue las frutas en conserva, tienen el codigo de la base anterior
+    "11112073":"011130303", #agregue las porciones de pastel de chocolate frio en los pasteles frios
 }
