@@ -14,6 +14,19 @@ decadas = {
     'Primera década':'1', 'Segunda década':'2', 'Tercera década':'3',
 }
 
+#funciones para generar los nombres de los archivos de excel con los indices y 
+def excel_mesant(month):
+    if month == 1:
+        return 12
+    elif 2 <= month <= 12:
+        return month - 1
+
+def excel_anioant(year, month):
+    if year == 2024 and month == 1:
+        return 2023
+    else:
+        return year
+
 #para recodificar los registros con la codificacion del ipc2010
 recodificacion = {
     '1111011':'011110101', 
