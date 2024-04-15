@@ -130,6 +130,18 @@ bol01 <- variacion(bol) %>%
   #drop_na()
 
 #sum(is.na(bol01))
+bol01
+```
+
+```{r}
+#esto es solo para una prueba, luego lo borro 
+read_xlsx('variacionpy.xlsx') %>% 
+  rename(indpy = 1) %>% 
+  mutate(var_r = bol01$var_prod) %>% 
+  mutate(varigual = if_else(var_prod == var_r, TRUE, FALSE)) %>% 
+  mutate(varres = var_prod-var_r) %>% 
+  filter(varigual == FALSE) %>% 
+  select(indpy, var_prod, var_r, varigual, varres)
 ```
 
 #### 2. Relativo de precios de un producto
@@ -143,6 +155,8 @@ relativo <- bol01 %>%
   left_join(pon_prod %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_anterior), 
                            by = c("region", "cod_prod")) %>% 
   select(region, cod_prod, grupo_nombre, relativo, ponderacion_region, indice_anterior)
+
+relativo
 ```
 
 #### 3. Promedio ponderado
@@ -156,6 +170,12 @@ prom_pon <- relativo %>%
             sum_pon = sum(ponderacion_region)) %>% 
   mutate(prom_pon = var_ac/sum_pon) %>% 
   left_join(relativo %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_anterior), by = c("region", "cod_prod", "grupo_nombre"))
+```
+
+```{r}
+#which(is.na(prom_pon$ponderacion_region))
+
+#estos na que aparecen son de los que estan mal codificados
 ```
 
 #### 4. Índice de precios por región
@@ -185,7 +205,8 @@ ind_prod01 <- ind_prod %>%
 #se guardan los datos en el workbook
 #writeData(indices, "Cuadro1", ind_prod01)
 
-#write.xlsx(indover150, "indicessobre150_012024.xlsx")
+#
+ind_prod
 ```
 
 ```{r}
@@ -332,6 +353,8 @@ ind_gen <- ind_prod %>%
             sum2 = sum(ponderacion_region)) %>% 
   mutate(ind_prod_rep = sum1/sum2) %>%
   select(region, ind_prod_rep)
+
+ind_gen
 ```
 
 ```{r}
@@ -406,5 +429,5 @@ prod_faltantes <- pon_prod %>%
 Exportamos a un excel de nombre para este mes
 
 ```{r}
-exportarexcel("indiceprelim_032024.xlsx")
+#exportarexcel("indiceprelim_032024.xlsx")
 ```
