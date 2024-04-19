@@ -21,8 +21,16 @@ library("RSQLite")
 library("psych")
 library("pracma")
 library("bit64")
+library('glue')
 
 source("funciones_ipc.R")
+```
+
+Ingresa el año y el mes a calcular
+
+```{r}
+anio <- 2024
+mes <- 3
 ```
 
 Conexión al servidor
@@ -32,11 +40,6 @@ server <- 'ipcprod.database.windows.net'
 user <- 'ipcreader'
 pas <- '1pc/*2023'
 database <- 'db-indices'
-
-#server <- 'inegt-ipc.database.windows.net'
-#user <- 'ipcuser_exec'
-#pas <- 'In3/*ipc2023'
-#database <- 'db-indices'
 ```
 
 ```{r}
@@ -53,18 +56,25 @@ conn_str <- paste0("Driver={ODBC Driver 17 for SQL Server};",
 con <- dbConnect(odbc::odbc(), .connection_string=conn_str)
 ```
 
-Obtención de la base de datos
+```{r}
+#se genera el nombre del archivo donde se guardan los indices calculados
+excel_indact01 <- 'indprod'
+excel_indact02 <- '.xlsx'
 
-El dataframe "boletas" tiene todos los datos obtenidos del servidor con la base de datos del mes actual
-
-```{sql connection=con, output.var="boletas"}
-EXEC [dbo].[sp_get_precios_recolectados_mes] 2024, 3
+excel_indactual <- glue("{excel_indact01}_{mes}_{anio}{excel_indact02}")
+excel_indactual
 ```
 
-El dataframe "ponderaciones" contiene los datos de las ponderaciones para el mes actual, asi como los indices del mes anterior que estan en la variable "indice_anterior"
+Obtención de la base de datos
 
-```{sql connection=con, output.var="ponderaciones"}
-EXEC sp_get_indice_grupo 2024, 3
+El dataframe "boletas" tiene todos los datos obtenidos del servidor con la base de datos del mes actual. El dataframe "ponderaciones" contiene los datos de las ponderaciones para el mes actual, asi como los indices del mes anterior que estan en la variable "indice_anterior"
+
+```{r}
+sql_01 <- paste("EXEC [dbo].[sp_get_precios_recolectados_mes]", anio, ",", mes)
+sql_02 <- paste("EXEC [dbo].[sp_get_indice_grupo]", anio, ",", mes)
+  
+boletas <- dbGetQuery(con, sql_01)
+ponderaciones <- dbGetQuery(con, sql_02)
 ```
 
 ```{r}
@@ -98,21 +108,6 @@ bol <- boletas %>%
 ```
 
 ```{r}
-#sum(is.na(bol)) #esto es el numero de datos faltantes en las boletas
-#unique(bol$cod_prod)
-#sum(is.na(boletas$cantidad_actual))
-
-#which(is.na(bol$cantidad_actual))
-```
-
-```{r}
-#bol %>% 
-  #filter(cod_prod == "1312002") #%>% 
-  #filter(cod_prod == "0116104")
-#aqui estoy revisando los datos de las boletas que tienen precios extraños que modifican el indice de los productos
-```
-
-```{r}
 #Aqui tengo las ponderaciones para cada produto por cada region y los indices anteriores
 pon_prod <- pondcat("Producto") %>% 
   rename(cod_prod = grupo_codigo) %>%
@@ -133,17 +128,6 @@ bol01 <- variacion(bol) %>%
 bol01
 ```
 
-```{r}
-#esto es solo para una prueba, luego lo borro 
-read_xlsx('variacionpy.xlsx') %>% 
-  rename(indpy = 1) %>% 
-  mutate(var_r = bol01$var_prod) %>% 
-  mutate(varigual = if_else(var_prod == var_r, TRUE, FALSE)) %>% 
-  mutate(varres = var_prod-var_r) %>% 
-  filter(varigual == FALSE) %>% 
-  select(indpy, var_prod, var_r, varigual, varres)
-```
-
 #### 2. Relativo de precios de un producto
 
 Esto es la media geométrica de todas las variaciones de las variedades (artículos) que componen un producto.
@@ -155,11 +139,9 @@ relativo <- bol01 %>%
   left_join(pon_prod %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_anterior), 
                            by = c("region", "cod_prod")) %>% 
   select(region, cod_prod, grupo_nombre, relativo, ponderacion_region, indice_anterior)
-
-relativo
 ```
 
-#### 3. Promedio ponderado
+#### 03. Promedio ponderado
 
 Se calcula la variacion acumulada, que es la suma producto de los relativos y sus ponderaciones. Luego se realiza la suma de los ponderadores y a partir de estos valores se calcula el promedio ponderado
 
@@ -172,12 +154,6 @@ prom_pon <- relativo %>%
   left_join(relativo %>% select(region, cod_prod, grupo_nombre, ponderacion_region, indice_anterior), by = c("region", "cod_prod", "grupo_nombre"))
 ```
 
-```{r}
-#which(is.na(prom_pon$ponderacion_region))
-
-#estos na que aparecen son de los que estan mal codificados
-```
-
 #### 4. Índice de precios por región
 
 ##### 4.1 Índice de productos
@@ -187,38 +163,9 @@ ind_prod <- prom_pon %>%
   mutate(ind_prod = indice_anterior*prom_pon) %>% 
   cod_grupos() %>% 
   drop_na() #utilice el dropna porque hay datos faltantes en las boletas
-#ind_prod
-#ind_prod %>% 
-#  select(region, cod_prod, grupo_nombre, sum_pon, prom_pon, ind_prod) %>% 
-#  filter(cod_prod == "0111102")
-
-#indover150 <- 
-#ind_prod %>% 
-#  select(region, cod_prod, grupo_nombre, var_ac, sum_pon, prom_pon, ponderacion_region, ind_prod) %>% 
-  #filter(ind_prod > 1000) #%>% 
-  #filter(ind_prod > 500) #%>%
-  #filter(ind_prod > 110)
-#  filter(ind_prod < 80)
 
 ind_prod01 <- ind_prod %>% 
   select(region, cod_prod, ind_prod)
-#se guardan los datos en el workbook
-#writeData(indices, "Cuadro1", ind_prod01)
-
-#
-ind_prod
-```
-
-```{r}
-#esta parte se uso porque en enero no aparecian todos los productos
-#ind_prod <- ind_prod %>% 
-#  select(region, cod_div, cod_grupo, cod_clase, cod_subclase, cod_prod, grupo_nombre, ind_prod) %>% 
-#  full_join(pon_prod) %>% 
-#  mutate(ind_prod = ifelse(is.na(ind_prod), indice_anterior, ind_prod)) %>% 
-#  filter(region != 0)
-
-#ind_prod01 <- ind_prod %>% 
-#  select(region, cod_prod, ind_prod)
 ```
 
 ##### 4.2 Índice de subclase
@@ -429,5 +376,5 @@ prod_faltantes <- pon_prod %>%
 Exportamos a un excel de nombre para este mes
 
 ```{r}
-#exportarexcel("indiceprelim_032024.xlsx")
+exportarexcel(excel_indactual)
 ```
