@@ -56,7 +56,7 @@ con <- dbConnect(odbc::odbc(), .connection_string=conn_str)
 
 ```{r}
 anio <- 2024
-mes <- 1
+mes <- 4
 ```
 
 ```{r}

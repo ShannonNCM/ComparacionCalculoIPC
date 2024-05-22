@@ -30,7 +30,7 @@ Ingresa el año y el mes a calcular
 
 ```{r}
 anio <- 2024
-mes <- 4
+mes <- 1
 ```
 
 Conexión al servidor
