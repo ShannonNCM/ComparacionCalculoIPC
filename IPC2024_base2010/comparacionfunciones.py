@@ -44,3 +44,17 @@ def grafreg(regcod, contreg01, contreg02, nombre_mes, anio, numero):
     grafica(topreg, nombre_mes, 'mas', anio)
     #se grafican los menos frecuentes
     grafica(lastreg, nombre_mes, 'menos', anio)
+
+
+#_____________________________________________________________________________
+#En esta parte van las funciones para hacer las graficas de las ponderaciones
+
+def grafpon(data):
+    ax = data.plot(kind='barh', x='DESCRIPCION', y='REPUBLICA_2010', legend=True, color='#629fca', position=0, width=0.4)
+    data.plot(kind='barh', x='DESCRIPCION', y='REPUBLICA_2023', legend=True, color='lightcoral', ax=ax, position=1, width=0.4)
+    ax.invert_yaxis()
+    ax.set_ylabel('')  # Remove y-axis label
+    plt.xlabel('Ponderacion')
+    #plt.title(f'Articulos {tipo} recopilados respecto a {nombre_mes} {anio}')
+    plt.yticks(fontsize=7)
+    plt.legend(['2010', '2023'])
