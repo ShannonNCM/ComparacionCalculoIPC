@@ -49,12 +49,33 @@ def grafreg(regcod, contreg01, contreg02, nombre_mes, anio, numero):
 #_____________________________________________________________________________
 #En esta parte van las funciones para hacer las graficas de las ponderaciones
 
-def grafpon(data):
+def grafpon(data, tipo : str):
     ax = data.plot(kind='barh', x='DESCRIPCION', y='REPUBLICA_2010', legend=True, color='#629fca', position=0, width=0.4)
     data.plot(kind='barh', x='DESCRIPCION', y='REPUBLICA_2023', legend=True, color='lightcoral', ax=ax, position=1, width=0.4)
     ax.invert_yaxis()
     ax.set_ylabel('')  # Remove y-axis label
     plt.xlabel('Ponderacion')
-    #plt.title(f'Articulos {tipo} recopilados respecto a {nombre_mes} {anio}')
+    plt.title(f'Comparación de ponderadores más {tipo} respecto a la base 2010')
     plt.yticks(fontsize=7)
     plt.legend(['2010', '2023'])
+
+
+#esta funcion hace la grafica 
+def graf_regpon(region: str, ponderaciones, num):
+    #primero se obtiene el dataframe de las ponderaciones mas altas y mas bajas
+    topreg = ponderaciones[['DESCRIPCION', f'{region}_2010', f'{region}_2023']].fillna(0).head(num).sort_values(by=f'{region}_2010', ascending=False)
+    lastreg = ponderaciones[['DESCRIPCION', f'{region}_2010', f'{region}_2023']].fillna(0).tail(num).sort_values(by=f'{region}_2010', ascending=False)
+
+    #esta funcion se usa para graficar los datos para cada region
+    def greg(data, region, tipo: str):
+        ax = data.plot(kind='barh', x='DESCRIPCION', y=f'{region}_2010', legend=True, color='#629fca', position=0, width=0.4)
+        data.plot(kind='barh', x='DESCRIPCION', y=f'{region}_2023', legend=True, color='lightcoral', ax=ax, position=1, width=0.4)
+        ax.invert_yaxis()
+        ax.set_ylabel('')  # Remove y-axis label
+        plt.xlabel('Ponderacion')
+        plt.title(f'Comparación de ponderadores más {tipo} de la region {region} respecto a la base 2010')
+        plt.yticks(fontsize=7)
+        plt.legend(['2010', '2023'])
+    
+    greg(topreg, region, 'altos')
+    greg(lastreg, region, 'bajos')
