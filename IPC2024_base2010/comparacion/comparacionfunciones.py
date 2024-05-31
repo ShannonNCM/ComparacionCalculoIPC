@@ -46,7 +46,7 @@ def graf_regpon(region: str, ponderaciones, num):
     #esta funcion se usa para graficar los datos para cada region
     def greg(data, region, tipo: str):
         if region.lower() == 'republica':
-            title = f'Comparación de ponderaciones más {tipo} a nivel {region} respecto a la base 2010'
+            title = f'Comparación de ponderadores más {tipo} a nivel {region} respecto a la base 2010'
         else:
             title = f'Comparación de ponderadores más {tipo} de la region {region} respecto a la base 2010'
 
