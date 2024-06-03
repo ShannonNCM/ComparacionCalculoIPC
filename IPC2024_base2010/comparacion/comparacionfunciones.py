@@ -37,7 +37,7 @@ def grafdif(region: str, diferencias, num):
     folder = 'comp_pond'
         
     grafreg(topreg, region, 'Aumento', os.path.join(folder, f'aumento{region}.png'))
-    grafreg(lastreg, region, 'Disminucion', os.path.join(folder, f'disminucion_{region}.png'))    
+    grafreg(lastreg, region, 'Disminucion', os.path.join(folder, f'disminucion{region}.png'))    
 
 
 #___________________________________________________________________________________________________________________________________
@@ -50,7 +50,7 @@ def graf_regpon(region: str, ponderaciones, num):
     lastreg = ponderaciones[['DESCRIPCION', f'{region}_2010', f'{region}_2023']].fillna(0).tail(num).sort_values(by=f'{region}_2010', ascending=False)
 
     #esta funcion se usa para graficar los datos para cada region
-    def greg(data, region, tipo: str):
+    def greg(data, region, tipo: str, grafica):
         if region.lower() == 'republica':
             title = f'Comparación de ponderadores más {tipo} a nivel {region} respecto a la base 2010'
         else:
@@ -62,11 +62,16 @@ def graf_regpon(region: str, ponderaciones, num):
         ax.set_ylabel('')  # Remove y-axis label
         plt.xlabel('Ponderacion')
         plt.title(title)
-        plt.yticks(fontsize=5)
-        plt.legend(['2010', '2023'])
+        plt.yticks(fontsize=4)
+        plt.legend(['2010', '2023'], fontsize=6.5)
+        plt.tight_layout(pad=3.0)
+        plt.savefig(grafica, bbox_inches='tight', dpi=150)
+        plt.close()
+
+    folder = 'comp_pond'
     
-    greg(topreg, region, 'altos')
-    greg(lastreg, region, 'bajos')
+    greg(topreg, region, 'altos', os.path.join(folder, f'top{region}.png'))
+    greg(lastreg, region, 'bajos', os.path.join(folder, f'last{region}.png'))
 
 
 
