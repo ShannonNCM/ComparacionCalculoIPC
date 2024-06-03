@@ -84,7 +84,7 @@ def grafica(datos, nombre_mes, tipo : str, anio, grafica):
     ax.set_ylabel('')  # Remove y-axis label
     plt.xlabel('Cantidad')
     plt.title(f'Articulos {tipo} recopilados respecto a {nombre_mes} {anio}')
-    plt.yticks(fontsize=4.5)
+    plt.yticks(fontsize=4.8)
     plt.legend(['2023', '2024'], fontsize=6.5)
     plt.tight_layout(pad=3.0)
     plt.savefig(grafica, bbox_inches='tight', dpi=150)
@@ -101,17 +101,20 @@ def grafreg(regcod, contreg01, contreg02, nombre_mes, anio, numero):
     lastreg = pd.merge(reg01, reg02, on=['ArtNom', 'RegCod'], how='inner', suffixes=('_2023', '_2024')).fillna(0).tail(numero).sort_values(by='Cant_2023', ascending=False)
     
     #esta es la funcion que se utiiza para graficar los datos para cada region
-    def grafica(datos, nombre_mes, tipo: str, anio):
+    def grafica(datos, nombre_mes, tipo: str, anio, grafica):
         ax = datos.plot(kind='barh', x='ArtNom', y='Cant_2023', legend=True, color='#629fca', position=0, width=0.4)
         datos.plot(kind='barh', x='ArtNom', y='Cant_2024', legend=True, color='lightcoral', ax=ax, position=1, width=0.4)
         ax.invert_yaxis()
         ax.set_ylabel('')  # Remove y-axis label
         plt.xlabel('Cantidad')
         plt.title(f'Articulos {tipo} recopilados en la región {regcod} respecto a {nombre_mes} {anio}')
-        plt.yticks(fontsize=7)
-        plt.legend(['2023', '2024'])
+        plt.yticks(fontsize=4.8)
+        plt.legend(['2023', '2024'], fontsize=6.5)
+        plt.tight_layout(pad=3.0)
+        plt.savefig(grafica, bbox_inches='tight', dpi=150)
+        plt.close()
 
     #se grafican los mas frecuentes
-    grafica(topreg, nombre_mes, 'mas', anio)
+    grafica(topreg, nombre_mes, 'mas', anio, f'top_{regcod}.png')
     #se grafican los menos frecuentes
-    grafica(lastreg, nombre_mes, 'menos', anio)
+    grafica(lastreg, nombre_mes, 'menos', anio, f'last_{regcod}.png')
