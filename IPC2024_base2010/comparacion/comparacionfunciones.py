@@ -68,7 +68,7 @@ def graf_regpon(region: str, ponderaciones, num):
 
 
 
-
+#________________________________________________________________________________________________________________________
 #________________________________________________________________________________________________________________________
 #En esta parte van las funciones que hacen la comparacion de los articulos recolectados para cada mes de 2023 y 2024
 meses = {
@@ -77,15 +77,18 @@ meses = {
     9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"
 }
 
-def grafica(datos, nombre_mes, tipo : str, anio):
+def grafica(datos, nombre_mes, tipo : str, anio, grafica):
     ax = datos.plot(kind='barh', x='ArtNom', y='Cant_2023', legend=True, color='#629fca', position=0, width=0.4)
     datos.plot(kind='barh', x='ArtNom', y='Cant_2024', legend=True, color='lightcoral', ax=ax, position=1, width=0.4)
     ax.invert_yaxis()
     ax.set_ylabel('')  # Remove y-axis label
     plt.xlabel('Cantidad')
     plt.title(f'Articulos {tipo} recopilados respecto a {nombre_mes} {anio}')
-    plt.yticks(fontsize=7)
-    plt.legend(['2023', '2024'])
+    plt.yticks(fontsize=4.5)
+    plt.legend(['2023', '2024'], fontsize=6.5)
+    plt.tight_layout(pad=3.0)
+    plt.savefig(grafica, bbox_inches='tight', dpi=150)
+    plt.close()
 
 reg_cods = ['01', '02', '03', '04', '05', '06', '07', '08']
 
