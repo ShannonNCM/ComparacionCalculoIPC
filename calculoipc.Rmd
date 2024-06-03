@@ -289,6 +289,8 @@ ind_rep_div <- ind_prod %>%
   mutate(ind_prod_rep = sum1/sum2) %>%
   drop_na() %>% 
   select(cod_div, ind_prod_rep)
+
+ind_rep_div
 ```
 
 #### 6. Índice general
