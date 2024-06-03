@@ -2,6 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
+import os
 
 #________________________________________________________________________________________________
 #En esta parte van las funciones para hacer las graficas de las diferencias de las ponderaciones
@@ -16,7 +17,7 @@ def grafdif(region: str, diferencias, num):
     lastreg = disminpond[['DESCRIPCION', f'dif_{region}']].head(num).sort_values(by=f'dif_{region}', ascending=True)
 
     #esta funcion se usa para graficar los datos para cada region
-    def grafreg(data, region, tipo: str):
+    def grafreg(data, region, tipo: str, grafica):
         if region.lower() == 'republica':
             title = f'{tipo} de ponderadores a nivel {region} de 2023 respecto a 2010'
         else:
@@ -27,11 +28,16 @@ def grafdif(region: str, diferencias, num):
         ax.set_ylabel('')  # Remove y-axis label
         plt.xlabel('Ponderacion')
         plt.title(title)
-        plt.yticks(fontsize=7)
-        plt.legend('')
+        plt.yticks(fontsize=5)
+        ax.get_legend().remove()
+        plt.tight_layout(pad=3.0)
+        plt.savefig(grafica, bbox_inches='tight', dpi=150)
+        plt.close()
+
+    folder = 'comp_pond'
         
-    grafreg(topreg, region, 'Aumento')
-    grafreg(lastreg, region, 'Disminucion')    
+    grafreg(topreg, region, 'Aumento', os.path.join(folder, f'aumento{region}.png'))
+    grafreg(lastreg, region, 'Disminucion', os.path.join(folder, f'disminucion_{region}.png'))    
 
 
 #___________________________________________________________________________________________________________________________________
@@ -56,7 +62,7 @@ def graf_regpon(region: str, ponderaciones, num):
         ax.set_ylabel('')  # Remove y-axis label
         plt.xlabel('Ponderacion')
         plt.title(title)
-        plt.yticks(fontsize=7)
+        plt.yticks(fontsize=5)
         plt.legend(['2010', '2023'])
     
     greg(topreg, region, 'altos')
@@ -114,7 +120,9 @@ def grafreg(regcod, contreg01, contreg02, nombre_mes, anio, numero):
         plt.savefig(grafica, bbox_inches='tight', dpi=150)
         plt.close()
 
+    folder = 'comp_recolec'
+
     #se grafican los mas frecuentes
-    grafica(topreg, nombre_mes, 'mas', anio, f'top_{regcod}.png')
+    grafica(topreg, nombre_mes, 'mas', anio, os.path.join(folder, f'top_{regcod}.png'))
     #se grafican los menos frecuentes
-    grafica(lastreg, nombre_mes, 'menos', anio, f'last_{regcod}.png')
+    grafica(lastreg, nombre_mes, 'menos', anio, os.path.join(folder, f'last_{regcod}.png'))
