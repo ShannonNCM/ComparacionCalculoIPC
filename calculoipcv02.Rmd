@@ -125,7 +125,24 @@ bol01 <- variacion(bol) %>%
   #drop_na()
 
 #sum(is.na(bol01))
-bol01
+bol01 
+```
+
+```{r}
+cr_mayo <- read_excel("CR MAYO.xlsx", sheet = "Resultados") %>% 
+  select(Código, Variedad, Variación) %>% 
+  rename(codigo_articulo = Código, articulo = Variedad, var_prod = Variación) %>% 
+  group_by(articulo) %>%
+  mutate(region = (row_number() - 1) %% 8 + 1, .before=codigo_articulo) %>%
+  ungroup() %>% 
+  mutate(cod_prod = paste0("0", substr(codigo_articulo, 1, nchar(as.character(codigo_articulo)) - 1)), .before=codigo_articulo) %>% 
+  mutate(var_prod = 1) %>% 
+  mutate(region = as.integer64(region))
+```
+
+```{r}
+bol01 <- bol01 %>% 
+  bind_rows(cr_mayo)
 ```
 
 #### 2. Relativo de precios de un producto
@@ -378,5 +395,5 @@ prod_faltantes <- pon_prod %>%
 Exportamos a un excel de nombre para este mes
 
 ```{r}
-exportarexcel(excel_indactual)
+#exportarexcel(excel_indactual)
 ```
