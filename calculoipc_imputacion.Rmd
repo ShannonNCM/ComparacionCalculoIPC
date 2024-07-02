@@ -70,6 +70,8 @@ Obtención de la base de datos
 El dataframe "boletas" tiene todos los datos obtenidos del servidor con la base de datos del mes actual. El dataframe "ponderaciones" contiene los datos de las ponderaciones para el mes actual, asi como los indices del mes anterior que estan en la variable "indice_anterior"
 
 ```{r}
+start_time <- proc.time()
+
 #sql_01 <- paste("EXEC [dbo].[sp_get_precios_recolectados_mes]", anio, ",", mes)
 sql_01 <- paste("EXEC [dbo].[sp_get_calculos_precios_recolectados_mes]", anio, ",", mes)
 sql_02 <- paste("EXEC [dbo].[sp_get_indice_grupo]", anio, ",", mes)
@@ -77,6 +79,11 @@ sql_02 <- paste("EXEC [dbo].[sp_get_indice_grupo]", anio, ",", mes)
   
 boletas <- dbGetQuery(con, sql_01)
 ponderaciones <- dbGetQuery(con, sql_02)
+
+end_time <- proc.time()
+elapsed_time <- end_time - start_time
+elapsed_time
+elapsed_time/60
 ```
 
 ```{r}
@@ -392,4 +399,10 @@ Exportamos a un excel de nombre para este mes
 
 ```{r}
 #exportarexcel(excel_indactual)
+```
+
+```{r}
+#end_time <- proc.time()
+#elapsed_time <- end_time - start_time
+#elapsed_time
 ```
