@@ -1,5 +1,7 @@
 #aca van las funciones y/o diccionarios que se utilicen
 
+
+
 #funcion para asignar los codigos de subclase, clase, grupo y division
 def pondcat(x, ponderaciones):
     grupo = ponderaciones[ponderaciones['tipo_grupo'] == x]
@@ -26,6 +28,7 @@ def excel_anioant(year, month):
         return 2023
     else:
         return year
+
 
 #para recodificar los registros con la codificacion del ipc2010
 recodificacion = {

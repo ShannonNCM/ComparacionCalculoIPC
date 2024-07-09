@@ -30,7 +30,7 @@ Ingresa el año y el mes a calcular
 
 ```{r}
 anio <- 2024
-mes <- 6
+mes <- 1
 ```
 
 Conexión al servidor
@@ -405,4 +405,8 @@ Exportamos a un excel de nombre para este mes
 #end_time <- proc.time()
 #elapsed_time <- end_time - start_time
 #elapsed_time
+```
+
+```{r}
+
 ```

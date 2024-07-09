@@ -29,6 +29,8 @@ variacion <- function(x){
 
 #funcion para generar el excel con los indices
 exportarexcel <- function(archivo, ...){
+  library(openxlsx)
+  
   indices <- createWorkbook() # se crea el workbook
   
   nombrehojas <- c("Ind_Producto", "Ind_Subclase", "Ind_Clase", "Ind_Grupo", 
@@ -58,4 +60,24 @@ exportarexcel <- function(archivo, ...){
   writeData(indices, sheet = 16, prod_faltantes)
   
   saveWorkbook(indices, archivo, overwrite = TRUE)
+}
+
+
+#funcion para exportar otro excel
+excel <- function(x, ...){
+  
+  results <- list(ind_rep, ind_gen, ind_rep_div)
+  
+  indxres <- createWorkbook()
+  
+  names <- c('ind_rep', 'ind_reg', 'ind_div')
+  
+  for (i in seq_along(results)) {
+    sheet_name <- paste(names[i], mes, sep = "_") 
+    addWorksheet(indxres, sheet_name)
+    writeData(indxres, sheet_name, results[[i]])
+  }
+  
+  excel_file <- "output.xlsx"
+  saveWorkbook(indxres, x, overwrite = TRUE)
 }
