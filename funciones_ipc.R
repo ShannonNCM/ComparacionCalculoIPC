@@ -70,7 +70,7 @@ excel <- function(x, ...){
   
   indxres <- createWorkbook()
   
-  names <- c('ind_rep', 'ind_reg', 'ind_div')
+  names <- c('ind_rep2023', 'ind_reg2023', 'ind_div2023')
   
   for (i in seq_along(results)) {
     sheet_name <- paste(names[i], mes, sep = "_") 
