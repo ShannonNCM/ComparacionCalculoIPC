@@ -403,17 +403,42 @@ indactual <- glue("{indact01}_{mes}_{anio}{indact02}")
 excel(indactual)
 ```
 
-Voy a ver si funciona hacer una conexion
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+Voy a ver si funciona hacer una conexion\_ spoiler alert: No funciona porque pide requisitos de permitir agregar datos y eso es con permisos de admin y blablabla y ya no logre que funcionara :c
 
 ```{r}
-con01 <- dbConnect(RMySQL::MySQL(),
-                 dbname = "resIPC2023-2010",
-                 host = "127.0.0.1",
-                 port = 3306,
-                 user = "root",
+con_01 <- dbConnect(RMySQL::MySQL(), 
+                 host = "127.0.0.1", 
+                 port = 3306, 
+                 user = "root", 
                  password = "MinYoongi*")
 ```
 
 ```{r}
+dbSendQuery(con_01, "CREATE DATABASE `resIPC2023-2010`;")
 
+databases <- dbGetQuery(con, "SHOW DATABASES;")
+databases
+```
+
+```{r}
+con_db <- dbConnect(RMySQL::MySQL(), 
+                    dbname = "resIPC2023-2010", 
+                    host = "127.0.0.1", 
+                    port = 3306, 
+                    user = "root", 
+                    password = "MinYoongi*",
+                    local_infile = TRUE)
+```
+
+```{r}
+dbWriteTable(con_db, "", ind_rep, overwrite = TRUE, row.names = FALSE)
+```
+
+```{r}
+#ind_rep2023', 'ind_reg2023', 'ind_div2023'
+table_name <- paste0("indrep_base2023_", mes)
+
+dbWriteTable(con_db, table_name, ind_rep, overwrite = TRUE)
 ```
