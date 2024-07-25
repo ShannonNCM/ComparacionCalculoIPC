@@ -1,0 +1,128 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library("readxl")
+library("tidyverse")
+require("tidyverse")
+library("writexl")
+library("tibble")
+library("openxlsx")
+library("DBI")
+library("odbc")
+library("RSQLite")
+library("psych")
+library("pracma")
+library("bit64")
+library('glue')
+library('RMySQL')
+library('stats')
+
+source("funciones.R")
+```
+
+```{r}
+ind2019 <- read_excel("2019.xls", sheet = "IPC POR GASTO BASICO")
+ind2020 <- read_excel("2020.xls", sheet = "IPC POR GASTO BASICO")
+ind2021 <- read_excel("2021.xls", sheet = "IPC por gasto básico")
+ind2022 <- read_excel("2022.xls", sheet = "IPC por gasto básico")
+ind2023 <- read_excel("2023.xls", sheet = "IPC por gasto básico")
+```
+
+```{r}
+#lista de frutas a usar
+frutas <- c('Aguacate', 'Banano', 'Manzana', 'Naranja', 'Plátano', 'Frutas de estación')
+#lista de verduras a usar
+verduras <- c('Tomate', 'Güisquil', 'Chile pimiento', 'Pepino', 'Güicoy (variedad)','Repollo', 'Lechuga', 'Frijol', 'Ejotes', 'Elote', 'Cebolla', 'Papa', 'Zanahoria', 'Rábano', 'Remolacha', 'Yuca', 'Brócoli', 'Culantro', 'Hierbabuena', 'Otras legumbres y hortalizas')
+```
+
+```{r}
+cincoanios <- bind_rows(ind2019, ind2020, ind2021, ind2022, ind2023) %>% 
+  mutate(Mes = str_to_lower(Mes))
+```
+
+```{r}
+#esto funciona pero me tira por mini dataframes no como uno completo
+
+#lapply(frutas, function(fruit) {
+#  factor_est(cincoanios, fruit)
+#})
+```
+
+```{r}
+factest_frutas <- map_dfr(frutas, ~ factor_est(cincoanios, .x))
+```
+
+```{r}
+factest_verduras <- map_dfr(verduras, ~ factor_est(cincoanios, .x))
+```
+
+```{r}
+correspondencia <- read_excel("matchingproducts.xlsx", sheet = "Sheet3") %>% 
+  mutate(codigo = paste0("0", codigo)) %>% 
+  mutate(cod_prod = gsub("\\.", "", cod_prod))
+```
+
+```{r}
+#meses
+months <- data.frame(Mes = c('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'), 
+           mesnum = c('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'))
+```
+
+```{r}
+factest_frutas01 <- factest_frutas %>% left_join(correspondencia, by = "producto") %>% 
+  left_join(months, by = 'Mes')
+factest_frutas01
+```
+
+```{r}
+factest_verduras01 <- factest_verduras %>% left_join(correspondencia, by = "producto") %>% 
+  left_join(months, by = 'Mes')
+factest_verduras01
+```
+
+```{r}
+# Create a new workbook
+wb <- createWorkbook()
+
+for (fruit in frutas) {
+  df <- factor_est(cincoanios, fruit)
+  addWorksheet(wb, fruit)
+  writeData(wb, fruit, df)
+}
+
+saveWorkbook(wb, "frutas_data.xlsx", overwrite = TRUE)
+```
+
+```{r}
+# Create a new workbook
+wb <- createWorkbook()
+
+for (veg in verduras) {
+  df <- factor_est(cincoanios, veg)
+  addWorksheet(wb, veg)
+  writeData(wb, veg, df)
+}
+
+# Save the workbook to an Excel file
+saveWorkbook(wb, "verduras_data.xlsx", overwrite = TRUE)
+```
+
+```{r}
+#guardamos el dataframe en un archivo de excel
+wb <- createWorkbook()
+
+# Add a worksheet for the first dataframe
+addWorksheet(wb, "factorfrutas")
+writeData(wb, "factorfrutas", factest_frutas01)
+
+# Add a worksheet for the second dataframe
+addWorksheet(wb, "factorverduras")
+writeData(wb, "factorverduras", factest_verduras01)
+
+
+# Save the workbook
+saveWorkbook(wb, "factor estacional.xlsx", overwrite = TRUE)
+```

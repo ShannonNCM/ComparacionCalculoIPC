@@ -1,0 +1,147 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library("readxl")
+library("tidyverse")
+require("tidyverse")
+library("writexl")
+library("tibble")
+library("openxlsx")
+library("DBI")
+library("odbc")
+library("RSQLite")
+library("psych")
+library("pracma")
+library("bit64")
+library('glue')
+library('RMySQL')
+library('stats')
+```
+
+```{r}
+ind2019 <- read_excel("2019.xls", sheet = "IPC POR GASTO BASICO")
+ind2020 <- read_excel("2020.xls", sheet = "IPC POR GASTO BASICO")
+ind2021 <- read_excel("2021.xls", sheet = "IPC por gasto básico")
+ind2022 <- read_excel("2022.xls", sheet = "IPC por gasto básico")
+ind2023 <- read_excel("2023.xls", sheet = "IPC por gasto básico")
+```
+
+```{r}
+tresanios <- bind_rows(ind2021, ind2022, ind2023) %>% 
+  mutate(Mes = str_to_lower(Mes))
+cincoanios <- bind_rows(ind2019, ind2020, ind2021, ind2022, ind2023) %>% 
+  mutate(Mes = str_to_lower(Mes))
+```
+
+```{r}
+#lista de frutas a usar
+frutas <- c('Aguacate', 'Banano', 'Manzana', 'Naranja', 'Plátano', 'Frutas de estación')
+#lista de verduras a usar
+
+```
+
+```{r}
+tresanios01 <- tresanios %>% filter(Descripción == 'Aguacate') %>% 
+  select(Año, Mes, Descripción, Rep.) %>% 
+  mutate(moving_average = custom_moving_average(Rep., 3)) %>% 
+  mutate(aggeom = Rep./moving_average)
+```
+
+```{r}
+cincoanios01 <- cincoanios %>% filter(Descripción == 'Aguacate') %>% 
+  select(Año, Mes, Descripción, Rep.) %>% 
+  mutate(moving_average = custom_moving_average(Rep., 3)) %>% 
+  mutate(aggeom = Rep./moving_average)
+```
+
+```{r}
+custom_moving_average <- function(x, k) {
+  n <- length(x)
+  result <- rep(NA, n)
+  for (i in seq_along(x)) {
+    if (i == 1) {
+      result[i] <- mean(x[i:(i + 1)])
+    } else if (i == n) {
+      result[i] <- mean(x[(i - 1):i])
+    } else {
+      result[i] <- mean(x[(i - (k-1)/2):(i + (k-1)/2)])
+    }
+  }
+  return(result)
+}
+```
+
+Factor estacional
+
+```{r}
+tresanios %>% filter(Descripción == 'Aguacate') %>% 
+  select(Año, Mes, Descripción, Rep.) %>% 
+  mutate(moving_average = custom_moving_average(Rep., 3)) %>% 
+  mutate(aggeom = Rep./moving_average)%>% 
+  group_by(Mes) %>% 
+  summarize(geometric.mean(aggeom))
+```
+
+```{r}
+cincoanios %>% filter(Descripción == 'Aguacate') %>% 
+  select(Año, Mes, Descripción, Rep.) %>% 
+  mutate(moving_average = custom_moving_average(Rep., 3)) %>% 
+  mutate(aggeom = Rep./moving_average) %>% 
+  group_by(Mes) %>% 
+  summarize(geometric.mean(aggeom))
+```
+
+Error para 3 años
+
+```{r}
+producto <- tresanios01 %>% group_by(Año, Descripción) %>% 
+  summarize(product = prod(aggeom))
+producto
+```
+
+```{r}
+geommean <- producto %>% group_by(Descripción) %>% 
+  summarize(geometric.mean(product))
+geommean
+```
+
+```{r}
+((1/geommean$`geometric.mean(product)`)-1)*100
+```
+
+Error para 5 años
+
+```{r}
+cincoanios01
+```
+
+```{r}
+cincoanios01 %>% group_by(Mes) %>% 
+  summarize(geometric.mean(aggeom))
+```
+
+```{r}
+producto <- cincoanios01 %>% group_by(Año, Descripción) %>% 
+  summarize(product = prod(aggeom))
+producto
+```
+
+```{r}
+geommean <- producto %>% group_by(Descripción) %>% 
+  summarize(geometric.mean(product))
+geommean
+```
+
+```{r}
+((1/geommean$`geometric.mean(product)`)-1)*100
+```
+
+```{r}
+fruit_test <- data.frame(codigo2010 = c('116101', '116102', '116103', '116104', '116105', '116106'), 
+           producto = c('Aguacate', 'Banano', 'Manzana', 'Naranja', 'Plátano', 'Frutas de estación'))
+fruit_test
+
+```
