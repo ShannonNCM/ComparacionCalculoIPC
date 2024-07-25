@@ -68,7 +68,7 @@ correspondencia <- read_excel("matchingproducts.xlsx", sheet = "Sheet3") %>%
 ```{r}
 #meses
 months <- data.frame(Mes = c('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'), 
-           mesnum = c('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'))
+           mesnum = c(1,2,3,4,5,6,7,8,9,10,11,12))
 ```
 
 ```{r}

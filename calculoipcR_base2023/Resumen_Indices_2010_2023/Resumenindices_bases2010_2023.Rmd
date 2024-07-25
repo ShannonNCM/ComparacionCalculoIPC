@@ -1,0 +1,66 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library("readxl")
+library("tidyverse")
+require("tidyverse")
+library("writexl")
+library("tibble")
+library("openxlsx")
+library("DBI")
+library("odbc")
+library("RSQLite")
+library("psych")
+library("pracma")
+library("bit64")
+library('glue')
+library('RMySQL')
+```
+
+Se obtienen los resultados de todos los meses de los archivos de excel generados por los scripts que calculan el IPC
+
+```{r}
+indrep2010_1 <- read_excel("2010/indxbase2010_1.xlsx", sheet = "indrep2010_1")
+indrep2010_2 <- read_excel("2010/indxbase2010_2.xlsx", sheet = "indrep2010_2")
+indrep2010_3 <- read_excel("2010/indxbase2010_3.xlsx", sheet = "indrep2010_3")
+indrep2010_4 <- read_excel("2010/indxbase2010_4.xlsx", sheet = "indrep2010_4")
+indrep2010_5 <- read_excel("2010/indxbase2010_5.xlsx", sheet = "indrep2010_5")
+indrep2010_6 <- read_excel("2010/indxbase2010_6.xlsx", sheet = "indrep2010_6")
+#indrep2010_7 <- read_excel("2010/indxbase2010_2.xlsx", sheet = "indrep2023_7")
+indrep2023_1 <- read_excel("2023/indxbase2023_1_2024.xlsx", sheet = "ind_rep2023_1")
+indrep2023_2 <- read_excel("2023/indxbase2023_2_2024.xlsx", sheet = "ind_rep2023_2")
+indrep2023_3 <- read_excel("2023/indxbase2023_3_2024.xlsx", sheet = "ind_rep2023_3")
+indrep2023_4 <- read_excel("2023/indxbase2023_4_2024.xlsx", sheet = "ind_rep2023_4")
+indrep2023_5 <- read_excel("2023/indxbase2023_5_2024.xlsx", sheet = "ind_rep2023_5")
+indrep2023_6 <- read_excel("2023/indxbase2023_6_2024.xlsx", sheet = "ind_rep2023_6")
+#indrep2023_7 <- read_excel("2023/indxbase2023_1_2024.xlsx", sheet = "ind_rep2023_7")
+```
+
+```{r}
+meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio")
+```
+
+```{r}
+#creamos la lista de dataframes de las bases 2010 y 2023
+nombres2010 <- paste0("indrep2010_", 1:6)
+indrepbase2010 <- mget(nombres2010)
+nombres2023 <- paste0("indrep2023_", 1:6)
+indrepbase2023 <- mget(nombres2023)
+
+#se combinan los dataframes para cada año base
+indrep_base2010 <- do.call(rbind, indrepbase2010)
+indrep_base2023 <- do.call(rbind, indrepbase2023)
+
+#se combinan los dataframes para 
+indrep <- cbind(indrep_base2010, indrep_base2023)
+```
+
+```{r}
+# Modificacmos el dataframe para que quede bonito
+indrep %>% select(IPC, indrep) %>% 
+  rename('Base 2010' = IPC, 'Base 2023' = indrep) %>% 
+  mutate(Mes = meses, .before = 'Base 2010')
+```
