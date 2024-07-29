@@ -1,3 +1,5 @@
+------------------------------------------------------------------------
+
 ---
 title: "R Notebook"
 output: html_notebook
@@ -18,49 +20,223 @@ library("pracma")
 library("bit64")
 library('glue')
 library('RMySQL')
+
+source('funciones.R')
 ```
+
+## 1. Comparacion bases 2010-2023
+
+### 1.1 Indice republica
 
 Se obtienen los resultados de todos los meses de los archivos de excel generados por los scripts que calculan el IPC
-
-```{r}
-indrep2010_1 <- read_excel("2010/indxbase2010_1.xlsx", sheet = "indrep2010_1")
-indrep2010_2 <- read_excel("2010/indxbase2010_2.xlsx", sheet = "indrep2010_2")
-indrep2010_3 <- read_excel("2010/indxbase2010_3.xlsx", sheet = "indrep2010_3")
-indrep2010_4 <- read_excel("2010/indxbase2010_4.xlsx", sheet = "indrep2010_4")
-indrep2010_5 <- read_excel("2010/indxbase2010_5.xlsx", sheet = "indrep2010_5")
-indrep2010_6 <- read_excel("2010/indxbase2010_6.xlsx", sheet = "indrep2010_6")
-#indrep2010_7 <- read_excel("2010/indxbase2010_2.xlsx", sheet = "indrep2023_7")
-indrep2023_1 <- read_excel("2023/indxbase2023_1_2024.xlsx", sheet = "ind_rep2023_1")
-indrep2023_2 <- read_excel("2023/indxbase2023_2_2024.xlsx", sheet = "ind_rep2023_2")
-indrep2023_3 <- read_excel("2023/indxbase2023_3_2024.xlsx", sheet = "ind_rep2023_3")
-indrep2023_4 <- read_excel("2023/indxbase2023_4_2024.xlsx", sheet = "ind_rep2023_4")
-indrep2023_5 <- read_excel("2023/indxbase2023_5_2024.xlsx", sheet = "ind_rep2023_5")
-indrep2023_6 <- read_excel("2023/indxbase2023_6_2024.xlsx", sheet = "ind_rep2023_6")
-#indrep2023_7 <- read_excel("2023/indxbase2023_1_2024.xlsx", sheet = "ind_rep2023_7")
-```
 
 ```{r}
 meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio")
 ```
 
 ```{r}
-#creamos la lista de dataframes de las bases 2010 y 2023
-nombres2010 <- paste0("indrep2010_", 1:6)
-indrepbase2010 <- mget(nombres2010)
-nombres2023 <- paste0("indrep2023_", 1:6)
-indrepbase2023 <- mget(nombres2023)
+months <- 1:6     #se establecen los meses a importar
+#nombres de las hojas que tienen los indices
+sheet_names_2010 <- paste0("indrep2010_", months)
+sheet_names_2023 <- paste0("ind_rep2023_", months)
 
-#se combinan los dataframes para cada año base
+#se leen los archivos de excel
+indrepbase2010 <- read_ind("2010", months, sheet_names_2010)
+indrepbase2023 <- read_ind("2023", months, sheet_names_2023)
+
+#se combinan en un solo dataframe para cada base
 indrep_base2010 <- do.call(rbind, indrepbase2010)
 indrep_base2023 <- do.call(rbind, indrepbase2023)
 
-#se combinan los dataframes para 
-indrep <- cbind(indrep_base2010, indrep_base2023)
+#se combinan y se arreglan en un dataframe resumen
+indrep <- cbind(indrep_base2010, indrep_base2023) %>% 
+  select(IPC, indrep) %>% 
+  rename('Base 2010' = IPC, 'Base 2023' = indrep) %>% 
+  mutate(Mes = meses, .before = 'Base 2010')
+
+indrep
+```
+
+### 1.2 Indice por region
+
+Esta seccion obtiene el cuadro de resultados de IPC para cada region a nivel republica con bases 2010 y 2023
+
+```{r}
+#nombres de las hojas que tienen los indices
+sheet_names_2010 <- paste0("indgen2010_", months)
+sheet_names_2023 <- paste0("ind_reg2023_", months)
+
+#se leen los archivos de excel
+indregbase2010 <- read_ind("2010", months, sheet_names_2010)
+indregbase2023 <- read_ind("2023", months, sheet_names_2023)
+
+#se combinan en un solo dataframe para cada base
+indreg_base2010 <- do.call(cbind, indregbase2010)
+indreg_base2023 <- do.call(cbind, indregbase2023)
+
+indreg <- cbind(indreg_base2010, indreg_base2023) 
+ 
+colnames(indreg) <- make.unique(colnames(indreg))
+
+indreg <- indreg %>% select(1, 2, 14, 4, 16, 6, 18, 8, 20, 10, 22, 12, 24) %>% 
+  rename(Region = RegCod, 
+         'Base 2010 1' = IPC, 'Base 2010 2' = IPC.1, 'Base 2010 3' = IPC.2, 'Base 2010 4' = IPC.3, 'Base 2010 5' = IPC.4, 'Base 2010 6' = IPC.5, 
+         'Base 2023 1' = ind_prod_rep, 'Base 2023 2' = ind_prod_rep.1, 'Base 2023 3' = ind_prod_rep.2, 'Base 2023 4' = ind_prod_rep.3, 'Base 2023 5' = ind_prod_rep.4, 'Base 2023 6' = ind_prod_rep.5) #toda esta parte es mejor que la automatice tambien
+
+indreg
+```
+
+### 1.3 Indice por division
+
+Esta seccion obtiene el cuadro de resultados de IPC para cada division a nivel republica con bases 2010 y 2023
+
+```{r}
+#nombres de las hojas que tienen los indices
+sheet_names_2010 <- paste0("indrepdiv2010_", months)
+sheet_names_2023 <- paste0("ind_div2023_", months)
+
+#se leen los archivos de excel
+inddivbase2010 <- read_ind("2010", months, sheet_names_2010)
+inddivbase2023 <- read_ind("2023", months, sheet_names_2023)
+
+#se combinan en un solo dataframe para cada base
+inddiv_base2010 <- do.call(cbind, inddivbase2010) %>% add_row()
+inddiv_base2023 <- do.call(cbind, inddivbase2023)
+
+inddiv <- cbind(inddiv_base2010, inddiv_base2023) 
+ 
+colnames(inddiv) <- make.unique(colnames(inddiv))
+
+
+inddiv <- inddiv %>% select(19, 3, 20, 6, 22, 9, 24, 12, 26, 15, 28, 18, 30) %>% 
+  rename("Division" = inddiv2023_1.cod_div, 
+         'Base 2010 1' = inddiv2010_1.DivInd, 'Base 2010 2' = inddiv2010_2.DivInd, 'Base 2010 3' = inddiv2010_3.DivInd, 'Base 2010 4' = inddiv2010_4.DivInd, 'Base 2010 5' = inddiv2010_5.DivInd, 'Base 2010 6' = inddiv2010_6.DivInd,
+         'Base 2023 1' = inddiv2023_1.ind_prod_rep, 'Base 2023 2' = inddiv2023_2.ind_prod_rep, 'Base 2023 3' = inddiv2023_3.ind_prod_rep, 'Base 2023 4' = inddiv2023_4.ind_prod_rep, 'Base 2023 5' = inddiv2023_5.ind_prod_rep, 'Base 2023 6' = inddiv2023_6.ind_prod_rep)
+
+inddiv
+```
+
+## 2. Comparacion factor estacional
+
+### 2.1 Indice republica
+
+Esta seccion sirve para hacer la comparacion del indice base 2023 sin los factores estacionales y con los factores estacionales
+
+```{r}
+indrep2023_1_est <- read_excel("2023estacional/indxbase2023_factest_1_2024.xlsx", 
+    sheet = "ind_rep2023_1") %>% rename('indrep_est'= indrep)
+indrep2023_2_est <- read_excel("2023estacional/indxbase2023_factest_2_2024.xlsx", 
+    sheet = "ind_rep2023_2") %>% rename('indrep_est'= indrep)
+indrep2023_3_est <- read_excel("2023estacional/indxbase2023_factest_3_2024.xlsx", 
+    sheet = "ind_rep2023_3") %>% rename('indrep_est'= indrep)
+indrep2023_4_est <- read_excel("2023estacional/indxbase2023_factest_4_2024.xlsx", 
+    sheet = "ind_rep2023_4") %>% rename('indrep_est'= indrep)
+indrep2023_5_est <- read_excel("2023estacional/indxbase2023_factest_5_2024.xlsx", 
+    sheet = "ind_rep2023_5") %>% rename('indrep_est'= indrep)
+indrep2023_6_est <- read_excel("2023estacional/indxbase2023_factest_6_2024.xlsx", 
+    sheet = "ind_rep2023_6") %>% rename('indrep_est'= indrep)
+#indrep2023_7_est <- read_excel("2023estacional/indxbase2023_factest_7_2024.xlsx", 
+#    sheet = "ind_rep2023_7")
 ```
 
 ```{r}
-# Modificacmos el dataframe para que quede bonito
-indrep %>% select(IPC, indrep) %>% 
-  rename('Base 2010' = IPC, 'Base 2023' = indrep) %>% 
-  mutate(Mes = meses, .before = 'Base 2010')
+nombres2023est <- paste0("indrep2023_", 1:6, '_est')
+indrepbase2023est <- mget(nombres2023est)
+
+indrep_base2023_est <- do.call(rbind, indrepbase2023est)
+
+indrep_est <- cbind(indrep_base2023, indrep_base2023_est)
+```
+
+```{r}
+indrep_est <- indrep_est %>% select(indrep, indrep_est) %>% 
+  rename('Base 2023' = indrep, 'Base 2023 estacional' = indrep_est) %>% 
+  mutate(Mes = meses, .before = 'Base 2023')
+indrep_est
+```
+
+### 2.2 Indice por region
+
+```{r}
+indreg2023_1_est <- read_excel("2023estacional/indxbase2023_factest_1_2024.xlsx", 
+    sheet = "ind_reg2023_1") %>% rename('ind_prod_rep_est'= ind_prod_rep)
+indreg2023_2_est <- read_excel("2023estacional/indxbase2023_factest_2_2024.xlsx", 
+    sheet = "ind_reg2023_2") %>% rename('ind_prod_rep_est'= ind_prod_rep)
+indreg2023_3_est <- read_excel("2023estacional/indxbase2023_factest_3_2024.xlsx", 
+    sheet = "ind_reg2023_3") %>% rename('ind_prod_rep_est'= ind_prod_rep)
+indreg2023_4_est <- read_excel("2023estacional/indxbase2023_factest_4_2024.xlsx", 
+    sheet = "ind_reg2023_4") %>% rename('ind_prod_rep_est'= ind_prod_rep)
+indreg2023_5_est <- read_excel("2023estacional/indxbase2023_factest_5_2024.xlsx", 
+    sheet = "ind_reg2023_5") %>% rename('ind_prod_rep_est'= ind_prod_rep)
+indreg2023_6_est <- read_excel("2023estacional/indxbase2023_factest_6_2024.xlsx", 
+    sheet = "ind_reg2023_6") %>% rename('ind_prod_rep_est'= ind_prod_rep)
+#indreg2023_7_est <- read_excel("2023estacional/indxbase2023_factest_7_2024.xlsx", 
+#    sheet = "ind_reg2023_7") %>% rename('ind_prod_rep_est'= ind_prod_rep)
+```
+
+```{r}
+indreg2023_1_est
+```
+
+```{r}
+nombres2023est <- paste0("indreg2023_", 1:6, '_est')
+indregbase2023est <- mget(nombres2023est)
+
+indreg_base2023_est <- do.call(cbind, indregbase2023est)
+
+#se combinan los dataframes para 
+indreg_est <- cbind(indreg_base2023, indregbase2023est) %>% 
+  select(indreg2023_1.region, indreg2023_1.ind_prod_rep, indreg2023_1_est.ind_prod_rep_est, indreg2023_2.ind_prod_rep, indreg2023_2_est.ind_prod_rep_est,indreg2023_3.ind_prod_rep, indreg2023_3_est.ind_prod_rep_est, indreg2023_4.ind_prod_rep, indreg2023_4_est.ind_prod_rep_est, indreg2023_5.ind_prod_rep, indreg2023_5_est.ind_prod_rep_est, indreg2023_6.ind_prod_rep, indreg2023_6_est.ind_prod_rep_est) %>% 
+  rename(Region = indreg2023_1.region,
+         'Base 2023 1' = indreg2023_1.ind_prod_rep, 'Base 2023 2' = indreg2023_2.ind_prod_rep, 'Base 2023 3' = indreg2023_3.ind_prod_rep, 'Base 2023 4' = indreg2023_4.ind_prod_rep, 'Base 2023 5' = indreg2023_5.ind_prod_rep, 'Base 2023 6' = indreg2023_6.ind_prod_rep,
+         'Base 2023 1 est' = indreg2023_1_est.ind_prod_rep_est, 'Base 2023 2 est' = indreg2023_2_est.ind_prod_rep_est, 'Base 2023 3 est' = indreg2023_3_est.ind_prod_rep_est, 'Base 2023 4 est' = indreg2023_4_est.ind_prod_rep_est, 'Base 2023 5 est' = indreg2023_5_est.ind_prod_rep_est, 'Base 2023 6 est' = indreg2023_6_est.ind_prod_rep_est)
+
+indreg_est
+```
+
+### 2.3 Indice por division
+
+```{r}
+inddiv2023_1_est <- read_excel("2023estacional/indxbase2023_factest_1_2024.xlsx", 
+    sheet = "ind_div2023_1") %>% rename('Base 2023 1 est'= ind_prod_rep)
+inddiv2023_2_est <- read_excel("2023estacional/indxbase2023_factest_2_2024.xlsx", 
+    sheet = "ind_div2023_2") %>% rename('Base 2023 2 est'= ind_prod_rep)
+inddiv2023_3_est <- read_excel("2023estacional/indxbase2023_factest_3_2024.xlsx", 
+    sheet = "ind_div2023_3") %>% rename('Base 2023 3 est'= ind_prod_rep)
+inddiv2023_4_est <- read_excel("2023estacional/indxbase2023_factest_4_2024.xlsx", 
+    sheet = "ind_div2023_4") %>% rename('Base 2023 4 est'= ind_prod_rep)
+inddiv2023_5_est <- read_excel("2023estacional/indxbase2023_factest_5_2024.xlsx", 
+    sheet = "ind_div2023_5") %>% rename('Base 2023 5 est'= ind_prod_rep)
+inddiv2023_6_est <- read_excel("2023estacional/indxbase2023_factest_6_2024.xlsx", 
+    sheet = "ind_div2023_6") %>% rename('Base 2023 6 est'= ind_prod_rep)
+#inddiv2023_1_est <- read_excel("2023estacional/indxbase2023_factest_1_2024.xlsx", 
+#    sheet = "ind_div2023_1") %>% rename('Base 2023 1 est'= ind_prod_rep)
+```
+
+```{r}
+
+```
+
+Esta seccion guarda los datos en un excel
+
+```{r}
+#guardamos el dataframe en un archivo de excel
+wb <- createWorkbook()
+
+addWorksheet(wb, "ind_rep")
+writeData(wb, "ind_rep", indrep)
+
+addWorksheet(wb, "ind_reg")
+writeData(wb, "ind_reg", indreg)
+
+addWorksheet(wb, "ind_div")
+writeData(wb, "ind_div", inddiv)
+
+addWorksheet(wb, "ind_rep_est")
+writeData(wb, "ind_rep_est", indrep_est)
+
+addWorksheet(wb, "ind_reg_est")
+writeData(wb, "ind_reg_est", indreg_est)
+
+saveWorkbook(wb, "resumen_indices_bases2010_2023.xlsx", overwrite = TRUE)
 ```

@@ -1752,172 +1752,35 @@ display: none;
 
 
 <!-- rnb-text-begin -->
+<hr />
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInJlYWR4bFwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(&quot;readxl&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInJlYWR4bFwiKVxubGlicmFyeShcInRpZHl2ZXJzZVwiKVxucmVxdWlyZShcInRpZHl2ZXJzZVwiKVxubGlicmFyeShcIndyaXRleGxcIilcbmxpYnJhcnkoXCJ0aWJibGVcIilcbmxpYnJhcnkoXCJvcGVueGxzeFwiKVxubGlicmFyeShcIkRCSVwiKVxubGlicmFyeShcIm9kYmNcIilcbmxpYnJhcnkoXCJSU1FMaXRlXCIpXG5saWJyYXJ5KFwicHN5Y2hcIilcbmxpYnJhcnkoXCJwcmFjbWFcIilcbmxpYnJhcnkoXCJiaXQ2NFwiKVxubGlicmFyeSgnZ2x1ZScpXG5saWJyYXJ5KCdSTXlTUUwnKVxuXG5zb3VyY2UoJ2Z1bmNpb25lcy5SJylcbmBgYCJ9 -->
+<pre class="r"><code>library(&quot;readxl&quot;)
+library(&quot;tidyverse&quot;)
+require(&quot;tidyverse&quot;)
+library(&quot;writexl&quot;)
+library(&quot;tibble&quot;)
+library(&quot;openxlsx&quot;)
+library(&quot;DBI&quot;)
+library(&quot;odbc&quot;)
+library(&quot;RSQLite&quot;)
+library(&quot;psych&quot;)
+library(&quot;pracma&quot;)
+library(&quot;bit64&quot;)
+library(&#39;glue&#39;)
+library(&#39;RMySQL&#39;)
+
+source(&#39;funciones.R&#39;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhyZWFkeGzigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1xuIn0= -->
-<pre><code>Warning: package ‘readxl’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInRpZHl2ZXJzZVwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJh0aWR5dmVyc2XigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1dhcm5pbmc6IHBhY2thZ2Ug4oCYZ2dwbG90MuKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDQuMi4zV2FybmluZzogcGFja2FnZSDigJh0aWJibGXigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1dhcm5pbmc6IHBhY2thZ2Ug4oCYZHBseXLigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1dhcm5pbmc6IHBhY2thZ2Ug4oCYbHVicmlkYXRl4oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gNC4yLjPilIDilIAgQXR0YWNoaW5nIGNvcmUgdGlkeXZlcnNlIHBhY2thZ2VzIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2UgMi4wLjAg4pSA4pSAXG7inJQgZHBseXIgICAgIDEuMS40ICAgICDinJQgcmVhZHIgICAgIDIuMS40XG7inJQgZm9yY2F0cyAgIDEuMC4wICAgICDinJQgc3RyaW5nciAgIDEuNS4wXG7inJQgZ2dwbG90MiAgIDMuNC40ICAgICDinJQgdGliYmxlICAgIDMuMi4xXG7inJQgbHVicmlkYXRlIDEuOS4yICAgICDinJQgdGlkeXIgICAgIDEuMy4wXG7inJQgcHVycnIgICAgIDEuMC4xICAgICDilIDilIAgQ29uZmxpY3RzIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2VfY29uZmxpY3RzKCkg4pSA4pSAXG7inJYgZHBseXI6OmZpbHRlcigpIG1hc2tzIHN0YXRzOjpmaWx0ZXIoKVxu4pyWIGRwbHlyOjpsYWcoKSAgICBtYXNrcyBzdGF0czo6bGFnKClcbuKEuSBVc2UgdGhlIFx1MDAxYl04OztodHRwOi8vY29uZmxpY3RlZC5yLWxpYi5vcmcvXHUwMDA3Y29uZmxpY3RlZCBwYWNrYWdlXHUwMDFiXTg7O1x1MDAwNyB0byBmb3JjZSBhbGwgY29uZmxpY3RzIHRvIGJlY29tZSBlcnJvcnNcbiJ9 -->
-<pre><code>Warning: package ‘tidyverse’ was built under R version 4.2.3Warning: package ‘ggplot2’ was built under R version 4.2.3Warning: package ‘tibble’ was built under R version 4.2.3Warning: package ‘dplyr’ was built under R version 4.2.3Warning: package ‘lubridate’ was built under R version 4.2.3── Attaching core tidyverse packages ────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVxdWlyZShcInRpZHl2ZXJzZVwiKVxubGlicmFyeShcIndyaXRleGxcIilcbmBgYCJ9 -->
-<pre class="r"><code>require(&quot;tidyverse&quot;)
-library(&quot;writexl&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJh3cml0ZXhs4oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gNC4yLjNcbiJ9 -->
-<pre><code>Warning: package ‘writexl’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInRpYmJsZVwiKVxubGlicmFyeShcIm9wZW54bHN4XCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(&quot;tibble&quot;)
-library(&quot;openxlsx&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhvcGVueGxzeOKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDQuMi4zXG4ifQ== -->
-<pre><code>Warning: package ‘openxlsx’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcIkRCSVwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(&quot;DBI&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhEQknigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1xuIn0= -->
-<pre><code>Warning: package ‘DBI’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcIm9kYmNcIilcbmBgYCJ9 -->
-<pre class="r"><code>library(&quot;odbc&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhvZGJj4oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gNC4yLjNcbiJ9 -->
-<pre><code>Warning: package ‘odbc’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcIlJTUUxpdGVcIilcbmBgYCJ9 -->
-<pre class="r"><code>library(&quot;RSQLite&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhSU1FMaXRl4oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gNC4yLjNcbiJ9 -->
-<pre><code>Warning: package ‘RSQLite’ was built under R version 4.2.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInBzeWNoXCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(&quot;psych&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhwc3ljaOKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDQuMi4zXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYcHN5Y2jigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmdncGxvdDLigJk6XG5cbiAgICAlKyUsIGFscGhhXG4ifQ== -->
-<pre><code>Warning: package ‘psych’ was built under R version 4.2.3
-Attaching package: ‘psych’
-
-The following objects are masked from ‘package:ggplot2’:
-
-    %+%, alpha</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcInByYWNtYVwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(&quot;pracma&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhwcmFjbWHigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1xuQXR0YWNoaW5nIHBhY2thZ2U6IOKAmHByYWNtYeKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6cHN5Y2jigJk6XG5cbiAgICBsb2dpdCwgcG9sYXJcblxuVGhlIGZvbGxvd2luZyBvYmplY3QgaXMgbWFza2VkIGZyb20g4oCYcGFja2FnZTpwdXJycuKAmTpcblxuICAgIGNyb3NzXG4ifQ== -->
-<pre><code>Warning: package ‘pracma’ was built under R version 4.2.3
-Attaching package: ‘pracma’
-
-The following objects are masked from ‘package:psych’:
-
-    logit, polar
-
-The following object is masked from ‘package:purrr’:
-
-    cross</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShcImJpdDY0XCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(&quot;bit64&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBiaXRcblxuQXR0YWNoaW5nIHBhY2thZ2U6IOKAmGJpdOKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnByYWNtYeKAmTpcblxuICAgIGlzLnNvcnRlZFxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnBzeWNo4oCZOlxuXG4gICAga2V5c29ydFxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmRwbHly4oCZOlxuXG4gICAgc3ltZGlmZlxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmJhc2XigJk6XG5cbiAgICB4b3JcblxuQXR0YWNoaW5nIHBhY2thZ2UgYml0NjRcbnBhY2thZ2U6Yml0NjQgKGMpIDIwMTEtMjAxNyBKZW5zIE9laGxzY2hsYWVnZWxcbmNyZWF0b3JzOiBpbnRlZ2VyNjQgcnVuaWY2NCBzZXEgOlxuY29lcmNpb246IGFzLmludGVnZXI2NCBhcy52ZWN0b3IgYXMubG9naWNhbCBhcy5pbnRlZ2VyIGFzLmRvdWJsZSBhcy5jaGFyYWN0ZXIgYXMuYml0c3RyaW5nXG5sb2dpY2FsIG9wZXJhdG9yOiAhICYgfCB4b3IgIT0gPT0gPCA8PSA+PSA+XG5hcml0aG1ldGljIG9wZXJhdG9yOiArIC0gKiAvICUvJSAlJSBeXG5tYXRoOiBzaWduIGFicyBzcXJ0IGxvZyBsb2cyIGxvZzEwXG5tYXRoOiBmbG9vciBjZWlsaW5nIHRydW5jIHJvdW5kXG5xdWVyeWluZzogaXMuaW50ZWdlcjY0IGlzLnZlY3RvciBbaXMuYXRvbWljfSBbbGVuZ3RoXSBmb3JtYXQgcHJpbnQgc3RyXG52YWx1ZXM6IGlzLm5hIGlzLm5hbiBpcy5maW5pdGUgaXMuaW5maW5pdGVcbmFnZ3JlZ2F0aW9uOiBhbnkgYWxsIG1pbiBtYXggcmFuZ2Ugc3VtIHByb2RcbmN1bXVsYXRpb246IGRpZmYgY3VtbWluIGN1bW1heCBjdW1zdW0gY3VtcHJvZFxuYWNjZXNzOiBsZW5ndGg8LSBbIFs8LSBbWyBbWzwtXG5jb21iaW5lOiBjIHJlcCBjYmluZCByYmluZCBhcy5kYXRhLmZyYW1lXG5XQVJOSU5HIGRvbid0IHVzZSBhcyBzdWJzY3JpcHRzXG5XQVJOSU5HIHNlbWFudGljcyBkaWZmZXIgZnJvbSBpbnRlZ2VyXG5mb3IgbW9yZSBoZWxwIHR5cGUgP2JpdDY0XG5cbkF0dGFjaGluZyBwYWNrYWdlOiDigJhiaXQ2NOKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnV0aWxz4oCZOlxuXG4gICAgaGFzaHRhYlxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6YmFzZeKAmTpcblxuICAgICVpbiUsIDosIGlzLmRvdWJsZSwgbWF0Y2gsIG9yZGVyLCByYW5rXG4ifQ== -->
-<pre><code>Loading required package: bit
-
-Attaching package: ‘bit’
-
-The following object is masked from ‘package:pracma’:
-
-    is.sorted
-
-The following object is masked from ‘package:psych’:
-
-    keysort
-
-The following object is masked from ‘package:dplyr’:
-
-    symdiff
-
-The following object is masked from ‘package:base’:
-
-    xor
-
-Attaching package bit64
-package:bit64 (c) 2011-2017 Jens Oehlschlaegel
-creators: integer64 runif64 seq :
-coercion: as.integer64 as.vector as.logical as.integer as.double as.character as.bitstring
-logical operator: ! &amp; | xor != == &lt; &lt;= &gt;= &gt;
-arithmetic operator: + - * / %/% %% ^
-math: sign abs sqrt log log2 log10
-math: floor ceiling trunc round
-querying: is.integer64 is.vector [is.atomic} [length] format print str
-values: is.na is.nan is.finite is.infinite
-aggregation: any all min max range sum prod
-cumulation: diff cummin cummax cumsum cumprod
-access: length&lt;- [ [&lt;- [[ [[&lt;-
-combine: c rep cbind rbind as.data.frame
-WARNING don&#39;t use as subscripts
-WARNING semantics differ from integer
-for more help type ?bit64
-
-Attaching package: ‘bit64’
-
-The following object is masked from ‘package:utils’:
-
-    hashtab
-
-The following objects are masked from ‘package:base’:
-
-    %in%, :, is.double, match, order, rank</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSgnZ2x1ZScpXG5saWJyYXJ5KCdSTXlTUUwnKVxuYGBgIn0= -->
-<pre class="r"><code>library(&#39;glue&#39;)
-library(&#39;RMySQL&#39;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhSTXlTUUzigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiA0LjIuM1xuQXR0YWNoaW5nIHBhY2thZ2U6IOKAmFJNeVNRTOKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOlJTUUxpdGXigJk6XG5cbiAgICBpc0lkQ3VycmVudFxuIn0= -->
-<pre><code>Warning: package ‘RMySQL’ was built under R version 4.2.3
-Attaching package: ‘RMySQL’
-
-The following object is masked from ‘package:RSQLite’:
-
-    isIdCurrent</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<div id="comparacion-bases-2010-2023" class="section level2">
+<h2>1. Comparacion bases 2010-2023</h2>
+<div id="indice-republica" class="section level3">
+<h3>1.1 Indice republica</h3>
 <p>Se obtienen los resultados de todos los meses de los archivos de
 excel generados por los scripts que calculan el IPC</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kcmVwMjAxMF8xIDwtIHJlYWRfZXhjZWwoXCIyMDEwL2luZHhiYXNlMjAxMF8xLnhsc3hcIiwgc2hlZXQgPSBcImluZHJlcDIwMTBfMVwiKVxuaW5kcmVwMjAxMF8yIDwtIHJlYWRfZXhjZWwoXCIyMDEwL2luZHhiYXNlMjAxMF8yLnhsc3hcIiwgc2hlZXQgPSBcImluZHJlcDIwMTBfMlwiKVxuaW5kcmVwMjAxMF8zIDwtIHJlYWRfZXhjZWwoXCIyMDEwL2luZHhiYXNlMjAxMF8zLnhsc3hcIiwgc2hlZXQgPSBcImluZHJlcDIwMTBfM1wiKVxuaW5kcmVwMjAxMF80IDwtIHJlYWRfZXhjZWwoXCIyMDEwL2luZHhiYXNlMjAxMF80Lnhsc3hcIiwgc2hlZXQgPSBcImluZHJlcDIwMTBfNFwiKVxuaW5kcmVwMjAxMF81IDwtIHJlYWRfZXhjZWwoXCIyMDEwL2luZHhiYXNlMjAxMF81Lnhsc3hcIiwgc2hlZXQgPSBcImluZHJlcDIwMTBfNVwiKVxuaW5kcmVwMjAxMF82IDwtIHJlYWRfZXhjZWwoXCIyMDEwL2luZHhiYXNlMjAxMF82Lnhsc3hcIiwgc2hlZXQgPSBcImluZHJlcDIwMTBfNlwiKVxuI2luZHJlcDIwMTBfNyA8LSByZWFkX2V4Y2VsKFwiMjAxMC9pbmR4YmFzZTIwMTBfMi54bHN4XCIsIHNoZWV0ID0gXCJpbmRyZXAyMDIzXzdcIilcbmluZHJlcDIwMjNfMSA8LSByZWFkX2V4Y2VsKFwiMjAyMy9pbmR4YmFzZTIwMjNfMV8yMDI0Lnhsc3hcIiwgc2hlZXQgPSBcImluZF9yZXAyMDIzXzFcIilcbmluZHJlcDIwMjNfMiA8LSByZWFkX2V4Y2VsKFwiMjAyMy9pbmR4YmFzZTIwMjNfMl8yMDI0Lnhsc3hcIiwgc2hlZXQgPSBcImluZF9yZXAyMDIzXzJcIilcbmBgYCJ9 -->
-<pre class="r"><code>indrep2010_1 &lt;- read_excel(&quot;2010/indxbase2010_1.xlsx&quot;, sheet = &quot;indrep2010_1&quot;)
-indrep2010_2 &lt;- read_excel(&quot;2010/indxbase2010_2.xlsx&quot;, sheet = &quot;indrep2010_2&quot;)
-indrep2010_3 &lt;- read_excel(&quot;2010/indxbase2010_3.xlsx&quot;, sheet = &quot;indrep2010_3&quot;)
-indrep2010_4 &lt;- read_excel(&quot;2010/indxbase2010_4.xlsx&quot;, sheet = &quot;indrep2010_4&quot;)
-indrep2010_5 &lt;- read_excel(&quot;2010/indxbase2010_5.xlsx&quot;, sheet = &quot;indrep2010_5&quot;)
-indrep2010_6 &lt;- read_excel(&quot;2010/indxbase2010_6.xlsx&quot;, sheet = &quot;indrep2010_6&quot;)
-#indrep2010_7 &lt;- read_excel(&quot;2010/indxbase2010_2.xlsx&quot;, sheet = &quot;indrep2023_7&quot;)
-indrep2023_1 &lt;- read_excel(&quot;2023/indxbase2023_1_2024.xlsx&quot;, sheet = &quot;ind_rep2023_1&quot;)
-indrep2023_2 &lt;- read_excel(&quot;2023/indxbase2023_2_2024.xlsx&quot;, sheet = &quot;ind_rep2023_2&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IGBwYXRoYCBkb2VzIG5vdCBleGlzdDog4oCYMjAyMy9pbmR4YmFzZTIwMjNfMl8yMDI0Lnhsc3jigJlcbiJ9 -->
-<pre><code>Error: `path` does not exist: ‘2023/indxbase2023_2_2024.xlsx’</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVzZXMgPC0gYyhcIkVuZXJvXCIsIFwiRmVicmVyb1wiLCBcIk1hcnpvXCIsIFwiQWJyaWxcIiwgXCJNYXlvXCIsIFwiSnVuaW9cIilcbmBgYCJ9 -->
@@ -1927,32 +1790,236 @@ indrep2023_2 &lt;- read_excel(&quot;2023/indxbase2023_2_2024.xlsx&quot;, sheet =
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2NyZWFtb3MgbGEgbGlzdGEgZGUgZGF0YWZyYW1lcyBkZSBsYXMgYmFzZXMgMjAxMCB5IDIwMjNcbm5vbWJyZXMyMDEwIDwtIHBhc3RlMChcImluZHJlcDIwMTBfXCIsIDE6NilcbmluZHJlcGJhc2UyMDEwIDwtIG1nZXQobm9tYnJlczIwMTApXG5ub21icmVzMjAyMyA8LSBwYXN0ZTAoXCJpbmRyZXAyMDIzX1wiLCAxOjYpXG5pbmRyZXBiYXNlMjAyMyA8LSBtZ2V0KG5vbWJyZXMyMDIzKVxuYGBgIn0= -->
-<pre class="r"><code>#creamos la lista de dataframes de las bases 2010 y 2023
-nombres2010 &lt;- paste0(&quot;indrep2010_&quot;, 1:6)
-indrepbase2010 &lt;- mget(nombres2010)
-nombres2023 &lt;- paste0(&quot;indrep2023_&quot;, 1:6)
-indrepbase2023 &lt;- mget(nombres2023)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9udGhzIDwtIDE6NiAgICAgI3NlIGVzdGFibGVjZW4gbG9zIG1lc2VzIGEgaW1wb3J0YXJcbiNub21icmVzIGRlIGxhcyBob2phcyBxdWUgdGllbmVuIGxvcyBpbmRpY2VzXG5zaGVldF9uYW1lc18yMDEwIDwtIHBhc3RlMChcImluZHJlcDIwMTBfXCIsIG1vbnRocylcbnNoZWV0X25hbWVzXzIwMjMgPC0gcGFzdGUwKFwiaW5kX3JlcDIwMjNfXCIsIG1vbnRocylcblxuI3NlIGxlZW4gbG9zIGFyY2hpdm9zIGRlIGV4Y2VsXG5pbmRyZXBiYXNlMjAxMCA8LSByZWFkX2luZChcIjIwMTBcIiwgbW9udGhzLCBzaGVldF9uYW1lc18yMDEwKVxuaW5kcmVwYmFzZTIwMjMgPC0gcmVhZF9pbmQoXCIyMDIzXCIsIG1vbnRocywgc2hlZXRfbmFtZXNfMjAyMylcblxuI3NlIGNvbWJpbmFuIGVuIHVuIHNvbG8gZGF0YWZyYW1lIHBhcmEgY2FkYSBiYXNlXG5pbmRyZXBfYmFzZTIwMTAgPC0gZG8uY2FsbChyYmluZCwgaW5kcmVwYmFzZTIwMTApXG5pbmRyZXBfYmFzZTIwMjMgPC0gZG8uY2FsbChyYmluZCwgaW5kcmVwYmFzZTIwMjMpXG5cbiNzZSBjb21iaW5hbiB5IHNlIGFycmVnbGFuIGVuIHVuIGRhdGFmcmFtZSByZXN1bWVuXG5pbmRyZXAgPC0gY2JpbmQoaW5kcmVwX2Jhc2UyMDEwLCBpbmRyZXBfYmFzZTIwMjMpICU+JSBcbiAgc2VsZWN0KElQQywgaW5kcmVwKSAlPiUgXG4gIHJlbmFtZSgnQmFzZSAyMDEwJyA9IElQQywgJ0Jhc2UgMjAyMycgPSBpbmRyZXApICU+JSBcbiAgbXV0YXRlKE1lcyA9IG1lc2VzLCAuYmVmb3JlID0gJ0Jhc2UgMjAxMCcpXG5cbmluZHJlcFxuYGBgIn0= -->
+<pre class="r"><code>months &lt;- 1:6     #se establecen los meses a importar
+#nombres de las hojas que tienen los indices
+sheet_names_2010 &lt;- paste0(&quot;indrep2010_&quot;, months)
+sheet_names_2023 &lt;- paste0(&quot;ind_rep2023_&quot;, months)
+
+#se leen los archivos de excel
+indrepbase2010 &lt;- read_ind(&quot;2010&quot;, months, sheet_names_2010)
+indrepbase2023 &lt;- read_ind(&quot;2023&quot;, months, sheet_names_2023)
+
+#se combinan en un solo dataframe para cada base
+indrep_base2010 &lt;- do.call(rbind, indrepbase2010)
+indrep_base2023 &lt;- do.call(rbind, indrepbase2023)
+
+#se combinan y se arreglan en un dataframe resumen
+indrep &lt;- cbind(indrep_base2010, indrep_base2023) %&gt;% 
+  select(IPC, indrep) %&gt;% 
+  rename(&#39;Base 2010&#39; = IPC, &#39;Base 2023&#39; = indrep) %&gt;% 
+  mutate(Mes = meses, .before = &#39;Base 2010&#39;)
+
+indrep</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IHZhbHVlIGZvciDigJhpbmRyZXAyMDIzXzLigJkgbm90IGZvdW5kXG4ifQ== -->
-<pre><code>Error: value for ‘indrep2023_2’ not found</code></pre>
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NiwibmNvbCI6Mywic3VtbWFyeSI6eyJEZXNjcmlwdGlvbiI6WyJkZiBbNiDDlyAzXSJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJndHlpVERtaXVCaVlHQmdabUJoWW1KZ1pnVXlHVmhEUTl4MExSaUFJa0FPSXdNTEF5ZUlyZ0FxRWdhclpHRGdCV0kyc0NRREF4TlVqQVdrRXlyT0I2SWRVdCtvOUtVSG5YWklmVlRLZlZHanlTR042OVVCQTE1emh6UlYxMWt1eC9RZDBpSjdKam1MbGp1a3RiKzY4VmhoQVZ4ZkpGUGF3MlhyM1IwaU9TMnFyZFdiSFNKbFBqa3pzNTF4aU5RWExkbTliYnBEcE5IcnVhYzAreHdpYmRQYmwxZjJvam1VTlM4eE43VVl5QkNBZUFzc3lPd0xGSUl3T1owU2kxTVZqQXdNRGRBRWpJelJUT0lzeWkvWGc1a0c4akpUQXdNWXNLRmJtWnlUV0F5ekVpYklsWkpZa3FpWFZnVFVEK1Q5UTlQQ25sOVFrcG1mQjlURUpBd05PR1ROakVWb0FnS2xlU0NYcE9nbVo1VG1aZXNhbVlOc2dNWUFBOVI1ak5EUWg3R1pJWFl5L1llYXhRbzFpeTAxTHowekx4WG0rSnpFcE5RY0tJY1A2R1d3ai9VS2lqTHpTbUJlQVlvVzY1WGtseVRDMUhFbDUrZkFSTUNlWS9nSEFGV0xyV1pNQWdBQSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Mes"],"name":[1],"type":["int"],"align":["right"]},{"label":["Base 2010"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Base 2023"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"175.3795","3":"100.0375"},{"1":"2","2":"175.0768","3":"100.1441"},{"1":"3","2":"176.3412","3":"100.4523"},{"1":"4","2":"177.1647","3":"100.7357"},{"1":"5","2":"178.7984","3":"100.7956"},{"1":"6","2":"180.2474","3":"100.9594"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="indice-por-region" class="section level3">
+<h3>1.2 Indice por region</h3>
+<p>Esta seccion obtiene el cuadro de resultados de IPC para cada region
+a nivel republica con bases 2010 y 2023</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI25vbWJyZXMgZGUgbGFzIGhvamFzIHF1ZSB0aWVuZW4gbG9zIGluZGljZXNcbnNoZWV0X25hbWVzXzIwMTAgPC0gcGFzdGUwKFwiaW5kZ2VuMjAxMF9cIiwgbW9udGhzKVxuc2hlZXRfbmFtZXNfMjAyMyA8LSBwYXN0ZTAoXCJpbmRfcmVnMjAyM19cIiwgbW9udGhzKVxuXG4jc2UgbGVlbiBsb3MgYXJjaGl2b3MgZGUgZXhjZWxcbmluZHJlZ2Jhc2UyMDEwIDwtIHJlYWRfaW5kKFwiMjAxMFwiLCBtb250aHMsIHNoZWV0X25hbWVzXzIwMTApXG5pbmRyZWdiYXNlMjAyMyA8LSByZWFkX2luZChcIjIwMjNcIiwgbW9udGhzLCBzaGVldF9uYW1lc18yMDIzKVxuXG4jc2UgY29tYmluYW4gZW4gdW4gc29sbyBkYXRhZnJhbWUgcGFyYSBjYWRhIGJhc2VcbmluZHJlZ19iYXNlMjAxMCA8LSBkby5jYWxsKGNiaW5kLCBpbmRyZWdiYXNlMjAxMClcbmluZHJlZ19iYXNlMjAyMyA8LSBkby5jYWxsKGNiaW5kLCBpbmRyZWdiYXNlMjAyMylcblxuaW5kcmVnIDwtIGNiaW5kKGluZHJlZ19iYXNlMjAxMCwgaW5kcmVnX2Jhc2UyMDIzKSBcbiBcbmNvbG5hbWVzKGluZHJlZykgPC0gbWFrZS51bmlxdWUoY29sbmFtZXMoaW5kcmVnKSlcblxuaW5kcmVnIDwtIGluZHJlZyAlPiUgc2VsZWN0KDEsIDIsIDE0LCA0LCAxNiwgNiwgMTgsIDgsIDIwLCAxMCwgMjIsIDEyLCAyNCkgJT4lIFxuICByZW5hbWUoUmVnaW9uID0gUmVnQ29kLCBcbiAgICAgICAgICdCYXNlIDIwMTAgMScgPSBJUEMsICdCYXNlIDIwMTAgMicgPSBJUEMuMSwgJ0Jhc2UgMjAxMCAzJyA9IElQQy4yLCAnQmFzZSAyMDEwIDQnID0gSVBDLjMsICdCYXNlIDIwMTAgNScgPSBJUEMuNCwgJ0Jhc2UgMjAxMCA2JyA9IElQQy41LCBcbiAgICAgICAgICdCYXNlIDIwMjMgMScgPSBpbmRfcHJvZF9yZXAsICdCYXNlIDIwMjMgMicgPSBpbmRfcHJvZF9yZXAuMSwgJ0Jhc2UgMjAyMyAzJyA9IGluZF9wcm9kX3JlcC4yLCAnQmFzZSAyMDIzIDQnID0gaW5kX3Byb2RfcmVwLjMsICdCYXNlIDIwMjMgNScgPSBpbmRfcHJvZF9yZXAuNCwgJ0Jhc2UgMjAyMyA2JyA9IGluZF9wcm9kX3JlcC41KSAjdG9kYSBlc3RhIHBhcnRlIGVzIG1lam9yIHF1ZSBsYSBhdXRvbWF0aWNlIHRhbWJpZW5cblxuaW5kcmVnXG5gYGAifQ== -->
+<pre class="r"><code>#nombres de las hojas que tienen los indices
+sheet_names_2010 &lt;- paste0(&quot;indgen2010_&quot;, months)
+sheet_names_2023 &lt;- paste0(&quot;ind_reg2023_&quot;, months)
+
+#se leen los archivos de excel
+indregbase2010 &lt;- read_ind(&quot;2010&quot;, months, sheet_names_2010)
+indregbase2023 &lt;- read_ind(&quot;2023&quot;, months, sheet_names_2023)
+
+#se combinan en un solo dataframe para cada base
+indreg_base2010 &lt;- do.call(cbind, indregbase2010)
+indreg_base2023 &lt;- do.call(cbind, indregbase2023)
+
+indreg &lt;- cbind(indreg_base2010, indreg_base2023) 
+ 
+colnames(indreg) &lt;- make.unique(colnames(indreg))
+
+indreg &lt;- indreg %&gt;% select(1, 2, 14, 4, 16, 6, 18, 8, 20, 10, 22, 12, 24) %&gt;% 
+  rename(Region = RegCod, 
+         &#39;Base 2010 1&#39; = IPC, &#39;Base 2010 2&#39; = IPC.1, &#39;Base 2010 3&#39; = IPC.2, &#39;Base 2010 4&#39; = IPC.3, &#39;Base 2010 5&#39; = IPC.4, &#39;Base 2010 6&#39; = IPC.5, 
+         &#39;Base 2023 1&#39; = ind_prod_rep, &#39;Base 2023 2&#39; = ind_prod_rep.1, &#39;Base 2023 3&#39; = ind_prod_rep.2, &#39;Base 2023 4&#39; = ind_prod_rep.3, &#39;Base 2023 5&#39; = ind_prod_rep.4, &#39;Base 2023 6&#39; = ind_prod_rep.5) #toda esta parte es mejor que la automatice tambien
+
+indreg</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6OCwibmNvbCI6MTMsInN1bW1hcnkiOnsiRGVzY3JpcHRpb24iOlsiZGYgWzggw5cgMTNdIl19fSwicmRmIjoiSDRzSUFBQUFBQUFBQm1WVUMweFRWeGkrRkFxMXJLeGFGTFE4QmNaWW9LTVBIdUtFdjhBY0ZBRmxJK2xoYzFKNlcxN2x0cVh0WUNqTUNSSEZJU3d5Y1JFUzJFQ1hNZHdDT29lS2pNV1pvWE9SU1ZnRkp1SWN4aWpUc1RHZGk3SlQ3TVBjbnVUa2Z1YzczMy9PZDc2YmMzSlM1V0sybkUwUWhDdmh4bUFRcmt3TUNXYnVHeHVqNGduTTRJRUw0VVlzczN3cnNZaUhBUWQzTHU0czZ3UWpXbWhISWpzUzI1SEVqbUxzS05hTzR1d0liMGg0V2RZRnhZTi9BdjMzYndmZDVlMnZORStLZ015VVAxcDh1UTkwQ1YrRkI2U2ZBT1d0eUpualBuTkFSdTg3eW51dkU2alFjWFBYRVJHb2F5dWtmNXRZOW5VUTQxeEdncWtORURlNDdsN2NGQ0Rpa3F2K3VkMGduK3Zad200ckJ1UmFlMXFtSGdQa1h0Y3ZHVzhHK2NJRmRsN1RDNENXaTFkMlZ2czcvTnk1L3QzRDBYclEzVSs2NVoyUkFPUzY2eWRHMm9KQmw3V2FmK09udGFDOFlwNlEzbDBBOG5uT1ZNRDV4MEN0dlRaeThQZXRvRlpmVlhrY3puYjQ4VFdjWm54cHdyN2VQR24ycWNmNzNxeTY3VGtOaUYzWlYxTG9ndjNjYkt6NXJCVHpNbWxxekVjZy8yL1d1TWI5QnFDVnZhTTdXdit3cjFNUUtQUWNtcjRNT3ZPMXQzTG1jNEhNcXRuRVA1c0Z1ckdvc2E1M0VTaC9lM1hBTkpNSFpNam5Qc1Z1U3FDOEtwSnlaVmRCWGRkOWFaaEljL2lSSmpSbVZxOEF4QXdzM3dyM0FQRW0vOHpnOHdDRnFZZjR2aGV3My9nZlU2b2ZBUEl6ZEdnK1VRSnlRMG10eVVHQVhpcmFuNWpWNlBBVEljdzJENDZEUHVTS1dScC9GTWlTSW9WcVhnYjZ3R1pwNTJBOEtLZDN0L0xMVmdIcDFYNjNkZHNPb1BMamo2ZmVhUUcxUnJ0eitUNDNoNTg4TFg5dlR4Zk9uOW5kbFM0R0ZLc2NQbExnRDJoRFZmOEh2dzRDaWxpY21ReEtBaFRTTUh2bXcwT0FWcTJlbXpjYkFJbEtmQk5kQngxK3ZGMCtIazU2QkhxNThPR3VNQUxJVXJMbW5iSW0wQjhjU0hGUE1lSjhYT29QZTZtQURQMTU0c0N4OTBGNzh0VENXT1VvcVBjMlpkZWQvZDdoSjBHU2tabS9BT2pGZEdWM2V6cWdkWDVwVmIwUmdEYXVnYlNXR2tBQjkwTlpJMjlqWDFtQ1EvbGZBNHBpVExGcWt3RWx3NytmOGxvY2ZnSjRGMldQemFEdmFSM1lzejRHeURwaFErSHRYdENmNGNaNXZGNExKS2V2LzFqSFppQTN6RmJFYlE0SG5lZ0x3V0FURzlSdGtibmNvV2Z5a2Z3bCtHWDlONEJlazAyRU5YampYQkszckxqWWdmMkVuV01FaHdPS2JEL2ZmR0FYb0JnLzVnOEZURURwMnpaeDYxT3duMlRwcWVGdmFSZWFTU25LVkFiclplWllTZmNjVldHeGxyS09QSk1WQmxXUUtGb1lIU1NrVVNLeEU0VlZJbWNWbmNJcXNiT0tUbUdWeEZsRnA3QXF4bGxGcDdBcTFsa1ZTNHRqV2JtMlFtQ0x4UExHTVhZU1M0MUZ6MDJwVVJoc3VkbElOcWt3S2dUcWNseVBSMDlvSlI1YW5SR25pb3NZbGhlVVNTdDJLYWNSWEJObGNVSkdLWXRNVkdtVVVHTFpZV24rYWVOWU1lc1p6SG02SjJQUnVoYlQ5a2RWVkdFeHBiS1oxeWdLVkJycndBc2ZlZW5FQWwxNU1XVzBIUVd6Qm9GUmExVFlkR3lsVm1OamxnNUhQUGtmY2p2dEZEa0dBQUE9In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Region"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Base 2010 1"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Base 2023 1"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Base 2010 2"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Base 2023 2"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Base 2010 3"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Base 2023 3"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["Base 2010 4"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["Base 2023 4"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Base 2010 5"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Base 2023 5"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Base 2010 6"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Base 2023 6"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"01","2":"143.7488","3":"100.04323","4":"143.3712","5":"100.38206","6":"144.9747","7":"101.0192","8":"145.2873","9":"101.4130","10":"144.6252","11":"100.9094","12":"144.9399","13":"100.8273"},{"1":"02","2":"269.0301","3":"100.25205","4":"271.0156","5":"100.03685","6":"269.5543","7":"100.0800","8":"274.2392","9":"100.2660","10":"277.5122","11":"100.6295","12":"282.7245","13":"101.1139"},{"1":"03","2":"162.4171","3":"100.01251","4":"161.8087","5":"100.10770","6":"162.4529","7":"100.3103","8":"163.3252","9":"100.8498","10":"163.3560","11":"100.8924","12":"164.1310","13":"100.9569"},{"1":"04","2":"259.6680","3":"99.71358","4":"260.8811","5":"100.16362","6":"269.2612","7":"100.5844","8":"273.9727","9":"100.9606","10":"281.4202","11":"101.0954","12":"283.7540","13":"101.0961"},{"1":"05","2":"159.2242","3":"100.05492","4":"158.6202","5":"100.06082","6":"159.1023","7":"100.3785","8":"158.9852","9":"100.6562","10":"159.0939","11":"100.4834","12":"160.4281","13":"100.6971"},{"1":"06","2":"161.5170","3":"100.10185","4":"160.4704","5":"100.09828","6":"161.1145","7":"100.4446","8":"160.4568","9":"100.5554","10":"161.1507","11":"100.6454","12":"161.9344","13":"100.8298"},{"1":"07","2":"241.1512","3":"99.84046","4":"241.0897","5":"99.93594","6":"240.4521","7":"100.0679","8":"243.0069","9":"100.3453","10":"253.7416","11":"100.7033","12":"259.1670","13":"101.1464"},{"1":"08","2":"180.1083","3":"100.26874","4":"179.2140","5":"100.33873","6":"180.1452","7":"100.6626","8":"179.3886","9":"100.7877","10":"180.2987","11":"101.0352","12":"180.8804","13":"101.0353"}],"options":{"columns":{"min":{},"max":[10],"total":[13]},"rows":{"min":[10],"max":[10],"total":[8]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="indice-por-division" class="section level3">
+<h3>1.3 Indice por division</h3>
+<p>Esta seccion obtiene el cuadro de resultados de IPC para cada
+division a nivel republica con bases 2010 y 2023</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI25vbWJyZXMgZGUgbGFzIGhvamFzIHF1ZSB0aWVuZW4gbG9zIGluZGljZXNcbnNoZWV0X25hbWVzXzIwMTAgPC0gcGFzdGUwKFwiaW5kcmVwZGl2MjAxMF9cIiwgbW9udGhzKVxuc2hlZXRfbmFtZXNfMjAyMyA8LSBwYXN0ZTAoXCJpbmRfZGl2MjAyM19cIiwgbW9udGhzKVxuXG4jc2UgbGVlbiBsb3MgYXJjaGl2b3MgZGUgZXhjZWxcbmluZGRpdmJhc2UyMDEwIDwtIHJlYWRfaW5kKFwiMjAxMFwiLCBtb250aHMsIHNoZWV0X25hbWVzXzIwMTApXG5pbmRkaXZiYXNlMjAyMyA8LSByZWFkX2luZChcIjIwMjNcIiwgbW9udGhzLCBzaGVldF9uYW1lc18yMDIzKVxuXG4jc2UgY29tYmluYW4gZW4gdW4gc29sbyBkYXRhZnJhbWUgcGFyYSBjYWRhIGJhc2VcbmluZGRpdl9iYXNlMjAxMCA8LSBkby5jYWxsKGNiaW5kLCBpbmRkaXZiYXNlMjAxMCkgJT4lIGFkZF9yb3coKVxuYGBgIn0= -->
+<pre class="r"><code>#nombres de las hojas que tienen los indices
+sheet_names_2010 &lt;- paste0(&quot;indrepdiv2010_&quot;, months)
+sheet_names_2023 &lt;- paste0(&quot;ind_div2023_&quot;, months)
+
+#se leen los archivos de excel
+inddivbase2010 &lt;- read_ind(&quot;2010&quot;, months, sheet_names_2010)
+inddivbase2023 &lt;- read_ind(&quot;2023&quot;, months, sheet_names_2023)
+
+#se combinan en un solo dataframe para cada base
+inddiv_base2010 &lt;- do.call(cbind, inddivbase2010) %&gt;% add_row()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiTmV3IG5hbWVzOlxuIn0= -->
+<pre><code>New names:</code></pre>
 <!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kZGl2X2Jhc2UyMDIzIDwtIGRvLmNhbGwoY2JpbmQsIGluZGRpdmJhc2UyMDIzKVxuXG5pbmRkaXYgPC0gY2JpbmQoaW5kZGl2X2Jhc2UyMDEwLCBpbmRkaXZfYmFzZTIwMjMpIFxuIFxuY29sbmFtZXMoaW5kZGl2KSA8LSBtYWtlLnVuaXF1ZShjb2xuYW1lcyhpbmRkaXYpKVxuXG5cbmluZGRpdiA8LSBpbmRkaXYgJT4lIHNlbGVjdCgxOSwgMywgMjAsIDYsIDIyLCA5LCAyNCwgMTIsIDI2LCAxNSwgMjgsIDE4LCAzMClcblxuaW5kZGl2XG5gYGAifQ== -->
+<pre class="r"><code>inddiv_base2023 &lt;- do.call(cbind, inddivbase2023)
+
+inddiv &lt;- cbind(inddiv_base2010, inddiv_base2023) 
+ 
+colnames(inddiv) &lt;- make.unique(colnames(inddiv))
+
+
+inddiv &lt;- inddiv %&gt;% select(19, 3, 20, 6, 22, 9, 24, 12, 26, 15, 28, 18, 30)
+
+inddiv</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MTMsIm5jb2wiOjEzLCJzdW1tYXJ5Ijp7IkRlc2NyaXB0aW9uIjpbImRmIFsxMyDDlyAxM10iXX19LCJyZGYiOiJINHNJQUFBQUFBQUFCbTJWQ1ZRVFZ4U0dReUJCTm1VVFNSRVFsSzFJTUFRRnNjaEZjS3RGUlJIbmhUVE1FTUltSmlFSm02Q1dXc0RxY2FFdTFTb3RnbFdvV2tVRDZoRlVGamRPUlVWUnEySUJGMEJCeVRsMUIra0xtbENKT1djeS83dnp2K1c3NzgyZFJhRUUxNWd3cHRGbytqUURPcDJtejhDU3hsZ1NNY3ZMbjRZanVLRkhNNkFacWU4WjJHU0ZoUm0rekFmdkh4N1FKM0cweWtlcnVGcmxxMVdUdFdxS1Z2bHBsYjlXVGRVb3ppU3QwczdCMGM3QjRlTC9rZXFWUU1yWjBzTHI2VmxBQnM1K2IxZllBWUpSYmQrRUhPNEFjb0w3dldQZi9nbGtxbkt0OXg5OVFGbXdndlJYMUFFVnZtN0ZGSzhTaUtvTGNIOWhQaDVJYVhoUTNPb2ZnYWMwWmY2a2FvV1lOOXNVVGo0cUlGOHlDMC9PY1ZuZHEwNkxZYkYyUG1Tdy81Rko5bm9nVktyNmUxWUlpUDRrVm5EeGN5RCtkZzB3SFpVQXhOdXlSVVZCYkVEMHgyM01FU2FBZkNmYTYxbU94ZjJhWmUxalRJQVk0TWFicHhDQWpQWlV0Vkc5Z0VhVjMxNGFXQTJJTnZqRC9VM0xUamNVRGZHZFRHdmUrTGdXeUxuZENsRjRKZ2lzQjc2S0tEMEtwRU9EM2ZTNmNpQVZ6SmtoK1pNeFg2RlhJT2M0VUo3eXpTdGR6REJmVW9zMGFBT1EzQ01yNTZTVHdLdG9yRW16ZHdJaE01czdwcGtQRk9Pc2M5aFdsZzRmOGJyUjRHbVhBSWc3anUzU0N4R0FMRVdsR3d2SEEzRnRYZFg4bXUxQXZOdStOYko5SGlERG44KzlGTmtCMnRuMzJsQVFEc2pVU0JCaDFnaElMMlhObWJ0dWdNYjBoczJyUFFqSTAvWjQzTXZGT0w3U1JycnBGQkQvTGxmOUk1Zyt4TmRjMkpyY2xRNWsrT3lPQjRmWklMQnh5TFBNV2dDazB5eTVNaXdVU0ZtZnZYNlpGVkNXaDZ3cm1yY0FWYmJ5Mks5Zk8yRyt4NWZ5SnpRQldkM2k3cjl4QWZBcXpmdDdMcnFDY015T0xpaXlBSXExTUlGeGc5VGRQd2IvZkdwZEd4Q1hvenhQcncwRFpMTW8wLzJHRlJEWGhmRjIzKzhEb2k4eVFjeC9Ec2drc3FUMzFqTGdPVmpzbjVSL0FKREY3OUxRemhtQTdBNWw2N3ZzQitUb0Y5ZlNrdzVveXRFYVRzbzB6RnVjVjlBVERNU3p4UkxwbVdkRGZDOFdDdU5MN2dOSkxsV2dPdzlCWUh2T1kwTk9QcEF1TFpuOEhYc3gzdzFGZjJrQzVvdTZ3anduQnVwcVVoVGpiUzVFWGF6djlIUmJCV1NqZFVST3lsWGduY2p0Nlc3Z2c5QXhwSU5id0FES1cxelZmdjZVTHAveHJwSXFSeEVRdDQ4b1BlVHJBYkh5NmlzZEp3RFJFdk1xeWdLZlI5cVQrNzFaQm9ETVNxZHZ2ajBOait1V0xHK29BV1NkME8zZXFRSTAwbWdjbzE2SitTYjZCWFpmQmpTVGNEMzRWU0htb3hmM1h1RGo4NnM4b2JLbGFlZVRSZHVVNzdvWkFHUzg5Wk9aZkE4UTJHZjhza0xaQ0tUelRWZlJ3OUg0L1ZwWXZTUnJEVkRXM25RSmJ3UlFNY3FCQTAxYklPcjh4clJESjU4QzJWTERGditRUGNUbk1ZZDFPTGNjcUJEbWNhZU1JbDArSDNwL1RsQXJFSGVYVjI2L1pBN0lZVUo4NjdRNElEcmxzUWVkQy9BNXEzbXd4UGMwSU52N0RyMzVsY0FiKzR3MThkRlpRT1p2N25hTmk4Ym4rZDFPNzFJK0lQdW02cUtJaTREQ2JocncyL2NDc3NxTTJXS3dDYiszZkdTOFo5a1EzNzdmUXVISktTQWxMZTY3VzJ0Qk1HNGc4czI2U1VDNlBrMmxIcTNHZlA2NXUwdWJnQnI5VjJISHFGbEFMWE9yVFMwUVF0U0ZpdEhPOXBGQVBxOWQxZDEvQi9NbFJUZmVxd2VoajVJalAyWUVGTy9kam95WUwzWDUrTmRLWGp0RUFuRy91UExHaTZtQW5LYmNtdldnRW9pZTBQQVpzL1B3K1VWemR3VGpmUjFQbE1xelh3R3E2Rlc1cldVQytpSWd4VFByRE42bmdTdXJaZ3hnUG9uTlZRdDNRSUlyTFBHbFc3aGRsUk1kak1jM2ROeVdOZDlsV0lsbmlLbmxJdm13OG00b2xNUkd4eWFtZld3YWh5YW16UlhIc3Rsc1RZVTNUUlRIUmt0bDJDVVRTWFZjbWtvLzh2OHVOa2ZITi9XelBrMnROOUg2dE9YL1V5Tlgxemo1czBaZlhhUC9aNDJUaHlYSFNDWkpaMnNTcFA0RzByLzdVS3pOaG1kUm1FekpOVm5VQkkxaktRWEZqcFBoL3JqMWZsZ1hRNGxVa1NnUjQwNTA5UmVXTWF5em5teFl3RHhWckY1SnJKY3dJVlc4ekl2anA1NWg4TGwyU1lQYTdGT3RucE0rOEhFc3hzZXhtQ0p4ZktKWXBGbDhNaFVqU3RZa0JDTVBFck9sc2tTeFFvT0NvM0syUXFLZ05ENWpvU1JaRXhtRW83My9EMmxYYWJaWkNBQUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["cod_div"],"name":[1],"type":["chr"],"align":["left"]},{"label":["DivInd...3"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ind_prod_rep"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["DivInd...6"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["ind_prod_rep.1"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["DivInd...9"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["ind_prod_rep.2"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["DivInd...12"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["ind_prod_rep.3"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["DivInd...15"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["ind_prod_rep.4"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["DivInd...18"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["ind_prod_rep.5"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"01","2":"284.0412","3":"100.07275","4":"283.5915","5":"99.88757","6":"285.3510","7":"100.08379","8":"287.3321","9":"100.16575","10":"293.9430","11":"100.78143","12":"298.4139","13":"101.45030"},{"1":"02","2":"129.9150","3":"99.78038","4":"130.3101","5":"99.40820","6":"130.5400","7":"99.20869","8":"131.0107","9":"99.38579","10":"131.2213","11":"99.42857","12":"131.4957","13":"99.47868"},{"1":"03","2":"120.2481","3":"99.95960","4":"120.3281","5":"100.28745","6":"120.3456","7":"100.34878","8":"120.3870","9":"100.39885","10":"120.4605","11":"100.47097","12":"120.5156","13":"100.51897"},{"1":"04","2":"129.1300","3":"99.39296","4":"128.9622","5":"99.27409","6":"129.0399","7":"99.30294","8":"129.1833","9":"99.45917","10":"129.0886","11":"99.63204","12":"129.2162","13":"99.70729"},{"1":"05","2":"131.6783","3":"99.91658","4":"131.6258","5":"99.93107","6":"131.5933","7":"99.94277","8":"131.5884","9":"100.01434","10":"131.5099","11":"100.02746","12":"131.5069","13":"100.08357"},{"1":"06","2":"136.5343","3":"100.04534","4":"136.5504","5":"100.11864","6":"136.5836","7":"100.17716","8":"136.5737","9":"100.21339","10":"136.6307","11":"100.38856","12":"136.6812","13":"100.55229"},{"1":"07","2":"138.5482","3":"100.81519","4":"137.3579","5":"102.40606","6":"141.2966","7":"104.46983","8":"142.5130","9":"106.87741","10":"139.0846","11":"104.45203","12":"139.3486","13":"102.84283"},{"1":"08","2":"111.0504","3":"100.07553","4":"111.0534","5":"100.18807","6":"111.0610","7":"100.27572","8":"111.1370","9":"100.31890","10":"111.1024","11":"100.26525","12":"111.1204","13":"100.40982"},{"1":"09","2":"131.5099","3":"99.98751","4":"129.6153","5":"100.02255","6":"133.9332","7":"100.43246","8":"134.4400","9":"100.21931","10":"134.9298","11":"100.29661","12":"135.4925","13":"100.37499"},{"1":"10","2":"106.8132","3":"100.15050","4":"106.8407","5":"100.37404","6":"106.8448","7":"100.48776","8":"106.8832","9":"100.48707","10":"106.8832","11":"100.46599","12":"106.8815","13":"100.45991"},{"1":"11","2":"151.7995","3":"100.24523","4":"152.2027","5":"100.67338","6":"152.7374","7":"100.85466","8":"152.9770","9":"101.08351","10":"153.2901","11":"101.21619","12":"153.5845","13":"101.48139"},{"1":"12","2":"135.6883","3":"100.00000","4":"136.1797","5":"100.02326","6":"136.7911","7":"100.36929","8":"137.4823","9":"100.35954","10":"138.0946","11":"100.30428","12":"138.8432","13":"100.46463"},{"1":"13","2":"NA","3":"99.90702","4":"NA","5":"99.81921","6":"NA","7":"99.72384","8":"NA","9":"99.99541","10":"NA","11":"100.03689","12":"NA","13":"100.11130"}],"options":{"columns":{"min":{},"max":[10],"total":[13]},"rows":{"min":[10],"max":[10],"total":[13]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="comparacion-factor-estacional" class="section level2">
+<h2>2. Comparacion factor estacional</h2>
+<div id="indice-republica-1" class="section level3">
+<h3>2.1 Indice republica</h3>
+<p>Esta seccion sirve para hacer la comparacion del indice base 2023 sin
+los factores estacionales y con los factores estacionales</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kcmVwMjAyM18xX2VzdCA8LSByZWFkX2V4Y2VsKFwiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfMV8yMDI0Lnhsc3hcIiwgXG4gICAgc2hlZXQgPSBcImluZF9yZXAyMDIzXzFcIikgJT4lIHJlbmFtZSgnaW5kcmVwX2VzdCc9IGluZHJlcClcbmluZHJlcDIwMjNfMl9lc3QgPC0gcmVhZF9leGNlbChcIjIwMjNlc3RhY2lvbmFsL2luZHhiYXNlMjAyM19mYWN0ZXN0XzJfMjAyNC54bHN4XCIsIFxuICAgIHNoZWV0ID0gXCJpbmRfcmVwMjAyM18yXCIpICU+JSByZW5hbWUoJ2luZHJlcF9lc3QnPSBpbmRyZXApXG5pbmRyZXAyMDIzXzNfZXN0IDwtIHJlYWRfZXhjZWwoXCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF8zXzIwMjQueGxzeFwiLCBcbiAgICBzaGVldCA9IFwiaW5kX3JlcDIwMjNfM1wiKSAlPiUgcmVuYW1lKCdpbmRyZXBfZXN0Jz0gaW5kcmVwKVxuaW5kcmVwMjAyM180X2VzdCA8LSByZWFkX2V4Y2VsKFwiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfNF8yMDI0Lnhsc3hcIiwgXG4gICAgc2hlZXQgPSBcImluZF9yZXAyMDIzXzRcIikgJT4lIHJlbmFtZSgnaW5kcmVwX2VzdCc9IGluZHJlcClcbmluZHJlcDIwMjNfNV9lc3QgPC0gcmVhZF9leGNlbChcIjIwMjNlc3RhY2lvbmFsL2luZHhiYXNlMjAyM19mYWN0ZXN0XzVfMjAyNC54bHN4XCIsIFxuICAgIHNoZWV0ID0gXCJpbmRfcmVwMjAyM181XCIpICU+JSByZW5hbWUoJ2luZHJlcF9lc3QnPSBpbmRyZXApXG5pbmRyZXAyMDIzXzZfZXN0IDwtIHJlYWRfZXhjZWwoXCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF82XzIwMjQueGxzeFwiLCBcbiAgICBzaGVldCA9IFwiaW5kX3JlcDIwMjNfNlwiKSAlPiUgcmVuYW1lKCdpbmRyZXBfZXN0Jz0gaW5kcmVwKVxuI2luZHJlcDIwMjNfMV9lc3QgPC0gcmVhZF9leGNlbChcIjIwMjNlc3RhY2lvbmFsL2luZHhiYXNlMjAyM19mYWN0ZXN0XzFfMjAyNC54bHN4XCIsIFxuIyAgICBzaGVldCA9IFwiaW5kX3JlcDIwMjNfMVwiKVxuYGBgIn0= -->
+<pre class="r"><code>indrep2023_1_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_1_2024.xlsx&quot;, 
+    sheet = &quot;ind_rep2023_1&quot;) %&gt;% rename(&#39;indrep_est&#39;= indrep)
+indrep2023_2_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_2_2024.xlsx&quot;, 
+    sheet = &quot;ind_rep2023_2&quot;) %&gt;% rename(&#39;indrep_est&#39;= indrep)
+indrep2023_3_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_3_2024.xlsx&quot;, 
+    sheet = &quot;ind_rep2023_3&quot;) %&gt;% rename(&#39;indrep_est&#39;= indrep)
+indrep2023_4_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_4_2024.xlsx&quot;, 
+    sheet = &quot;ind_rep2023_4&quot;) %&gt;% rename(&#39;indrep_est&#39;= indrep)
+indrep2023_5_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_5_2024.xlsx&quot;, 
+    sheet = &quot;ind_rep2023_5&quot;) %&gt;% rename(&#39;indrep_est&#39;= indrep)
+indrep2023_6_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_6_2024.xlsx&quot;, 
+    sheet = &quot;ind_rep2023_6&quot;) %&gt;% rename(&#39;indrep_est&#39;= indrep)
+#indrep2023_1_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_1_2024.xlsx&quot;, 
+#    sheet = &quot;ind_rep2023_1&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBNb2RpZmljYWNtb3MgZWwgZGF0YWZyYW1lIHBhcmEgcXVlIHF1ZWRlIGJvbml0b1xuaW5kcmVwICU+JSBzZWxlY3QoSVBDLCBpbmRyZXApICU+JSBcbiAgcmVuYW1lKCdCYXNlIDIwMTAnID0gSVBDLCAnQmFzZSAyMDIzJyA9IGluZHJlcCkgJT4lIFxuICBtdXRhdGUoTWVzID0gbWVzZXMsIC5iZWZvcmUgPSAnQmFzZSAyMDEwJylcbmBgYCJ9 -->
-<pre class="r"><code># Modificacmos el dataframe para que quede bonito
-indrep %&gt;% select(IPC, indrep) %&gt;% 
-  rename(&#39;Base 2010&#39; = IPC, &#39;Base 2023&#39; = indrep) %&gt;% 
-  mutate(Mes = meses, .before = &#39;Base 2010&#39;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gc2VsZWN0KC4sIElQQywgaW5kcmVwKSA6IG9iamVjdCAnaW5kcmVwJyBub3QgZm91bmRcbiJ9 -->
-<pre><code>Error in select(., IPC, indrep) : object &#39;indrep&#39; not found</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubm9tYnJlczIwMjNlc3QgPC0gcGFzdGUwKFwiaW5kcmVwMjAyM19cIiwgMTo2LCAnX2VzdCcpXG5pbmRyZXBiYXNlMjAyM2VzdCA8LSBtZ2V0KG5vbWJyZXMyMDIzZXN0KVxuXG5pbmRyZXBfYmFzZTIwMjNfZXN0IDwtIGRvLmNhbGwocmJpbmQsIGluZHJlcGJhc2UyMDIzZXN0KVxuXG5pbmRyZXBfZXN0IDwtIGNiaW5kKGluZHJlcF9iYXNlMjAyMywgaW5kcmVwX2Jhc2UyMDIzX2VzdClcbmBgYCJ9 -->
+<pre class="r"><code>nombres2023est &lt;- paste0(&quot;indrep2023_&quot;, 1:6, &#39;_est&#39;)
+indrepbase2023est &lt;- mget(nombres2023est)
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCmxpYnJhcnkoInJlYWR4bCIpDQpsaWJyYXJ5KCJ0aWR5dmVyc2UiKQ0KcmVxdWlyZSgidGlkeXZlcnNlIikNCmxpYnJhcnkoIndyaXRleGwiKQ0KbGlicmFyeSgidGliYmxlIikNCmxpYnJhcnkoIm9wZW54bHN4IikNCmxpYnJhcnkoIkRCSSIpDQpsaWJyYXJ5KCJvZGJjIikNCmxpYnJhcnkoIlJTUUxpdGUiKQ0KbGlicmFyeSgicHN5Y2giKQ0KbGlicmFyeSgicHJhY21hIikNCmxpYnJhcnkoImJpdDY0IikNCmxpYnJhcnkoJ2dsdWUnKQ0KbGlicmFyeSgnUk15U1FMJykNCmBgYA0KDQpTZSBvYnRpZW5lbiBsb3MgcmVzdWx0YWRvcyBkZSB0b2RvcyBsb3MgbWVzZXMgZGUgbG9zIGFyY2hpdm9zIGRlIGV4Y2VsIGdlbmVyYWRvcyBwb3IgbG9zIHNjcmlwdHMgcXVlIGNhbGN1bGFuIGVsIElQQw0KDQpgYGB7cn0NCmluZHJlcDIwMTBfMSA8LSByZWFkX2V4Y2VsKCIyMDEwL2luZHhiYXNlMjAxMF8xLnhsc3giLCBzaGVldCA9ICJpbmRyZXAyMDEwXzEiKQ0KaW5kcmVwMjAxMF8yIDwtIHJlYWRfZXhjZWwoIjIwMTAvaW5keGJhc2UyMDEwXzIueGxzeCIsIHNoZWV0ID0gImluZHJlcDIwMTBfMiIpDQppbmRyZXAyMDEwXzMgPC0gcmVhZF9leGNlbCgiMjAxMC9pbmR4YmFzZTIwMTBfMy54bHN4Iiwgc2hlZXQgPSAiaW5kcmVwMjAxMF8zIikNCmluZHJlcDIwMTBfNCA8LSByZWFkX2V4Y2VsKCIyMDEwL2luZHhiYXNlMjAxMF80Lnhsc3giLCBzaGVldCA9ICJpbmRyZXAyMDEwXzQiKQ0KaW5kcmVwMjAxMF81IDwtIHJlYWRfZXhjZWwoIjIwMTAvaW5keGJhc2UyMDEwXzUueGxzeCIsIHNoZWV0ID0gImluZHJlcDIwMTBfNSIpDQppbmRyZXAyMDEwXzYgPC0gcmVhZF9leGNlbCgiMjAxMC9pbmR4YmFzZTIwMTBfNi54bHN4Iiwgc2hlZXQgPSAiaW5kcmVwMjAxMF82IikNCiNpbmRyZXAyMDEwXzcgPC0gcmVhZF9leGNlbCgiMjAxMC9pbmR4YmFzZTIwMTBfMi54bHN4Iiwgc2hlZXQgPSAiaW5kcmVwMjAyM183IikNCmluZHJlcDIwMjNfMSA8LSByZWFkX2V4Y2VsKCIyMDIzL2luZHhiYXNlMjAyM18xXzIwMjQueGxzeCIsIHNoZWV0ID0gImluZF9yZXAyMDIzXzEiKQ0KaW5kcmVwMjAyM18yIDwtIHJlYWRfZXhjZWwoIjIwMjMvaW5keGJhc2UyMDIzXzJfMjAyNC54bHN4Iiwgc2hlZXQgPSAiaW5kX3JlcDIwMjNfMiIpDQppbmRyZXAyMDIzXzMgPC0gcmVhZF9leGNlbCgiMjAyMy9pbmR4YmFzZTIwMjNfM18yMDI0Lnhsc3giLCBzaGVldCA9ICJpbmRfcmVwMjAyM18zIikNCmluZHJlcDIwMjNfNCA8LSByZWFkX2V4Y2VsKCIyMDIzL2luZHhiYXNlMjAyM180XzIwMjQueGxzeCIsIHNoZWV0ID0gImluZF9yZXAyMDIzXzQiKQ0KaW5kcmVwMjAyM181IDwtIHJlYWRfZXhjZWwoIjIwMjMvaW5keGJhc2UyMDIzXzVfMjAyNC54bHN4Iiwgc2hlZXQgPSAiaW5kX3JlcDIwMjNfNSIpDQppbmRyZXAyMDIzXzYgPC0gcmVhZF9leGNlbCgiMjAyMy9pbmR4YmFzZTIwMjNfNl8yMDI0Lnhsc3giLCBzaGVldCA9ICJpbmRfcmVwMjAyM182IikNCiNpbmRyZXAyMDIzXzcgPC0gcmVhZF9leGNlbCgiMjAyMy9pbmR4YmFzZTIwMjNfMV8yMDI0Lnhsc3giLCBzaGVldCA9ICJpbmRfcmVwMjAyM183IikNCmBgYA0KDQpgYGB7cn0NCm1lc2VzIDwtIGMoIkVuZXJvIiwgIkZlYnJlcm8iLCAiTWFyem8iLCAiQWJyaWwiLCAiTWF5byIsICJKdW5pbyIpDQpgYGANCg0KYGBge3J9DQojY3JlYW1vcyBsYSBsaXN0YSBkZSBkYXRhZnJhbWVzIGRlIGxhcyBiYXNlcyAyMDEwIHkgMjAyMw0Kbm9tYnJlczIwMTAgPC0gcGFzdGUwKCJpbmRyZXAyMDEwXyIsIDE6NikNCmluZHJlcGJhc2UyMDEwIDwtIG1nZXQobm9tYnJlczIwMTApDQpub21icmVzMjAyMyA8LSBwYXN0ZTAoImluZHJlcDIwMjNfIiwgMTo2KQ0KaW5kcmVwYmFzZTIwMjMgPC0gbWdldChub21icmVzMjAyMykNCg0KI3NlIGNvbWJpbmFuIGxvcyBkYXRhZnJhbWVzIHBhcmEgY2FkYSBhw7FvIGJhc2UNCmluZHJlcF9iYXNlMjAxMCA8LSBkby5jYWxsKHJiaW5kLCBpbmRyZXBiYXNlMjAxMCkNCmluZHJlcF9iYXNlMjAyMyA8LSBkby5jYWxsKHJiaW5kLCBpbmRyZXBiYXNlMjAyMykNCg0KI3NlIGNvbWJpbmFuIGxvcyBkYXRhZnJhbWVzIHBhcmEgDQppbmRyZXAgPC0gY2JpbmQoaW5kcmVwX2Jhc2UyMDEwLCBpbmRyZXBfYmFzZTIwMjMpDQpgYGANCg0KYGBge3J9DQojIE1vZGlmaWNhY21vcyBlbCBkYXRhZnJhbWUgcGFyYSBxdWUgcXVlZGUgYm9uaXRvDQppbmRyZXAgJT4lIHNlbGVjdChJUEMsIGluZHJlcCkgJT4lIA0KICByZW5hbWUoJ0Jhc2UgMjAxMCcgPSBJUEMsICdCYXNlIDIwMjMnID0gaW5kcmVwKSAlPiUgDQogIG11dGF0ZShNZXMgPSBtZXNlcywgLmJlZm9yZSA9ICdCYXNlIDIwMTAnKQ0KYGBgDQo=</div>
+indrep_base2023_est &lt;- do.call(rbind, indrepbase2023est)
+
+indrep_est &lt;- cbind(indrep_base2023, indrep_base2023_est)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kcmVwX2VzdCA8LSBpbmRyZXBfZXN0ICU+JSBzZWxlY3QoaW5kcmVwLCBpbmRyZXBfZXN0KSAlPiUgXG4gIHJlbmFtZSgnQmFzZSAyMDIzJyA9IGluZHJlcCwgJ0Jhc2UgMjAyMyBlc3RhY2lvbmFsJyA9IGluZHJlcF9lc3QpICU+JSBcbiAgbXV0YXRlKE1lcyA9IG1lc2VzLCAuYmVmb3JlID0gJ0Jhc2UgMjAyMycpXG5pbmRyZXBfZXN0XG5gYGAifQ== -->
+<pre class="r"><code>indrep_est &lt;- indrep_est %&gt;% select(indrep, indrep_est) %&gt;% 
+  rename(&#39;Base 2023&#39; = indrep, &#39;Base 2023 estacional&#39; = indrep_est) %&gt;% 
+  mutate(Mes = meses, .before = &#39;Base 2023&#39;)
+indrep_est</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="indice-por-region-1" class="section level3">
+<h3>2.2 Indice por region</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kcmVwX2VzdCA8LSBpbmRyZXBfZXN0ICU+JSBzZWxlY3QoaW5kcmVwLCBpbmRyZXBfZXN0KSAlPiUgXG4gIHJlbmFtZSgnQmFzZSAyMDIzJyA9IGluZHJlcCwgJ0Jhc2UgMjAyMyBlc3RhY2lvbmFsJyA9IGluZHJlcF9lc3QpICU+JSBcbiAgbXV0YXRlKE1lcyA9IG1lc2VzLCAuYmVmb3JlID0gJ0Jhc2UgMjAyMycpXG5pbmRyZXBfZXN0XG5gYGAifQ== -->
+<pre class="r"><code>indrep_est &lt;- indrep_est %&gt;% select(indrep, indrep_est) %&gt;% 
+  rename(&#39;Base 2023&#39; = indrep, &#39;Base 2023 estacional&#39; = indrep_est) %&gt;% 
+  mutate(Mes = meses, .before = &#39;Base 2023&#39;)
+indrep_est</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NiwibmNvbCI6Mywic3VtbWFyeSI6eyJEZXNjcmlwdGlvbiI6WyJkZiBbNiDDlyAzXSJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJndHlpVERtaXVCaVlHQmdabUJoWW1KZ1pnVXlHVmhEUTl4MExSaUFJa0FPSXdNTEF5ZUlyZ0FxRWdhclpHQVFBR0kycUFTcmExNXFVVDZVdys2V21sU0U0TEw2SmhaVndUbU9TVVdaT1ZBT2kyOWlKVnpDcXpRdk14L0k0QU1aNnhESmxQWncyWHAzaDBoT2kycHI5V2FIU0psUHpzeHNaeHdpOVVWTGRtK2I3aEJwOUhydUtjMCtoMGpiOVBibGxiMUkrcDY5Y2RLMUJ1cXoyWFVzYjU1RHBLeVJXT2V5M1E2UmVxYlBsais3NEJCcDdPZDBhZW82b0Q3RlpXdGNiNlA1anpVdk1UZTFHT28zWnFnZ3N5OVFDTUxrZEVvc1RsVXdNakF5aGdxSXdBVVVVb3RMRXBNejgvTVNjOUFNNVN6S0w5ZURHY3dMeEV3TkRHREFobTU3Y2s1aU1jeDJtQ0JYU21KSm9sNWFFVkEva1BjUFRRdDdma0VKMEU2Z0ppWlF0TENpYVdZc1FoTVFLTTBEdVNSRk56bWpOQzliMThRU1pBTllIZ0o0b1d3MkpEWXp4RTZtLzFDeldLRm1zYVhtcFdmbXBjSWNuNU9ZbEFxTFdENmdsOEUrMWlzb3lzd3JnWGtGS0Zxc1Y1SmZrZ2hUeDVXY253TVRBWHVPNFI4QXdqZHVUWTRDQUFBPSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Mes"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Base 2023"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Base 2023 estacional"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Enero","2":"100.0375","3":"100.0453"},{"1":"Febrero","2":"100.1441","3":"100.1443"},{"1":"Marzo","2":"100.4523","3":"100.4562"},{"1":"Abril","2":"100.7357","3":"100.7220"},{"1":"Mayo","2":"100.7956","3":"100.8017"},{"1":"Junio","2":"100.9594","3":"100.9552"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kcmVnMjAyM18xX2VzdFxuYGBgIn0= -->
+<pre class="r"><code>indreg2023_1_est</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="indice-por-division-1" class="section level3">
+<h3>2.3 Indice por division</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kZGl2MjAyM18xX2VzdCA8LSByZWFkX2V4Y2VsKFwiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfMV8yMDI0Lnhsc3hcIiwgXG4gICAgc2hlZXQgPSBcImluZF9kaXYyMDIzXzFcIikgJT4lIHJlbmFtZSgnQmFzZSAyMDIzIDEgZXN0Jz0gaW5kX3Byb2RfcmVwKVxuaW5kZGl2MjAyM18yX2VzdCA8LSByZWFkX2V4Y2VsKFwiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfMl8yMDI0Lnhsc3hcIiwgXG4gICAgc2hlZXQgPSBcImluZF9kaXYyMDIzXzJcIikgJT4lIHJlbmFtZSgnQmFzZSAyMDIzIDIgZXN0Jz0gaW5kX3Byb2RfcmVwKVxuaW5kZGl2MjAyM18zX2VzdCA8LSByZWFkX2V4Y2VsKFwiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfM18yMDI0Lnhsc3hcIiwgXG4gICAgc2hlZXQgPSBcImluZF9kaXYyMDIzXzNcIikgJT4lIHJlbmFtZSgnQmFzZSAyMDIzIDMgZXN0Jz0gaW5kX3Byb2RfcmVwKVxuaW5kZGl2MjAyM180X2VzdCA8LSByZWFkX2V4Y2VsKFwiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfNF8yMDI0Lnhsc3hcIiwgXG4gICAgc2hlZXQgPSBcImluZF9kaXYyMDIzXzRcIikgJT4lIHJlbmFtZSgnQmFzZSAyMDIzIDQgZXN0Jz0gaW5kX3Byb2RfcmVwKVxuaW5kZGl2MjAyM181X2VzdCA8LSByZWFkX2V4Y2VsKFwiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfNV8yMDI0Lnhsc3hcIiwgXG4gICAgc2hlZXQgPSBcImluZF9kaXYyMDIzXzVcIikgJT4lIHJlbmFtZSgnQmFzZSAyMDIzIDUgZXN0Jz0gaW5kX3Byb2RfcmVwKVxuaW5kZGl2MjAyM182X2VzdCA8LSByZWFkX2V4Y2VsKFwiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfNl8yMDI0Lnhsc3hcIiwgXG4gICAgc2hlZXQgPSBcImluZF9kaXYyMDIzXzZcIikgJT4lIHJlbmFtZSgnQmFzZSAyMDIzIDYgZXN0Jz0gaW5kX3Byb2RfcmVwKVxuI2luZGRpdjIwMjNfMV9lc3QgPC0gcmVhZF9leGNlbChcIjIwMjNlc3RhY2lvbmFsL2luZHhiYXNlMjAyM19mYWN0ZXN0XzFfMjAyNC54bHN4XCIsIFxuIyAgICBzaGVldCA9IFwiaW5kX2RpdjIwMjNfMVwiKSAlPiUgcmVuYW1lKCdCYXNlIDIwMjMgMSBlc3QnPSBpbmRfcHJvZF9yZXApXG5gYGAifQ== -->
+<pre class="r"><code>inddiv2023_1_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_1_2024.xlsx&quot;, 
+    sheet = &quot;ind_div2023_1&quot;) %&gt;% rename(&#39;Base 2023 1 est&#39;= ind_prod_rep)
+inddiv2023_2_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_2_2024.xlsx&quot;, 
+    sheet = &quot;ind_div2023_2&quot;) %&gt;% rename(&#39;Base 2023 2 est&#39;= ind_prod_rep)
+inddiv2023_3_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_3_2024.xlsx&quot;, 
+    sheet = &quot;ind_div2023_3&quot;) %&gt;% rename(&#39;Base 2023 3 est&#39;= ind_prod_rep)
+inddiv2023_4_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_4_2024.xlsx&quot;, 
+    sheet = &quot;ind_div2023_4&quot;) %&gt;% rename(&#39;Base 2023 4 est&#39;= ind_prod_rep)
+inddiv2023_5_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_5_2024.xlsx&quot;, 
+    sheet = &quot;ind_div2023_5&quot;) %&gt;% rename(&#39;Base 2023 5 est&#39;= ind_prod_rep)
+inddiv2023_6_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_6_2024.xlsx&quot;, 
+    sheet = &quot;ind_div2023_6&quot;) %&gt;% rename(&#39;Base 2023 6 est&#39;= ind_prod_rep)
+#inddiv2023_1_est &lt;- read_excel(&quot;2023estacional/indxbase2023_factest_1_2024.xlsx&quot;, 
+#    sheet = &quot;ind_div2023_1&quot;) %&gt;% rename(&#39;Base 2023 1 est&#39;= ind_prod_rep)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Esta seccion guarda los datos en un excel</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNCi0tLQ0KdGl0bGU6ICJSIE5vdGVib29rIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KYGBge3J9DQpsaWJyYXJ5KCJyZWFkeGwiKQ0KbGlicmFyeSgidGlkeXZlcnNlIikNCnJlcXVpcmUoInRpZHl2ZXJzZSIpDQpsaWJyYXJ5KCJ3cml0ZXhsIikNCmxpYnJhcnkoInRpYmJsZSIpDQpsaWJyYXJ5KCJvcGVueGxzeCIpDQpsaWJyYXJ5KCJEQkkiKQ0KbGlicmFyeSgib2RiYyIpDQpsaWJyYXJ5KCJSU1FMaXRlIikNCmxpYnJhcnkoInBzeWNoIikNCmxpYnJhcnkoInByYWNtYSIpDQpsaWJyYXJ5KCJiaXQ2NCIpDQpsaWJyYXJ5KCdnbHVlJykNCmxpYnJhcnkoJ1JNeVNRTCcpDQoNCnNvdXJjZSgnZnVuY2lvbmVzLlInKQ0KYGBgDQoNCiMjIDEuIENvbXBhcmFjaW9uIGJhc2VzIDIwMTAtMjAyMw0KDQojIyMgMS4xIEluZGljZSByZXB1YmxpY2ENCg0KU2Ugb2J0aWVuZW4gbG9zIHJlc3VsdGFkb3MgZGUgdG9kb3MgbG9zIG1lc2VzIGRlIGxvcyBhcmNoaXZvcyBkZSBleGNlbCBnZW5lcmFkb3MgcG9yIGxvcyBzY3JpcHRzIHF1ZSBjYWxjdWxhbiBlbCBJUEMNCg0KYGBge3J9DQptZXNlcyA8LSBjKCJFbmVybyIsICJGZWJyZXJvIiwgIk1hcnpvIiwgIkFicmlsIiwgIk1heW8iLCAiSnVuaW8iKQ0KYGBgDQoNCmBgYHtyfQ0KbW9udGhzIDwtIDE6NiAgICAgI3NlIGVzdGFibGVjZW4gbG9zIG1lc2VzIGEgaW1wb3J0YXINCiNub21icmVzIGRlIGxhcyBob2phcyBxdWUgdGllbmVuIGxvcyBpbmRpY2VzDQpzaGVldF9uYW1lc18yMDEwIDwtIHBhc3RlMCgiaW5kcmVwMjAxMF8iLCBtb250aHMpDQpzaGVldF9uYW1lc18yMDIzIDwtIHBhc3RlMCgiaW5kX3JlcDIwMjNfIiwgbW9udGhzKQ0KDQojc2UgbGVlbiBsb3MgYXJjaGl2b3MgZGUgZXhjZWwNCmluZHJlcGJhc2UyMDEwIDwtIHJlYWRfaW5kKCIyMDEwIiwgbW9udGhzLCBzaGVldF9uYW1lc18yMDEwKQ0KaW5kcmVwYmFzZTIwMjMgPC0gcmVhZF9pbmQoIjIwMjMiLCBtb250aHMsIHNoZWV0X25hbWVzXzIwMjMpDQoNCiNzZSBjb21iaW5hbiBlbiB1biBzb2xvIGRhdGFmcmFtZSBwYXJhIGNhZGEgYmFzZQ0KaW5kcmVwX2Jhc2UyMDEwIDwtIGRvLmNhbGwocmJpbmQsIGluZHJlcGJhc2UyMDEwKQ0KaW5kcmVwX2Jhc2UyMDIzIDwtIGRvLmNhbGwocmJpbmQsIGluZHJlcGJhc2UyMDIzKQ0KDQojc2UgY29tYmluYW4geSBzZSBhcnJlZ2xhbiBlbiB1biBkYXRhZnJhbWUgcmVzdW1lbg0KaW5kcmVwIDwtIGNiaW5kKGluZHJlcF9iYXNlMjAxMCwgaW5kcmVwX2Jhc2UyMDIzKSAlPiUgDQogIHNlbGVjdChJUEMsIGluZHJlcCkgJT4lIA0KICByZW5hbWUoJ0Jhc2UgMjAxMCcgPSBJUEMsICdCYXNlIDIwMjMnID0gaW5kcmVwKSAlPiUgDQogIG11dGF0ZShNZXMgPSBtZXNlcywgLmJlZm9yZSA9ICdCYXNlIDIwMTAnKQ0KDQppbmRyZXANCmBgYA0KDQojIyMgMS4yIEluZGljZSBwb3IgcmVnaW9uDQoNCkVzdGEgc2VjY2lvbiBvYnRpZW5lIGVsIGN1YWRybyBkZSByZXN1bHRhZG9zIGRlIElQQyBwYXJhIGNhZGEgcmVnaW9uIGEgbml2ZWwgcmVwdWJsaWNhIGNvbiBiYXNlcyAyMDEwIHkgMjAyMw0KDQpgYGB7cn0NCiNub21icmVzIGRlIGxhcyBob2phcyBxdWUgdGllbmVuIGxvcyBpbmRpY2VzDQpzaGVldF9uYW1lc18yMDEwIDwtIHBhc3RlMCgiaW5kZ2VuMjAxMF8iLCBtb250aHMpDQpzaGVldF9uYW1lc18yMDIzIDwtIHBhc3RlMCgiaW5kX3JlZzIwMjNfIiwgbW9udGhzKQ0KDQojc2UgbGVlbiBsb3MgYXJjaGl2b3MgZGUgZXhjZWwNCmluZHJlZ2Jhc2UyMDEwIDwtIHJlYWRfaW5kKCIyMDEwIiwgbW9udGhzLCBzaGVldF9uYW1lc18yMDEwKQ0KaW5kcmVnYmFzZTIwMjMgPC0gcmVhZF9pbmQoIjIwMjMiLCBtb250aHMsIHNoZWV0X25hbWVzXzIwMjMpDQoNCiNzZSBjb21iaW5hbiBlbiB1biBzb2xvIGRhdGFmcmFtZSBwYXJhIGNhZGEgYmFzZQ0KaW5kcmVnX2Jhc2UyMDEwIDwtIGRvLmNhbGwoY2JpbmQsIGluZHJlZ2Jhc2UyMDEwKQ0KaW5kcmVnX2Jhc2UyMDIzIDwtIGRvLmNhbGwoY2JpbmQsIGluZHJlZ2Jhc2UyMDIzKQ0KDQppbmRyZWcgPC0gY2JpbmQoaW5kcmVnX2Jhc2UyMDEwLCBpbmRyZWdfYmFzZTIwMjMpIA0KIA0KY29sbmFtZXMoaW5kcmVnKSA8LSBtYWtlLnVuaXF1ZShjb2xuYW1lcyhpbmRyZWcpKQ0KDQppbmRyZWcgPC0gaW5kcmVnICU+JSBzZWxlY3QoMSwgMiwgMTQsIDQsIDE2LCA2LCAxOCwgOCwgMjAsIDEwLCAyMiwgMTIsIDI0KSAlPiUgDQogIHJlbmFtZShSZWdpb24gPSBSZWdDb2QsIA0KICAgICAgICAgJ0Jhc2UgMjAxMCAxJyA9IElQQywgJ0Jhc2UgMjAxMCAyJyA9IElQQy4xLCAnQmFzZSAyMDEwIDMnID0gSVBDLjIsICdCYXNlIDIwMTAgNCcgPSBJUEMuMywgJ0Jhc2UgMjAxMCA1JyA9IElQQy40LCAnQmFzZSAyMDEwIDYnID0gSVBDLjUsIA0KICAgICAgICAgJ0Jhc2UgMjAyMyAxJyA9IGluZF9wcm9kX3JlcCwgJ0Jhc2UgMjAyMyAyJyA9IGluZF9wcm9kX3JlcC4xLCAnQmFzZSAyMDIzIDMnID0gaW5kX3Byb2RfcmVwLjIsICdCYXNlIDIwMjMgNCcgPSBpbmRfcHJvZF9yZXAuMywgJ0Jhc2UgMjAyMyA1JyA9IGluZF9wcm9kX3JlcC40LCAnQmFzZSAyMDIzIDYnID0gaW5kX3Byb2RfcmVwLjUpICN0b2RhIGVzdGEgcGFydGUgZXMgbWVqb3IgcXVlIGxhIGF1dG9tYXRpY2UgdGFtYmllbg0KDQppbmRyZWcNCmBgYA0KDQojIyMgMS4zIEluZGljZSBwb3IgZGl2aXNpb24NCg0KRXN0YSBzZWNjaW9uIG9idGllbmUgZWwgY3VhZHJvIGRlIHJlc3VsdGFkb3MgZGUgSVBDIHBhcmEgY2FkYSBkaXZpc2lvbiBhIG5pdmVsIHJlcHVibGljYSBjb24gYmFzZXMgMjAxMCB5IDIwMjMNCg0KYGBge3J9DQojbm9tYnJlcyBkZSBsYXMgaG9qYXMgcXVlIHRpZW5lbiBsb3MgaW5kaWNlcw0Kc2hlZXRfbmFtZXNfMjAxMCA8LSBwYXN0ZTAoImluZHJlcGRpdjIwMTBfIiwgbW9udGhzKQ0Kc2hlZXRfbmFtZXNfMjAyMyA8LSBwYXN0ZTAoImluZF9kaXYyMDIzXyIsIG1vbnRocykNCg0KI3NlIGxlZW4gbG9zIGFyY2hpdm9zIGRlIGV4Y2VsDQppbmRkaXZiYXNlMjAxMCA8LSByZWFkX2luZCgiMjAxMCIsIG1vbnRocywgc2hlZXRfbmFtZXNfMjAxMCkNCmluZGRpdmJhc2UyMDIzIDwtIHJlYWRfaW5kKCIyMDIzIiwgbW9udGhzLCBzaGVldF9uYW1lc18yMDIzKQ0KDQojc2UgY29tYmluYW4gZW4gdW4gc29sbyBkYXRhZnJhbWUgcGFyYSBjYWRhIGJhc2UNCmluZGRpdl9iYXNlMjAxMCA8LSBkby5jYWxsKGNiaW5kLCBpbmRkaXZiYXNlMjAxMCkgJT4lIGFkZF9yb3coKQ0KaW5kZGl2X2Jhc2UyMDIzIDwtIGRvLmNhbGwoY2JpbmQsIGluZGRpdmJhc2UyMDIzKQ0KDQppbmRkaXYgPC0gY2JpbmQoaW5kZGl2X2Jhc2UyMDEwLCBpbmRkaXZfYmFzZTIwMjMpIA0KIA0KY29sbmFtZXMoaW5kZGl2KSA8LSBtYWtlLnVuaXF1ZShjb2xuYW1lcyhpbmRkaXYpKQ0KDQoNCmluZGRpdiA8LSBpbmRkaXYgJT4lIHNlbGVjdCgxOSwgMywgMjAsIDYsIDIyLCA5LCAyNCwgMTIsIDI2LCAxNSwgMjgsIDE4LCAzMCkgJT4lIA0KICByZW5hbWUoIkRpdmlzaW9uIiA9IGluZGRpdjIwMjNfMS5jb2RfZGl2LCANCiAgICAgICAgICdCYXNlIDIwMTAgMScgPSBpbmRkaXYyMDEwXzEuRGl2SW5kLCAnQmFzZSAyMDEwIDInID0gaW5kZGl2MjAxMF8yLkRpdkluZCwgJ0Jhc2UgMjAxMCAzJyA9IGluZGRpdjIwMTBfMy5EaXZJbmQsICdCYXNlIDIwMTAgNCcgPSBpbmRkaXYyMDEwXzQuRGl2SW5kLCAnQmFzZSAyMDEwIDUnID0gaW5kZGl2MjAxMF81LkRpdkluZCwgJ0Jhc2UgMjAxMCA2JyA9IGluZGRpdjIwMTBfNi5EaXZJbmQsDQogICAgICAgICAnQmFzZSAyMDIzIDEnID0gaW5kZGl2MjAyM18xLmluZF9wcm9kX3JlcCwgJ0Jhc2UgMjAyMyAyJyA9IGluZGRpdjIwMjNfMi5pbmRfcHJvZF9yZXAsICdCYXNlIDIwMjMgMycgPSBpbmRkaXYyMDIzXzMuaW5kX3Byb2RfcmVwLCAnQmFzZSAyMDIzIDQnID0gaW5kZGl2MjAyM180LmluZF9wcm9kX3JlcCwgJ0Jhc2UgMjAyMyA1JyA9IGluZGRpdjIwMjNfNS5pbmRfcHJvZF9yZXAsICdCYXNlIDIwMjMgNicgPSBpbmRkaXYyMDIzXzYuaW5kX3Byb2RfcmVwKQ0KDQppbmRkaXYNCmBgYA0KDQojIyAyLiBDb21wYXJhY2lvbiBmYWN0b3IgZXN0YWNpb25hbA0KDQojIyMgMi4xIEluZGljZSByZXB1YmxpY2ENCg0KRXN0YSBzZWNjaW9uIHNpcnZlIHBhcmEgaGFjZXIgbGEgY29tcGFyYWNpb24gZGVsIGluZGljZSBiYXNlIDIwMjMgc2luIGxvcyBmYWN0b3JlcyBlc3RhY2lvbmFsZXMgeSBjb24gbG9zIGZhY3RvcmVzIGVzdGFjaW9uYWxlcw0KDQpgYGB7cn0NCmluZHJlcDIwMjNfMV9lc3QgPC0gcmVhZF9leGNlbCgiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfMV8yMDI0Lnhsc3giLCANCiAgICBzaGVldCA9ICJpbmRfcmVwMjAyM18xIikgJT4lIHJlbmFtZSgnaW5kcmVwX2VzdCc9IGluZHJlcCkNCmluZHJlcDIwMjNfMl9lc3QgPC0gcmVhZF9leGNlbCgiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfMl8yMDI0Lnhsc3giLCANCiAgICBzaGVldCA9ICJpbmRfcmVwMjAyM18yIikgJT4lIHJlbmFtZSgnaW5kcmVwX2VzdCc9IGluZHJlcCkNCmluZHJlcDIwMjNfM19lc3QgPC0gcmVhZF9leGNlbCgiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfM18yMDI0Lnhsc3giLCANCiAgICBzaGVldCA9ICJpbmRfcmVwMjAyM18zIikgJT4lIHJlbmFtZSgnaW5kcmVwX2VzdCc9IGluZHJlcCkNCmluZHJlcDIwMjNfNF9lc3QgPC0gcmVhZF9leGNlbCgiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfNF8yMDI0Lnhsc3giLCANCiAgICBzaGVldCA9ICJpbmRfcmVwMjAyM180IikgJT4lIHJlbmFtZSgnaW5kcmVwX2VzdCc9IGluZHJlcCkNCmluZHJlcDIwMjNfNV9lc3QgPC0gcmVhZF9leGNlbCgiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfNV8yMDI0Lnhsc3giLCANCiAgICBzaGVldCA9ICJpbmRfcmVwMjAyM181IikgJT4lIHJlbmFtZSgnaW5kcmVwX2VzdCc9IGluZHJlcCkNCmluZHJlcDIwMjNfNl9lc3QgPC0gcmVhZF9leGNlbCgiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfNl8yMDI0Lnhsc3giLCANCiAgICBzaGVldCA9ICJpbmRfcmVwMjAyM182IikgJT4lIHJlbmFtZSgnaW5kcmVwX2VzdCc9IGluZHJlcCkNCiNpbmRyZXAyMDIzXzdfZXN0IDwtIHJlYWRfZXhjZWwoIjIwMjNlc3RhY2lvbmFsL2luZHhiYXNlMjAyM19mYWN0ZXN0XzdfMjAyNC54bHN4IiwgDQojICAgIHNoZWV0ID0gImluZF9yZXAyMDIzXzciKQ0KYGBgDQoNCmBgYHtyfQ0Kbm9tYnJlczIwMjNlc3QgPC0gcGFzdGUwKCJpbmRyZXAyMDIzXyIsIDE6NiwgJ19lc3QnKQ0KaW5kcmVwYmFzZTIwMjNlc3QgPC0gbWdldChub21icmVzMjAyM2VzdCkNCg0KaW5kcmVwX2Jhc2UyMDIzX2VzdCA8LSBkby5jYWxsKHJiaW5kLCBpbmRyZXBiYXNlMjAyM2VzdCkNCg0KaW5kcmVwX2VzdCA8LSBjYmluZChpbmRyZXBfYmFzZTIwMjMsIGluZHJlcF9iYXNlMjAyM19lc3QpDQpgYGANCg0KYGBge3J9DQppbmRyZXBfZXN0IDwtIGluZHJlcF9lc3QgJT4lIHNlbGVjdChpbmRyZXAsIGluZHJlcF9lc3QpICU+JSANCiAgcmVuYW1lKCdCYXNlIDIwMjMnID0gaW5kcmVwLCAnQmFzZSAyMDIzIGVzdGFjaW9uYWwnID0gaW5kcmVwX2VzdCkgJT4lIA0KICBtdXRhdGUoTWVzID0gbWVzZXMsIC5iZWZvcmUgPSAnQmFzZSAyMDIzJykNCmluZHJlcF9lc3QNCmBgYA0KDQojIyMgMi4yIEluZGljZSBwb3IgcmVnaW9uDQoNCmBgYHtyfQ0KaW5kcmVnMjAyM18xX2VzdCA8LSByZWFkX2V4Y2VsKCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF8xXzIwMjQueGxzeCIsIA0KICAgIHNoZWV0ID0gImluZF9yZWcyMDIzXzEiKSAlPiUgcmVuYW1lKCdpbmRfcHJvZF9yZXBfZXN0Jz0gaW5kX3Byb2RfcmVwKQ0KaW5kcmVnMjAyM18yX2VzdCA8LSByZWFkX2V4Y2VsKCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF8yXzIwMjQueGxzeCIsIA0KICAgIHNoZWV0ID0gImluZF9yZWcyMDIzXzIiKSAlPiUgcmVuYW1lKCdpbmRfcHJvZF9yZXBfZXN0Jz0gaW5kX3Byb2RfcmVwKQ0KaW5kcmVnMjAyM18zX2VzdCA8LSByZWFkX2V4Y2VsKCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF8zXzIwMjQueGxzeCIsIA0KICAgIHNoZWV0ID0gImluZF9yZWcyMDIzXzMiKSAlPiUgcmVuYW1lKCdpbmRfcHJvZF9yZXBfZXN0Jz0gaW5kX3Byb2RfcmVwKQ0KaW5kcmVnMjAyM180X2VzdCA8LSByZWFkX2V4Y2VsKCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF80XzIwMjQueGxzeCIsIA0KICAgIHNoZWV0ID0gImluZF9yZWcyMDIzXzQiKSAlPiUgcmVuYW1lKCdpbmRfcHJvZF9yZXBfZXN0Jz0gaW5kX3Byb2RfcmVwKQ0KaW5kcmVnMjAyM181X2VzdCA8LSByZWFkX2V4Y2VsKCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF81XzIwMjQueGxzeCIsIA0KICAgIHNoZWV0ID0gImluZF9yZWcyMDIzXzUiKSAlPiUgcmVuYW1lKCdpbmRfcHJvZF9yZXBfZXN0Jz0gaW5kX3Byb2RfcmVwKQ0KaW5kcmVnMjAyM182X2VzdCA8LSByZWFkX2V4Y2VsKCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF82XzIwMjQueGxzeCIsIA0KICAgIHNoZWV0ID0gImluZF9yZWcyMDIzXzYiKSAlPiUgcmVuYW1lKCdpbmRfcHJvZF9yZXBfZXN0Jz0gaW5kX3Byb2RfcmVwKQ0KI2luZHJlZzIwMjNfN19lc3QgPC0gcmVhZF9leGNlbCgiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfN18yMDI0Lnhsc3giLCANCiMgICAgc2hlZXQgPSAiaW5kX3JlZzIwMjNfNyIpICU+JSByZW5hbWUoJ2luZF9wcm9kX3JlcF9lc3QnPSBpbmRfcHJvZF9yZXApDQpgYGANCg0KYGBge3J9DQppbmRyZWcyMDIzXzFfZXN0DQpgYGANCg0KYGBge3J9DQpub21icmVzMjAyM2VzdCA8LSBwYXN0ZTAoImluZHJlZzIwMjNfIiwgMTo2LCAnX2VzdCcpDQppbmRyZWdiYXNlMjAyM2VzdCA8LSBtZ2V0KG5vbWJyZXMyMDIzZXN0KQ0KDQppbmRyZWdfYmFzZTIwMjNfZXN0IDwtIGRvLmNhbGwoY2JpbmQsIGluZHJlZ2Jhc2UyMDIzZXN0KQ0KDQojc2UgY29tYmluYW4gbG9zIGRhdGFmcmFtZXMgcGFyYSANCmluZHJlZ19lc3QgPC0gY2JpbmQoaW5kcmVnX2Jhc2UyMDIzLCBpbmRyZWdiYXNlMjAyM2VzdCkgJT4lIA0KICBzZWxlY3QoaW5kcmVnMjAyM18xLnJlZ2lvbiwgaW5kcmVnMjAyM18xLmluZF9wcm9kX3JlcCwgaW5kcmVnMjAyM18xX2VzdC5pbmRfcHJvZF9yZXBfZXN0LCBpbmRyZWcyMDIzXzIuaW5kX3Byb2RfcmVwLCBpbmRyZWcyMDIzXzJfZXN0LmluZF9wcm9kX3JlcF9lc3QsaW5kcmVnMjAyM18zLmluZF9wcm9kX3JlcCwgaW5kcmVnMjAyM18zX2VzdC5pbmRfcHJvZF9yZXBfZXN0LCBpbmRyZWcyMDIzXzQuaW5kX3Byb2RfcmVwLCBpbmRyZWcyMDIzXzRfZXN0LmluZF9wcm9kX3JlcF9lc3QsIGluZHJlZzIwMjNfNS5pbmRfcHJvZF9yZXAsIGluZHJlZzIwMjNfNV9lc3QuaW5kX3Byb2RfcmVwX2VzdCwgaW5kcmVnMjAyM182LmluZF9wcm9kX3JlcCwgaW5kcmVnMjAyM182X2VzdC5pbmRfcHJvZF9yZXBfZXN0KSAlPiUgDQogIHJlbmFtZShSZWdpb24gPSBpbmRyZWcyMDIzXzEucmVnaW9uLA0KICAgICAgICAgJ0Jhc2UgMjAyMyAxJyA9IGluZHJlZzIwMjNfMS5pbmRfcHJvZF9yZXAsICdCYXNlIDIwMjMgMicgPSBpbmRyZWcyMDIzXzIuaW5kX3Byb2RfcmVwLCAnQmFzZSAyMDIzIDMnID0gaW5kcmVnMjAyM18zLmluZF9wcm9kX3JlcCwgJ0Jhc2UgMjAyMyA0JyA9IGluZHJlZzIwMjNfNC5pbmRfcHJvZF9yZXAsICdCYXNlIDIwMjMgNScgPSBpbmRyZWcyMDIzXzUuaW5kX3Byb2RfcmVwLCAnQmFzZSAyMDIzIDYnID0gaW5kcmVnMjAyM182LmluZF9wcm9kX3JlcCwNCiAgICAgICAgICdCYXNlIDIwMjMgMSBlc3QnID0gaW5kcmVnMjAyM18xX2VzdC5pbmRfcHJvZF9yZXBfZXN0LCAnQmFzZSAyMDIzIDIgZXN0JyA9IGluZHJlZzIwMjNfMl9lc3QuaW5kX3Byb2RfcmVwX2VzdCwgJ0Jhc2UgMjAyMyAzIGVzdCcgPSBpbmRyZWcyMDIzXzNfZXN0LmluZF9wcm9kX3JlcF9lc3QsICdCYXNlIDIwMjMgNCBlc3QnID0gaW5kcmVnMjAyM180X2VzdC5pbmRfcHJvZF9yZXBfZXN0LCAnQmFzZSAyMDIzIDUgZXN0JyA9IGluZHJlZzIwMjNfNV9lc3QuaW5kX3Byb2RfcmVwX2VzdCwgJ0Jhc2UgMjAyMyA2IGVzdCcgPSBpbmRyZWcyMDIzXzZfZXN0LmluZF9wcm9kX3JlcF9lc3QpDQoNCmluZHJlZ19lc3QNCmBgYA0KDQojIyMgMi4zIEluZGljZSBwb3IgZGl2aXNpb24NCg0KYGBge3J9DQppbmRkaXYyMDIzXzFfZXN0IDwtIHJlYWRfZXhjZWwoIjIwMjNlc3RhY2lvbmFsL2luZHhiYXNlMjAyM19mYWN0ZXN0XzFfMjAyNC54bHN4IiwgDQogICAgc2hlZXQgPSAiaW5kX2RpdjIwMjNfMSIpICU+JSByZW5hbWUoJ0Jhc2UgMjAyMyAxIGVzdCc9IGluZF9wcm9kX3JlcCkNCmluZGRpdjIwMjNfMl9lc3QgPC0gcmVhZF9leGNlbCgiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfMl8yMDI0Lnhsc3giLCANCiAgICBzaGVldCA9ICJpbmRfZGl2MjAyM18yIikgJT4lIHJlbmFtZSgnQmFzZSAyMDIzIDIgZXN0Jz0gaW5kX3Byb2RfcmVwKQ0KaW5kZGl2MjAyM18zX2VzdCA8LSByZWFkX2V4Y2VsKCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF8zXzIwMjQueGxzeCIsIA0KICAgIHNoZWV0ID0gImluZF9kaXYyMDIzXzMiKSAlPiUgcmVuYW1lKCdCYXNlIDIwMjMgMyBlc3QnPSBpbmRfcHJvZF9yZXApDQppbmRkaXYyMDIzXzRfZXN0IDwtIHJlYWRfZXhjZWwoIjIwMjNlc3RhY2lvbmFsL2luZHhiYXNlMjAyM19mYWN0ZXN0XzRfMjAyNC54bHN4IiwgDQogICAgc2hlZXQgPSAiaW5kX2RpdjIwMjNfNCIpICU+JSByZW5hbWUoJ0Jhc2UgMjAyMyA0IGVzdCc9IGluZF9wcm9kX3JlcCkNCmluZGRpdjIwMjNfNV9lc3QgPC0gcmVhZF9leGNlbCgiMjAyM2VzdGFjaW9uYWwvaW5keGJhc2UyMDIzX2ZhY3Rlc3RfNV8yMDI0Lnhsc3giLCANCiAgICBzaGVldCA9ICJpbmRfZGl2MjAyM181IikgJT4lIHJlbmFtZSgnQmFzZSAyMDIzIDUgZXN0Jz0gaW5kX3Byb2RfcmVwKQ0KaW5kZGl2MjAyM182X2VzdCA8LSByZWFkX2V4Y2VsKCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF82XzIwMjQueGxzeCIsIA0KICAgIHNoZWV0ID0gImluZF9kaXYyMDIzXzYiKSAlPiUgcmVuYW1lKCdCYXNlIDIwMjMgNiBlc3QnPSBpbmRfcHJvZF9yZXApDQojaW5kZGl2MjAyM18xX2VzdCA8LSByZWFkX2V4Y2VsKCIyMDIzZXN0YWNpb25hbC9pbmR4YmFzZTIwMjNfZmFjdGVzdF8xXzIwMjQueGxzeCIsIA0KIyAgICBzaGVldCA9ICJpbmRfZGl2MjAyM18xIikgJT4lIHJlbmFtZSgnQmFzZSAyMDIzIDEgZXN0Jz0gaW5kX3Byb2RfcmVwKQ0KYGBgDQoNCmBgYHtyfQ0KDQpgYGANCg0KRXN0YSBzZWNjaW9uIGd1YXJkYSBsb3MgZGF0b3MgZW4gdW4gZXhjZWwNCg0KYGBge3J9DQojZ3VhcmRhbW9zIGVsIGRhdGFmcmFtZSBlbiB1biBhcmNoaXZvIGRlIGV4Y2VsDQp3YiA8LSBjcmVhdGVXb3JrYm9vaygpDQoNCmFkZFdvcmtzaGVldCh3YiwgImluZF9yZXAiKQ0Kd3JpdGVEYXRhKHdiLCAiaW5kX3JlcCIsIGluZHJlcCkNCg0KYWRkV29ya3NoZWV0KHdiLCAiaW5kX3JlZyIpDQp3cml0ZURhdGEod2IsICJpbmRfcmVnIiwgaW5kcmVnKQ0KDQphZGRXb3Jrc2hlZXQod2IsICJpbmRfZGl2IikNCndyaXRlRGF0YSh3YiwgImluZF9kaXYiLCBpbmRkaXYpDQoNCmFkZFdvcmtzaGVldCh3YiwgImluZF9yZXBfZXN0IikNCndyaXRlRGF0YSh3YiwgImluZF9yZXBfZXN0IiwgaW5kcmVwX2VzdCkNCg0KYWRkV29ya3NoZWV0KHdiLCAiaW5kX3JlZ19lc3QiKQ0Kd3JpdGVEYXRhKHdiLCAiaW5kX3JlZ19lc3QiLCBpbmRyZWdfZXN0KQ0KDQpzYXZlV29ya2Jvb2sod2IsICJyZXN1bWVuX2luZGljZXNfYmFzZXMyMDEwXzIwMjMueGxzeCIsIG92ZXJ3cml0ZSA9IFRSVUUpDQpgYGANCg==</div>
 
 
 

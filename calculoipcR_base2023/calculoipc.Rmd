@@ -32,7 +32,7 @@ Ingresa el año y el mes a calcular
 
 ```{r}
 anio <- 2024
-mes <- 6
+mes <- 7
 ```
 
 Conexión al servidor
@@ -398,7 +398,8 @@ Exporta un excel con los indices solamente general, region y division
 #se genera el nombre del archivo donde se guardan los indices calculados
 indact01 <- 'indxbase2023'
 indact02 <- '.xlsx'
+dir <- 'Resumen_Indices_2010_2023/2023/'
 
-indactual <- glue("{indact01}_{mes}_{anio}{indact02}")
+indactual <- glue("{dir}{indact01}_{mes}_{anio}{indact02}")
 excel(indactual)
 ```

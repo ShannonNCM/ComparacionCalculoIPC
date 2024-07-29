@@ -181,21 +181,40 @@ ind_prod01 <- ind_prod %>%
   select(region, cod_prod, ind_prod)
 ```
 
+###### 4.1.1 Productos estacionales
+
 ```{r}
 #aqui empiezo a editar la parte de los productos estacionales
 factfrutas <- read_excel("Productos estacionales/factor estacional.xlsx", sheet = "factorfrutas")
 factverduras <- read_excel("Productos estacionales/factor estacional.xlsx", sheet = "factorverduras")
+```
 
+```{r}
+factestmes_frutas <- factfrutas %>%
+  filter(mesnum == mes) %>% 
+  select(cod_prod, factest)
+
+factestmes_verduras <- factverduras %>% 
+  filter(mesnum == mes) %>% 
+  select(cod_prod, factest)
+
+factestmes_frutas
+```
+
+```{r}
+ind_prod_est <- ind_prod %>% left_join(factestmes_frutas, by = 'cod_prod') %>% 
+  mutate(factest = replace_na(factest, 1)) %>% 
+  mutate(ind_est = ind_prod/factest)
 ```
 
 ##### 4.2 Índice de subclase
 
 ```{r}
-ind_subclase <- ind_prod %>% 
-  select(region, cod_subclase, grupo_nombre, ponderacion_region, ind_prod) %>% 
+ind_subclase <- ind_prod_est %>% 
+  select(region, cod_subclase, grupo_nombre, ponderacion_region, ind_est) %>% 
   rename(grupo_codigo = cod_subclase) %>% 
   group_by(region, grupo_codigo) %>%
-  summarize(sum1 = sum(ind_prod*ponderacion_region),
+  summarize(sum1 = sum(ind_est*ponderacion_region),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
   mutate(ind = sum1/sum2) %>%
@@ -206,11 +225,11 @@ ind_subclase <- ind_prod %>%
 ##### 4.3 Índice de clase
 
 ```{r}
-ind_clase <- ind_prod %>% 
-  select(region, cod_clase, grupo_nombre, ponderacion_region, ind_prod) %>% 
+ind_clase <- ind_prod_est %>% 
+  select(region, cod_clase, grupo_nombre, ponderacion_region, ind_est) %>% 
   rename(grupo_codigo = cod_clase) %>% 
   group_by(region, grupo_codigo) %>%
-  summarize(sum1 = sum(ind_prod*ponderacion_region),
+  summarize(sum1 = sum(ind_est*ponderacion_region),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
   mutate(ind = sum1/sum2) %>%
@@ -221,11 +240,11 @@ ind_clase <- ind_prod %>%
 ##### 4.4 Índice de grupo
 
 ```{r}
-ind_grupo <- ind_prod %>% 
-  select(region, cod_grupo, grupo_nombre, ponderacion_region, ind_prod) %>% 
+ind_grupo <- ind_prod_est %>% 
+  select(region, cod_grupo, grupo_nombre, ponderacion_region, ind_est) %>% 
   rename(grupo_codigo = cod_grupo) %>% 
   group_by(region, grupo_codigo) %>%
-  summarize(sum1 = sum(ind_prod*ponderacion_region),
+  summarize(sum1 = sum(ind_est*ponderacion_region),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
   mutate(ind = sum1/sum2) %>%
@@ -236,11 +255,11 @@ ind_grupo <- ind_prod %>%
 ##### 4.5 Índice de división
 
 ```{r}
-ind_div <- ind_prod %>% 
-  select(region, cod_div, grupo_nombre, ponderacion_region, ind_prod) %>% 
+ind_div <- ind_prod_est %>% 
+  select(region, cod_div, grupo_nombre, ponderacion_region, ind_est) %>% 
   rename(grupo_codigo = cod_div) %>% 
   group_by(region, grupo_codigo) %>%
-  summarize(sum1 = sum(ind_prod*ponderacion_region),
+  summarize(sum1 = sum(ind_est*ponderacion_region),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
   mutate(ind = sum1/sum2) %>%
@@ -253,9 +272,9 @@ ind_div <- ind_prod %>%
 ##### 5.1 índice de productos
 
 ```{r}
-ind_rep_prod <- ind_prod %>% 
+ind_rep_prod <- ind_prod_est %>% 
   group_by(cod_prod, grupo_nombre) %>%
-  summarize(sum1 = sum(ponderacion_region*ind_prod),
+  summarize(sum1 = sum(ponderacion_region*ind_est),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
   mutate(ind_prod_rep = sum1/sum2) %>%
@@ -265,9 +284,9 @@ ind_rep_prod <- ind_prod %>%
 ##### 5.1 índice de subclase
 
 ```{r}
-ind_rep_subclase <- ind_prod %>% 
+ind_rep_subclase <- ind_prod_est %>% 
   group_by(cod_subclase) %>%
-  summarize(sum1 = sum(ponderacion_region*ind_prod),
+  summarize(sum1 = sum(ponderacion_region*ind_est),
             sum2 = sum(ponderacion_region),
             count = n()) %>% 
   mutate(ind_prod_rep = sum1/sum2) %>%
@@ -278,9 +297,9 @@ ind_rep_subclase <- ind_prod %>%
 ##### 5.2 Índice de clase
 
 ```{r}
-ind_rep_clase <- ind_prod %>% 
+ind_rep_clase <- ind_prod_est %>% 
   group_by(cod_clase) %>%
-  summarize(sum1 = sum(ponderacion_region*ind_prod),
+  summarize(sum1 = sum(ponderacion_region*ind_est),
             sum2 = sum(ponderacion_region)) %>% 
   mutate(ind_prod_rep = sum1/sum2) %>%
   drop_na() %>% 
@@ -290,9 +309,9 @@ ind_rep_clase <- ind_prod %>%
 ##### 5.3 Índice de grupo
 
 ```{r}
-ind_rep_grupo <- ind_prod %>% 
+ind_rep_grupo <- ind_prod_est %>% 
   group_by(cod_grupo) %>%
-  summarize(sum1 = sum(ponderacion_region*ind_prod),
+  summarize(sum1 = sum(ponderacion_region*ind_est),
             sum2 = sum(ponderacion_region)) %>% 
   mutate(ind_prod_rep = sum1/sum2) %>%
   drop_na() %>% 
@@ -302,9 +321,9 @@ ind_rep_grupo <- ind_prod %>%
 ##### 5.4 Índice de división
 
 ```{r}
-ind_rep_div <- ind_prod %>% 
+ind_rep_div <- ind_prod_est %>% 
   group_by(cod_div) %>%
-  summarize(sum1 = sum(ponderacion_region*ind_prod),
+  summarize(sum1 = sum(ponderacion_region*ind_est),
             sum2 = sum(ponderacion_region)) %>% 
   mutate(ind_prod_rep = sum1/sum2) %>%
   drop_na() %>% 
@@ -316,9 +335,9 @@ ind_rep_div
 #### 6. Índice general
 
 ```{r}
-ind_gen <- ind_prod %>% 
+ind_gen <- ind_prod_est %>% 
   group_by(region) %>%
-  summarize(sum1 = sum(ponderacion_region*ind_prod),
+  summarize(sum1 = sum(ponderacion_region*ind_est),
             sum2 = sum(ponderacion_region)) %>% 
   mutate(ind_prod_rep = sum1/sum2) %>%
   select(region, ind_prod_rep)
@@ -327,8 +346,8 @@ ind_gen
 ```
 
 ```{r}
-ind_rep <- ind_prod %>% 
-  summarize(sum1 = sum(ponderacion_region*ind_prod),
+ind_rep <- ind_prod_est %>% 
+  summarize(sum1 = sum(ponderacion_region*ind_est),
             sum2 = sum(ponderacion_region)) %>% 
   mutate(indrep = sum1/sum2)
 ind_rep
@@ -405,9 +424,10 @@ Exporta un excel con los indices solamente general, region y division
 
 ```{r}
 #se genera el nombre del archivo donde se guardan los indices calculados
-#indact01 <- 'indxbase2023'
-#indact02 <- '.xlsx'
+indact01 <- 'indxbase2023_factest'
+indact02 <- '.xlsx'
+dir <- 'Resumen_Indices_2010_2023/2023estacional/'
 
-#indactual <- glue("{indact01}_{mes}_{anio}{indact02}")
-#excel(indactual)
+indactual <- glue("{dir}{indact01}_{mes}_{anio}{indact02}")
+excel(indactual)
 ```
