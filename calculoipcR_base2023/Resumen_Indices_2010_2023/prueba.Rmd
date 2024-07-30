@@ -1,0 +1,105 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library("readxl")
+library("tidyverse")
+require("tidyverse")
+library("writexl")
+library("tibble")
+library("openxlsx")
+library("DBI")
+library("odbc")
+library("RSQLite")
+library("psych")
+library("pracma")
+library("bit64")
+library('glue')
+library('RMySQL')
+
+source('funciones.R')
+```
+
+```{r}
+meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio")
+months <- 1:6     #se establecen los meses a importar
+cols_select01 <- c(1, 2, 14, 4, 16, 6, 18, 8, 20, 10, 22, 12, 24)
+cols_select02 <- c(19, 3, 20, 6, 22, 9, 24, 12, 26, 15, 28, 18, 30)
+```
+
+```{r}
+#nombres de las hojas que tienen los indices
+sheet_names_2010 <- paste0("indgen2010_", months)
+sheet_names_2023 <- paste0("ind_reg2023_", months)
+
+#se leen los archivos de excel
+indregbase2010 <- read_ind("2010", months, sheet_names_2010)
+indregbase2023 <- read_ind("2023", months, sheet_names_2023)
+
+#se combinan en un solo dataframe para cada base
+indreg_base2010 <- do.call(cbind, indregbase2010)
+indreg_base2023 <- do.call(cbind, indregbase2023)
+
+indreg <- cbind(indreg_base2010, indreg_base2023) 
+ 
+colnames(indreg) <- make.unique(colnames(indreg))
+
+indreg
+```
+
+```{r}
+cols_to_select <- c(1, 2, 14, 4, 16, 6, 18, 8, 20, 10, 22, 12, 24)
+cols_to_select
+```
+
+```{r}
+actual_col_names <- colnames(indreg)[cols_to_select]
+actual_col_names
+```
+
+```{r}
+new_names <- c(
+  "Region",
+  paste0("Base 2010 ", months),
+  paste0("Base 2023 ", months)
+)
+
+new_names
+```
+
+```{r}
+rename_vector <- set_names(actual_col_names, new_names)
+rename_vector
+```
+
+```{r}
+indreg %>%
+  select(all_of(actual_col_names)) %>%
+  rename(!!!rename_vector)
+```
+
+```{r}
+rename_columns <- function(df, cols_to_select) {
+  # Get the actual column names based on the indices
+  actual_col_names <- colnames(df)[cols_to_select]
+  
+  # Define the new names dynamically
+  new_names <- c(
+    "Region",
+    paste0("Base 2010 ", months),
+    paste0("Base 2023 ", m)
+  )
+  
+  # Create a named vector for renaming
+  rename_vector <- set_names(actual_col_names, new_names)
+  
+  # Select and rename columns dynamically
+  df <- df %>%
+    select(all_of(actual_col_names)) %>%
+    rename(!!!rename_vector)
+  
+  return(df)
+}
+```

@@ -216,6 +216,9 @@ addWorksheet(wb, "ind_reg_est")
 writeData(wb, "ind_reg_est", indregest)
 
 addWorksheet(wb, "ind_div_est")
+
+
+
 writeData(wb, "ind_div_est", inddivest)
 
 saveWorkbook(wb, "resumen_indices_bases2010_2023.xlsx", overwrite = TRUE)
