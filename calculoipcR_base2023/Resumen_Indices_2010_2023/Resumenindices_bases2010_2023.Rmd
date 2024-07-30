@@ -32,10 +32,10 @@ Se obtienen los resultados de todos los meses de los archivos de excel generados
 
 ```{r}
 meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio")
+months <- 1:6     #se establecen los meses a importar
 ```
 
 ```{r}
-months <- 1:6     #se establecen los meses a importar
 #nombres de las hojas que tienen los indices
 sheet_names_2010 <- paste0("indrep2010_", months)
 sheet_names_2023 <- paste0("ind_rep2023_", months)
@@ -109,9 +109,9 @@ colnames(inddiv) <- make.unique(colnames(inddiv))
 
 
 inddiv <- inddiv %>% select(19, 3, 20, 6, 22, 9, 24, 12, 26, 15, 28, 18, 30) %>% 
-  rename("Division" = inddiv2023_1.cod_div, 
-         'Base 2010 1' = inddiv2010_1.DivInd, 'Base 2010 2' = inddiv2010_2.DivInd, 'Base 2010 3' = inddiv2010_3.DivInd, 'Base 2010 4' = inddiv2010_4.DivInd, 'Base 2010 5' = inddiv2010_5.DivInd, 'Base 2010 6' = inddiv2010_6.DivInd,
-         'Base 2023 1' = inddiv2023_1.ind_prod_rep, 'Base 2023 2' = inddiv2023_2.ind_prod_rep, 'Base 2023 3' = inddiv2023_3.ind_prod_rep, 'Base 2023 4' = inddiv2023_4.ind_prod_rep, 'Base 2023 5' = inddiv2023_5.ind_prod_rep, 'Base 2023 6' = inddiv2023_6.ind_prod_rep)
+  rename("Division" = cod_div, 
+         'Base 2010 1' = DivInd...3, 'Base 2010 2' = DivInd...6, 'Base 2010 3' = DivInd...9, 'Base 2010 4' = DivInd...12, 'Base 2010 5' = DivInd...15, 'Base 2010 6' = DivInd...18,
+         'Base 2023 1' = ind_prod_rep, 'Base 2023 2' = ind_prod_rep.1, 'Base 2023 3' = ind_prod_rep.2, 'Base 2023 4' = ind_prod_rep.3, 'Base 2023 5' = ind_prod_rep.4, 'Base 2023 6' = ind_prod_rep.5)
 
 inddiv
 ```
@@ -123,98 +123,75 @@ inddiv
 Esta seccion sirve para hacer la comparacion del indice base 2023 sin los factores estacionales y con los factores estacionales
 
 ```{r}
-indrep2023_1_est <- read_excel("2023estacional/indxbase2023_factest_1_2024.xlsx", 
-    sheet = "ind_rep2023_1") %>% rename('indrep_est'= indrep)
-indrep2023_2_est <- read_excel("2023estacional/indxbase2023_factest_2_2024.xlsx", 
-    sheet = "ind_rep2023_2") %>% rename('indrep_est'= indrep)
-indrep2023_3_est <- read_excel("2023estacional/indxbase2023_factest_3_2024.xlsx", 
-    sheet = "ind_rep2023_3") %>% rename('indrep_est'= indrep)
-indrep2023_4_est <- read_excel("2023estacional/indxbase2023_factest_4_2024.xlsx", 
-    sheet = "ind_rep2023_4") %>% rename('indrep_est'= indrep)
-indrep2023_5_est <- read_excel("2023estacional/indxbase2023_factest_5_2024.xlsx", 
-    sheet = "ind_rep2023_5") %>% rename('indrep_est'= indrep)
-indrep2023_6_est <- read_excel("2023estacional/indxbase2023_factest_6_2024.xlsx", 
-    sheet = "ind_rep2023_6") %>% rename('indrep_est'= indrep)
-#indrep2023_7_est <- read_excel("2023estacional/indxbase2023_factest_7_2024.xlsx", 
-#    sheet = "ind_rep2023_7")
-```
+#nombres de las hojas que tienen los indices
+sheet_names_2023 <- paste0("ind_rep2023_", months)
 
-```{r}
-nombres2023est <- paste0("indrep2023_", 1:6, '_est')
-indrepbase2023est <- mget(nombres2023est)
+#se leen los archivos de excel
+indrepestbase2023 <- read_est("2023", months, sheet_names_2023)
 
-indrep_base2023_est <- do.call(rbind, indrepbase2023est)
+#se combinan en un solo dataframe para cada base
+indrepest_base2023 <- do.call(rbind, indrepestbase2023)
 
-indrep_est <- cbind(indrep_base2023, indrep_base2023_est)
-```
+#se combinan y se arreglan en un dataframe resumen
+indrepest <- cbind(indrep_base2023, indrepest_base2023)
+colnames(indrepest) <- make.unique(colnames(indrepest))
 
-```{r}
-indrep_est <- indrep_est %>% select(indrep, indrep_est) %>% 
-  rename('Base 2023' = indrep, 'Base 2023 estacional' = indrep_est) %>% 
-  mutate(Mes = meses, .before = 'Base 2023')
-indrep_est
+indrepest <- indrepest %>% 
+  select(indrep, indrep.1) %>% 
+  rename('Base 2010' = indrep, 'Base 2023' = indrep.1) %>% 
+  mutate(Mes = meses, .before = 'Base 2010')
+
+indrepest
 ```
 
 ### 2.2 Indice por region
 
 ```{r}
-indreg2023_1_est <- read_excel("2023estacional/indxbase2023_factest_1_2024.xlsx", 
-    sheet = "ind_reg2023_1") %>% rename('ind_prod_rep_est'= ind_prod_rep)
-indreg2023_2_est <- read_excel("2023estacional/indxbase2023_factest_2_2024.xlsx", 
-    sheet = "ind_reg2023_2") %>% rename('ind_prod_rep_est'= ind_prod_rep)
-indreg2023_3_est <- read_excel("2023estacional/indxbase2023_factest_3_2024.xlsx", 
-    sheet = "ind_reg2023_3") %>% rename('ind_prod_rep_est'= ind_prod_rep)
-indreg2023_4_est <- read_excel("2023estacional/indxbase2023_factest_4_2024.xlsx", 
-    sheet = "ind_reg2023_4") %>% rename('ind_prod_rep_est'= ind_prod_rep)
-indreg2023_5_est <- read_excel("2023estacional/indxbase2023_factest_5_2024.xlsx", 
-    sheet = "ind_reg2023_5") %>% rename('ind_prod_rep_est'= ind_prod_rep)
-indreg2023_6_est <- read_excel("2023estacional/indxbase2023_factest_6_2024.xlsx", 
-    sheet = "ind_reg2023_6") %>% rename('ind_prod_rep_est'= ind_prod_rep)
-#indreg2023_7_est <- read_excel("2023estacional/indxbase2023_factest_7_2024.xlsx", 
-#    sheet = "ind_reg2023_7") %>% rename('ind_prod_rep_est'= ind_prod_rep)
-```
+#nombres de las hojas que tienen los indices
+sheet_names_2023 <- paste0("ind_reg2023_", months)
 
-```{r}
-indreg2023_1_est
-```
+#se leen los archivos de excel
+indregestbase2023 <- read_est("2023", months, sheet_names_2023)
 
-```{r}
-nombres2023est <- paste0("indreg2023_", 1:6, '_est')
-indregbase2023est <- mget(nombres2023est)
+#se combinan en un solo dataframe para cada base
+indregest_base2023 <- do.call(cbind, indregestbase2023)
 
-indreg_base2023_est <- do.call(cbind, indregbase2023est)
+#se combinan y se arreglan en un dataframe resumen
+indregest <- cbind(indreg_base2023, indregest_base2023)
+colnames(indregest) <- make.unique(colnames(indregest))
 
-#se combinan los dataframes para 
-indreg_est <- cbind(indreg_base2023, indregbase2023est) %>% 
-  select(indreg2023_1.region, indreg2023_1.ind_prod_rep, indreg2023_1_est.ind_prod_rep_est, indreg2023_2.ind_prod_rep, indreg2023_2_est.ind_prod_rep_est,indreg2023_3.ind_prod_rep, indreg2023_3_est.ind_prod_rep_est, indreg2023_4.ind_prod_rep, indreg2023_4_est.ind_prod_rep_est, indreg2023_5.ind_prod_rep, indreg2023_5_est.ind_prod_rep_est, indreg2023_6.ind_prod_rep, indreg2023_6_est.ind_prod_rep_est) %>% 
-  rename(Region = indreg2023_1.region,
-         'Base 2023 1' = indreg2023_1.ind_prod_rep, 'Base 2023 2' = indreg2023_2.ind_prod_rep, 'Base 2023 3' = indreg2023_3.ind_prod_rep, 'Base 2023 4' = indreg2023_4.ind_prod_rep, 'Base 2023 5' = indreg2023_5.ind_prod_rep, 'Base 2023 6' = indreg2023_6.ind_prod_rep,
-         'Base 2023 1 est' = indreg2023_1_est.ind_prod_rep_est, 'Base 2023 2 est' = indreg2023_2_est.ind_prod_rep_est, 'Base 2023 3 est' = indreg2023_3_est.ind_prod_rep_est, 'Base 2023 4 est' = indreg2023_4_est.ind_prod_rep_est, 'Base 2023 5 est' = indreg2023_5_est.ind_prod_rep_est, 'Base 2023 6 est' = indreg2023_6_est.ind_prod_rep_est)
+indregest <- indregest %>% 
+  select(1, 2, 14, 4, 16, 6, 18, 8, 20, 10, 22, 12, 24) %>% 
+  rename(Region = region,
+         'Base 2023 1' = ind_prod_rep, 'Base 2023 2' = ind_prod_rep.1, 'Base 2023 3' = ind_prod_rep.2, 'Base 2023 4' = ind_prod_rep.3, 'Base 2023 5' = ind_prod_rep.4, 'Base 2023 6' = ind_prod_rep.5,
+         'Base 2023 est 1' = ind_prod_rep.6, 'Base 2023 est 2' = ind_prod_rep.7, 'Base 2023 est 3' = ind_prod_rep.8, 'Base 2023 est 4' = ind_prod_rep.9, 'Base 2023 est 5' = ind_prod_rep.10, 'Base 2023 est 6' = ind_prod_rep.11)
 
-indreg_est
+indregest
 ```
 
 ### 2.3 Indice por division
 
 ```{r}
-inddiv2023_1_est <- read_excel("2023estacional/indxbase2023_factest_1_2024.xlsx", 
-    sheet = "ind_div2023_1") %>% rename('Base 2023 1 est'= ind_prod_rep)
-inddiv2023_2_est <- read_excel("2023estacional/indxbase2023_factest_2_2024.xlsx", 
-    sheet = "ind_div2023_2") %>% rename('Base 2023 2 est'= ind_prod_rep)
-inddiv2023_3_est <- read_excel("2023estacional/indxbase2023_factest_3_2024.xlsx", 
-    sheet = "ind_div2023_3") %>% rename('Base 2023 3 est'= ind_prod_rep)
-inddiv2023_4_est <- read_excel("2023estacional/indxbase2023_factest_4_2024.xlsx", 
-    sheet = "ind_div2023_4") %>% rename('Base 2023 4 est'= ind_prod_rep)
-inddiv2023_5_est <- read_excel("2023estacional/indxbase2023_factest_5_2024.xlsx", 
-    sheet = "ind_div2023_5") %>% rename('Base 2023 5 est'= ind_prod_rep)
-inddiv2023_6_est <- read_excel("2023estacional/indxbase2023_factest_6_2024.xlsx", 
-    sheet = "ind_div2023_6") %>% rename('Base 2023 6 est'= ind_prod_rep)
-#inddiv2023_1_est <- read_excel("2023estacional/indxbase2023_factest_1_2024.xlsx", 
-#    sheet = "ind_div2023_1") %>% rename('Base 2023 1 est'= ind_prod_rep)
-```
+#nombres de las hojas que tienen los indices
+sheet_names_2023 <- paste0("ind_div2023_", months)
 
-```{r}
+#se leen los archivos de excel
+inddivestbase2023 <- read_est("2023", months, sheet_names_2023)
 
+#se combinan en un solo dataframe para cada base
+inddivest_base2023 <- do.call(cbind, inddivestbase2023)
+
+#se combinan y se arreglan en un dataframe resumen
+inddivest <- cbind(inddiv_base2023, inddivest_base2023)
+colnames(inddivest) <- make.unique(colnames(inddivest))
+
+inddivest <- inddivest %>% 
+  select(1, 2, 14, 4, 16, 6, 18, 8, 20, 10, 22, 12, 24) %>% 
+  rename(Division = cod_div,
+         'Base 2023 1' = ind_prod_rep, 'Base 2023 2' = ind_prod_rep.1, 'Base 2023 3' = ind_prod_rep.2, 'Base 2023 4' = ind_prod_rep.3, 'Base 2023 5' = ind_prod_rep.4, 'Base 2023 6' = ind_prod_rep.5,
+         'Base 2023 est 1' = ind_prod_rep.6, 'Base 2023 est 2' = ind_prod_rep.7, 'Base 2023 est 3' = ind_prod_rep.8, 'Base 2023 est 4' = ind_prod_rep.9, 'Base 2023 est 5' = ind_prod_rep.10, 'Base 2023 est 6' = ind_prod_rep.11)
+
+inddivest
 ```
 
 Esta seccion guarda los datos en un excel
@@ -233,10 +210,13 @@ addWorksheet(wb, "ind_div")
 writeData(wb, "ind_div", inddiv)
 
 addWorksheet(wb, "ind_rep_est")
-writeData(wb, "ind_rep_est", indrep_est)
+writeData(wb, "ind_rep_est", indrepest)
 
 addWorksheet(wb, "ind_reg_est")
-writeData(wb, "ind_reg_est", indreg_est)
+writeData(wb, "ind_reg_est", indregest)
+
+addWorksheet(wb, "ind_div_est")
+writeData(wb, "ind_div_est", inddivest)
 
 saveWorkbook(wb, "resumen_indices_bases2010_2023.xlsx", overwrite = TRUE)
 ```
