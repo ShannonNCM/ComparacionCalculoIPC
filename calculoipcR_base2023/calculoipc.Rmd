@@ -24,7 +24,6 @@ library("bit64")
 library('glue')
 library('RMySQL')
 
-
 source("funciones_ipc.R")
 ```
 

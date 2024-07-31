@@ -1,0 +1,17 @@
+Acá hay 2 carpetas principales:
+1. calculoipcR_base2023
+2. IPC2024_base2010
+
+La carpeta 1 contiene los scripts de calculo del IPC base 2023. Los principales son dos R notebooks: "calculoipc" que es el que calcula el IPC y el otro "calculoipc_factorestacional" que calcula el IPC con los factores estacionales.
+	Dentro se encuentran tres carpetas distintas: "ipc_factorestacional", "Productos estacionales" y 	"Resumen_indices_2010_2023". 
+		- La carpeta "ipc_factorestacional" es donde iba a guardar los exceles con los 				resultados del calculo de los factores estaciones, estos archivos de Excel no son el 			resumn serian los que tienen todos los índices para cada desagregacion, para ello se 			deberia de modificar el cuaderno de R "calculoipc_factorestacional" para que guarde los 		archivos en esa carpeta.
+		- La carpeta "Productos estacionales" contiene el R Project con el que se realizó el 			calculo de los factores estacionales, el Rnotebook que realiza el calculo es el que 			tienen el nombre "Factorestacional". El Rnotebook llamado "factorestacinal_test" 			contiene una versión no finalizada del calculo asi como el calculo de errores usando 3 y 		5 años para calcular los factores y se determino que se iban a usar 5 años para calcular 		dichos factores.
+		- La carpeta "Resumen_indices_2010_2023" contiene un R Project con el que se realiza un 		resumen de los resultados del IPC para los índices, genera, región y división a nivel 			republica. Hay 3 carpetas que contienen los índices con bases 2010, 2023 y 2023 con 			factor estacional (en estas carpetas están guardados los cálculos que se generan con los 		distintos scripts que calculan el IPC). Este script aun puede mejorarse.
+
+La carpeta 2 contiene los scripts de calculo del IPC con base 2010. Esto esta hecho tomando como base el script de Python que habían hecho Luciano y Tobar. En la parte principal se encuentran un archivo de Python y un Jupyternb, el archivo de Python tiene las funciones que se utilizan para el calculo del IPC (para la recodificación y otras modificaciones que se hicieron para el calculo) y en el Jupyter se realiza el calculo del IPC. Hay otras 2 carpetas, "comparación" e "imputación".
+	- La carpeta "imputación" tiene dos Jupyternb que realizan el calculo del IPC pero tomando en 	cuenta los productos que se deben imputar, es decir los que aparecen en la base 2010 pero no 	están en la base 2023 y por lo tanto deben de imputarse. El nb principal es el que se llama 	"ipc_2024_imputacion" ya que este es la versión final. También tiene un archivo de Python que 	tiene las funciones que se usaron tanto para la recodificación como la imputación.
+	- La carpeta "comparación" tiene dos Jupyternb, "comparación" y "comp_pond"
+		* "comparación" realiza graficas para comparar los artículos que se recolectan cada mes 		del año 2024 con los que se recolectaron en el año 2023, este nb genera todas las 			graficas, las guarda en una carpeta especifica y genera una presentación de PowerPoint 			con ellas (sin formato definido).
+		* "comp_pond" realiza graficas para comparar los ponderadores de las bases 2023 y 2024, 		las guarda en una carpeta especifica.
+		* Los archivos de Python tienen las funciones que se usan para generar las graficas y 			archivos en los nb.
+
